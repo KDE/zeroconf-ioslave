@@ -60,6 +60,7 @@ private:
 	void dissect(const KURL& url,QString& name,QString& type,QString& domain);
 	// resolve given service and redirect() to it or use KRun on it (used for helper protocols)
 	void resolveAndRedirect(const KURL& url, bool useKRun = false);
+	bool dnssdOK();
 	QString getAttribute(const QString& name);
 	QString getProtocol(const QString& type);
 	DNSSD::ServiceBrowser* browser;

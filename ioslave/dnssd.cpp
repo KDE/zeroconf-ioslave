@@ -78,6 +78,7 @@ kio_dnssdProtocol::~kio_dnssdProtocol()
 
 void kio_dnssdProtocol::get(const KURL& url )
 {
+	if (!dnssdOK()) return;
 	UrlType t = checkURL(url);
 	switch (t) {
 	case HelperProtocol:
@@ -125,9 +126,26 @@ void kio_dnssdProtocol::dissect(const KURL& url,QString& name,QString& type,QStr
 
 }
 
+bool kio_dnssdProtocol::dnssdOK()
+{
+	switch(DNSSD::ServiceBrowser::isAvailable()) {	    
+        	case DNSSD::ServiceBrowser::Stopped:
+			error(KIO::ERR_UNSUPPORTED_ACTION,
+			i18n("<p>The Zeroconf daemon (mdnsd) is not running. </p>"));
+			return false;
+		case DNSSD::ServiceBrowser::Unsupported:
+	    		error(KIO::ERR_UNSUPPORTED_ACTION,
+			i18n("<p>KDE has been built without Zeroconf support.</p>"));
+			return false;
+          default:
+			return true;
+        }
+}
+
 void kio_dnssdProtocol::stat(const KURL& url)
 {
 	UDSEntry entry;
+	if (!dnssdOK()) return;
 	UrlType t = checkURL(url);
 	switch (t) {
 	case RootDir:
@@ -254,6 +272,7 @@ void kio_dnssdProtocol::buildServiceEntry(UDSEntry& entry,const QString& name,co
 void kio_dnssdProtocol::listDir(const KURL& url )
 {
 
+	if (!dnssdOK()) return;
 	UrlType t  = checkURL(url);
 	UDSEntry entry;
 	switch (t) {
