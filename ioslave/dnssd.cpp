@@ -46,6 +46,7 @@
 #include <qmap.h>
 #include <kapplication.h>
 #include <qeventloop.h>
+#include <dnssd/domainbrowser.h>
 #include <krun.h>
 
 
@@ -65,9 +66,7 @@ using namespace KIO;
 ZeroConfProtocol::ZeroConfProtocol(const QCString &pool_socket, const QCString &app_socket)
 		: SlaveBase("zeroconf", pool_socket, app_socket), browser(0),toResolve(0),
 		configData(0)
-{
-	kdDebug() << "ZeroConfProtocol::ZeroConfProtocol()" << endl;
-}
+{}
 
 
 ZeroConfProtocol::~ZeroConfProtocol()
@@ -235,7 +234,7 @@ inline void buildAtom(UDSEntry& entry,UDSAtomTypes type, long data)
 }
 
 
-void ZeroConfProtocol::buildDirEntry(UDSEntry& entry,const QString& name,const QString& type)
+void ZeroConfProtocol::buildDirEntry(UDSEntry& entry,const QString& name,const QString& type, const QString& host)
 {
 	entry.clear();
 	buildAtom(entry,UDS_NAME,name);
@@ -243,7 +242,7 @@ void ZeroConfProtocol::buildDirEntry(UDSEntry& entry,const QString& name,const Q
 	buildAtom(entry,UDS_SIZE,0);
 	buildAtom(entry,UDS_FILE_TYPE,S_IFDIR);
 	buildAtom(entry,UDS_MIME_TYPE,"inode/directory");
-	if (!type.isNull()) buildAtom(entry,UDS_URL,"zeroconf:/"+type+"/");
+	if (!type.isNull()) buildAtom(entry,UDS_URL,"zeroconf:/"+((!host.isNull()) ? "/"+host+"/" : "" )+type+"/");
 }
 QString ZeroConfProtocol::getProtocol(const QString& type)
 {
@@ -277,7 +276,7 @@ void ZeroConfProtocol::listDir(const KURL& url )
 	UDSEntry entry;
 	switch (t) {
 	case RootDir:
-		if (url.host().isEmpty())
+		if (allDomains=url.host().isEmpty())
 			browser = new DNSSD::ServiceBrowser(DNSSD::ServiceBrowser::AllServices);
 			else browser = new DNSSD::ServiceBrowser(DNSSD::ServiceBrowser::AllServices,url.host());
 		connect(browser,SIGNAL(serviceAdded(DNSSD::RemoteService::Ptr)),
@@ -317,11 +316,11 @@ void ZeroConfProtocol::newType(DNSSD::RemoteService::Ptr srv)
 	mergedtypes << srv->type();
 	UDSEntry entry;
 	kdDebug() << "Got new entry " << srv->type() << endl;
-	QString name;
 	if (!setConfig(srv->type())) return;
-	name = configData->readEntry("Name");
+	QString name = configData->readEntry("Name");
 	if (!name.isNull()) {
-		buildDirEntry(entry,name,srv->type());
+		buildDirEntry(entry,name,srv->type(), (allDomains) ? QString::null : 
+			browser->browsedDomains()->domains()[0]);
 		listEntry(entry,false);
 	}
 }

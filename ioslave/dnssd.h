@@ -50,7 +50,8 @@ public:
 	virtual void listDir(const KURL& url );
 private:
 	// Create UDSEntry for zeroconf:/ or zeroconf:/type/ paths
-	void buildDirEntry(UDSEntry& entry,const QString& name,const QString& type=QString::null);
+	void buildDirEntry(UDSEntry& entry,const QString& name,const QString& type=QString::null, 
+		const QString& host=QString::null);
 	// Create UDSEntry for single services: dnssd:/type/service
 	void buildServiceEntry(UDSEntry& entry,const QString& name,const QString& type,
 			       const QString& domain);
@@ -63,6 +64,9 @@ private:
 	bool dnssdOK();
 	QString getAttribute(const QString& name);
 	QString getProtocol(const QString& type);
+	// try to load config file for given service type (or just return if already loaded)
+	bool setConfig(const QString& type);
+
 	DNSSD::ServiceBrowser* browser;
 	// service types merged from all domains - to avoid duplicates
 	QStringList mergedtypes;
@@ -70,8 +74,8 @@ private:
 	DNSSD::RemoteService *toResolve;
 	// Config file for service - also acts as one-entry cache
 	KConfig *configData;
-	// try to load config file for given service type (or just return if already loaded)
-	bool setConfig(const QString& type);
+	// listDir for all domains (zeroconf:/) or one specified (zeroconf://domain/)
+	bool allDomains;
 private slots:
 	void newType(DNSSD::RemoteService::Ptr);
 	void newService(DNSSD::RemoteService::Ptr);
