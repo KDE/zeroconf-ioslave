@@ -1,0 +1,3 @@
+Name=NFS Remote directory
+Type=_nfs._tcp
+PathEntry=path

@@ -1,0 +1,5 @@
+Name=FTP servers
+Type=_ftp._tcp
+PathEntry=path
+UserEntry=u
+PasswordEntry=p

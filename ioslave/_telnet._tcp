@@ -1,0 +1,4 @@
+Name=Remote shell (telnet)
+Type=_telnet._tcp
+UserEntry=u
+PasswordEntry=p

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Name=DNS-SD services Watcher
+Comment=Keeps track of DNS-SD services and updates directory listings 
+ServiceTypes=KDEDModule
+X-KDE-ModuleType=Library
+X-KDE-Library=dnssdwatcher
+X-KDE-FactoryName=dnssdwatcher
+X-KDE-Kded-autoload=true

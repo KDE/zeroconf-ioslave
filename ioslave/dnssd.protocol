@@ -1,0 +1,18 @@
+[Protocol]
+exec=kio_dnssd
+protocol=dnssd
+
+input=none
+output=filesystem
+listing=Name,Link,Type
+reading=true
+writing=false
+makedir=false
+deleting=false
+linking=false
+moving=false
+Icon=network_local
+Description=A kioslave for DNSSD
+maxInstances=4
+Class=:local
+
