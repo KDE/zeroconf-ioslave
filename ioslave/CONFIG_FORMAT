@@ -1,5 +1,5 @@
-Every DNS-SD service type used with dnssd:/ ioslave needs
-configuration file in $DATADIR/dnssd with name matching service type.
+Every DNS-SD service type used with zeroconf:/ ioslave needs
+configuration file in $DATADIR/zeroconf with name matching service type.
 Used entries:
 
 Type      	- obligatory, must match file name 

@@ -38,18 +38,18 @@ using namespace KIO;
 
 enum UrlType { RootDir, ServiceDir, Service, HelperProtocol, Invalid };
 
-class kio_dnssdProtocol : public QObject, public KIO::SlaveBase
+class ZeroConfProtocol : public QObject, public KIO::SlaveBase
 {
 	Q_OBJECT
 public:
-	kio_dnssdProtocol(const QCString &pool_socket, const QCString &app_socket);
-	virtual ~kio_dnssdProtocol();
+	ZeroConfProtocol(const QCString &pool_socket, const QCString &app_socket);
+	virtual ~ZeroConfProtocol();
 	virtual void get(const KURL& url);
 	virtual void mimetype(const KURL& url);
 	virtual void stat(const KURL& url);
 	virtual void listDir(const KURL& url );
 private:
-	// Create UDSEntry for dnssd:/ or dnssd:/type/ paths
+	// Create UDSEntry for zeroconf:/ or zeroconf:/type/ paths
 	void buildDirEntry(UDSEntry& entry,const QString& name,const QString& type=QString::null);
 	// Create UDSEntry for single services: dnssd:/type/service
 	void buildServiceEntry(UDSEntry& entry,const QString& name,const QString& type,

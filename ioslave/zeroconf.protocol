@@ -1,0 +1,28 @@
+[Protocol]
+exec=kio_zeroconf
+protocol=zeroconf
+
+input=none
+output=filesystem
+listing=Name,Link,Type
+reading=true
+writing=false
+makedir=false
+deleting=false
+linking=false
+moving=false
+Icon=network_local
+Description=A kioslave for ZeroConf
+Description[da]=En kioslave for ZeroConf
+Description[de]=Ein kioslave für ZeroConf
+Description[fr]=Un module d'entrée / sortie pour ZeroConf
+Description[nl]=Een kioslave voor ZeroConf
+Description[pt]=Um 'kioslave' para ZeroConf
+Description[pt_BR]=Um 'kioslave' para ZeroConf
+Description[ru]=Kioslave для ZeroConf
+Description[sv]=En I/O-slav för ZeroConf
+Description[uk]=Kioslave для ZeroConf
+Description[zh_CN]=ZeroConf 的 kioslave
+maxInstances=4
+Class=:local
+

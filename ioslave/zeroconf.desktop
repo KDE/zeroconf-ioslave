@@ -12,5 +12,6 @@ Name[pt_BR]=Serviços de rede
 Name[ru]=Сетевые службы
 Name[sv]=Nätverkstjänster
 Name[uk]=Мережеві служби
+Name[zh_CN]=网络服务
 Type=Link
-URL=dnssd:/
+URL=zeroconf:/

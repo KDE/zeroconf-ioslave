@@ -62,21 +62,21 @@ static const KCmdLineOptions options[] =
 using namespace KIO;
 
 
-kio_dnssdProtocol::kio_dnssdProtocol(const QCString &pool_socket, const QCString &app_socket)
-		: SlaveBase("dnssd", pool_socket, app_socket), browser(0),toResolve(0),
+ZeroConfProtocol::ZeroConfProtocol(const QCString &pool_socket, const QCString &app_socket)
+		: SlaveBase("zeroconf", pool_socket, app_socket), browser(0),toResolve(0),
 		configData(0)
 {
-	kdDebug() << "kio_dnssdProtocol::kio_dnssdProtocol()" << endl;
+	kdDebug() << "ZeroConfProtocol::ZeroConfProtocol()" << endl;
 }
 
 
-kio_dnssdProtocol::~kio_dnssdProtocol()
+ZeroConfProtocol::~ZeroConfProtocol()
 {
-	kdDebug() << "kio_dnssdProtocol::~kio_dnssdProtocol()" << endl;
+	kdDebug() << "ZeroConfProtocol::~ZeroConfProtocol()" << endl;
 }
 
 
-void kio_dnssdProtocol::get(const KURL& url )
+void ZeroConfProtocol::get(const KURL& url )
 {
 	if (!dnssdOK()) return;
 	UrlType t = checkURL(url);
@@ -95,12 +95,12 @@ void kio_dnssdProtocol::get(const KURL& url )
 		error(ERR_MALFORMED_URL,i18n("invalid URL"));
 	}
 }
-void kio_dnssdProtocol::mimetype(const KURL& url )
+void ZeroConfProtocol::mimetype(const KURL& url )
 {
 	resolveAndRedirect(url);
 }
 
-UrlType kio_dnssdProtocol::checkURL(const KURL& url)
+UrlType ZeroConfProtocol::checkURL(const KURL& url)
 {
 	if (url.path()=="/") return RootDir;
 	QString service, type, domain;
@@ -117,8 +117,8 @@ UrlType kio_dnssdProtocol::checkURL(const KURL& url)
 	return Invalid;
 }
 
-// URL dnssd://domain/_http._tcp/some service
-void kio_dnssdProtocol::dissect(const KURL& url,QString& name,QString& type,QString& domain)
+// URL zeroconf://domain/_http._tcp/some service
+void ZeroConfProtocol::dissect(const KURL& url,QString& name,QString& type,QString& domain)
 {
 	type = url.path().section("/",1,1);
 	domain = url.host();
@@ -126,7 +126,7 @@ void kio_dnssdProtocol::dissect(const KURL& url,QString& name,QString& type,QStr
 
 }
 
-bool kio_dnssdProtocol::dnssdOK()
+bool ZeroConfProtocol::dnssdOK()
 {
 	switch(DNSSD::ServiceBrowser::isAvailable()) {	    
         	case DNSSD::ServiceBrowser::Stopped:
@@ -142,7 +142,7 @@ bool kio_dnssdProtocol::dnssdOK()
         }
 }
 
-void kio_dnssdProtocol::stat(const KURL& url)
+void ZeroConfProtocol::stat(const KURL& url)
 {
 	UDSEntry entry;
 	if (!dnssdOK()) return;
@@ -170,13 +170,13 @@ void kio_dnssdProtocol::stat(const KURL& url)
 		error(ERR_MALFORMED_URL,i18n("invalid URL"));
 	}
 }
-QString kio_dnssdProtocol::getAttribute(const QString& name)
+QString ZeroConfProtocol::getAttribute(const QString& name)
 {
 	QString entry = configData->readEntry(name);
 	return (entry.isNull()) ? QString::null : toResolve->textData()[entry];
 }
 
-void kio_dnssdProtocol::resolveAndRedirect(const KURL& url, bool useKRun)
+void ZeroConfProtocol::resolveAndRedirect(const KURL& url, bool useKRun)
 {
 	QString name,type,domain;
 	dissect(url,name,type,domain);
@@ -209,13 +209,13 @@ void kio_dnssdProtocol::resolveAndRedirect(const KURL& url, bool useKRun)
 	}
 }
 
-bool kio_dnssdProtocol::setConfig(const QString& type)
+bool ZeroConfProtocol::setConfig(const QString& type)
 {
 	kdDebug() << "Setting config for " << type << endl;
 	if (configData)
 		if (configData->readEntry("Type")!=type) delete configData;
 		else return true;
-	configData = new KConfig("dnssd/"+type,false,false,"data");
+	configData = new KConfig("zeroconf/"+type,false,false,"data");
 	return (configData->readEntry("Type")==type);
 }
 
@@ -235,7 +235,7 @@ inline void buildAtom(UDSEntry& entry,UDSAtomTypes type, long data)
 }
 
 
-void kio_dnssdProtocol::buildDirEntry(UDSEntry& entry,const QString& name,const QString& type)
+void ZeroConfProtocol::buildDirEntry(UDSEntry& entry,const QString& name,const QString& type)
 {
 	entry.clear();
 	buildAtom(entry,UDS_NAME,name);
@@ -243,15 +243,15 @@ void kio_dnssdProtocol::buildDirEntry(UDSEntry& entry,const QString& name,const 
 	buildAtom(entry,UDS_SIZE,0);
 	buildAtom(entry,UDS_FILE_TYPE,S_IFDIR);
 	buildAtom(entry,UDS_MIME_TYPE,"inode/directory");
-	if (!type.isNull()) buildAtom(entry,UDS_URL,"dnssd:/"+type+"/");
+	if (!type.isNull()) buildAtom(entry,UDS_URL,"zeroconf:/"+type+"/");
 }
-QString kio_dnssdProtocol::getProtocol(const QString& type)
+QString ZeroConfProtocol::getProtocol(const QString& type)
 {
 	setConfig(type);
 	return configData->readEntry("Protocol",type.section(".",0,0).mid(1));
 }
 
-void kio_dnssdProtocol::buildServiceEntry(UDSEntry& entry,const QString& name,const QString& type,const QString& domain)
+void ZeroConfProtocol::buildServiceEntry(UDSEntry& entry,const QString& name,const QString& type,const QString& domain)
 {
 	setConfig(type);
 	entry.clear();
@@ -261,7 +261,7 @@ void kio_dnssdProtocol::buildServiceEntry(UDSEntry& entry,const QString& name,co
 	if (!icon.isNull()) buildAtom(entry,UDS_ICON_NAME,icon);
 	KURL protourl;
 	protourl.setProtocol(getProtocol(type));
-	QString encname = "dnssd://" + domain +"/" +type+ "/" + name;
+	QString encname = "zeroconf://" + domain +"/" +type+ "/" + name;
 	if (KProtocolInfo::supportsListing(protourl)) {
 		buildAtom(entry,UDS_FILE_TYPE,S_IFDIR);
 		encname+="/";
@@ -269,7 +269,7 @@ void kio_dnssdProtocol::buildServiceEntry(UDSEntry& entry,const QString& name,co
 	buildAtom(entry,UDS_URL,encname);
 }
 
-void kio_dnssdProtocol::listDir(const KURL& url )
+void ZeroConfProtocol::listDir(const KURL& url )
 {
 
 	if (!dnssdOK()) return;
@@ -301,7 +301,7 @@ void kio_dnssdProtocol::listDir(const KURL& url )
 	browser->startBrowse();
 	kapp->eventLoop()->enterLoop();
 }
-void kio_dnssdProtocol::allReported()
+void ZeroConfProtocol::allReported()
 {
 	UDSEntry entry;
 	listEntry(entry,true);
@@ -311,7 +311,7 @@ void kio_dnssdProtocol::allReported()
 	mergedtypes.clear();
 	kapp->eventLoop()->exitLoop();
 }
-void kio_dnssdProtocol::newType(DNSSD::RemoteService::Ptr srv)
+void ZeroConfProtocol::newType(DNSSD::RemoteService::Ptr srv)
 {
 	if (mergedtypes.contains(srv->type())>0) return;
 	mergedtypes << srv->type();
@@ -325,7 +325,7 @@ void kio_dnssdProtocol::newType(DNSSD::RemoteService::Ptr srv)
 		listEntry(entry,false);
 	}
 }
-void kio_dnssdProtocol::newService(DNSSD::RemoteService::Ptr srv)
+void ZeroConfProtocol::newService(DNSSD::RemoteService::Ptr srv)
 {
 	UDSEntry entry;
 	buildServiceEntry(entry,srv->serviceName(),srv->type(),srv->domain());
@@ -339,12 +339,12 @@ extern "C"
 	{
 		// KApplication is necessary to use other ioslaves
 		putenv(strdup("SESSION_MANAGER="));
-		KCmdLineArgs::init(argc, argv, "kio_dnssd", 0, 0, 0, 0);
+		KCmdLineArgs::init(argc, argv, "kio_zeroconf", 0, 0, 0, 0);
 		KCmdLineArgs::addCmdLineOptions( options );
 		KApplication::disableAutoDcopRegistration();
 		KApplication app;
 		KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-		kio_dnssdProtocol slave( args->arg(1), args->arg(2) );
+		ZeroConfProtocol slave( args->arg(1), args->arg(2) );
 		slave.dispatchLoop();
 		return 0;
 	}
