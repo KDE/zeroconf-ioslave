@@ -18,6 +18,7 @@ Description[fr]=Un module d'entrée / sortie pour DNSSD
 Description[nl]=Een kioslave voor DNSSD
 Description[pt]=Um 'kioslave' para DNSSD
 Description[pt_BR]=Um 'kioslave' para DNSSD
+Description[ru]=Kioslave для DNSSD
 Description[sv]=En I/O-slav för DNSSD
 Description[uk]=Kioslave для DNSSD
 maxInstances=4
