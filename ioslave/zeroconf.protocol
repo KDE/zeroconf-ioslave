@@ -13,6 +13,10 @@ linking=false
 moving=false
 Icon=network_local
 Description=A kioslave for ZeroConf
+Description[da]=En kioslave for Zeroconf
+Description[pt]=Um 'kioslave' para o ZeroConf
+Description[pt_BR]=Um 'kioslave' para o ZeroConf
+Description[sv]=En I/O-slav för Zeroconf
 maxInstances=4
 Class=:local
 
