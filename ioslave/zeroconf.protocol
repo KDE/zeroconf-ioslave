@@ -15,6 +15,7 @@ Icon=network_local
 Description=A kioslave for ZeroConf
 Description[da]=En kioslave for Zeroconf
 Description[et]=ZeroConfi I/O-moodul
+Description[fr]=Un module d'entrée / sortie pour ZeroConf
 Description[is]=kioslave fyrir ZeroConf
 Description[pt]=Um 'kioslave' para o ZeroConf
 Description[pt_BR]=Um 'kioslave' para o ZeroConf
