@@ -21,8 +21,9 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
-
+#include <dnssd/servicebrowser.h>
 #include <kdirnotify_stub.h>
+#include "watcher.h"
 
 
 DNSSDWatcher::DNSSDWatcher(const QCString& obj)
@@ -30,78 +31,19 @@ DNSSDWatcher::DNSSDWatcher(const QCString& obj)
 {
 	connectDCOPSignal("","KDirNotify","enteredDirectory(KURL)","enteredDirectory(KURL)",false);
 	connectDCOPSignal("","KDirNotify","leftDirectory(KURL)","leftDirectory(KURL)",false);
-	browsers.setAutoDelete(true);
+	watchers.setAutoDelete(true);
 }
 
 QStringList DNSSDWatcher::watchedDirectories()
 {
-	return references.keys();
-}
-
-
-void DNSSDWatcher::enteredDirectory(const KURL& dir)
-{
-	if (dir.protocol()!="dnssd") return;
-	kdDebug() << "entereed: " << dir.prettyURL() << "\n";
-	if (references.contains(dir.url())) references[dir.url()]++;
-		else createNotifier(dir);
-//	kdDebug() << dir.url() << ": count " << references[dir.url()] << "\n";
-}
-
-
-void DNSSDWatcher::leftDirectory(const KURL& dir)
-{
-	if (dir.protocol()!="dnssd") return;
-	kdDebug() << "left:  " << dir.prettyURL() << ", referenced:" << references.contains(dir.url()) << endl;
-	if (!references.contains(dir.url())) return;
-	kdDebug() << "current refcount: " << references[dir.url()] << endl;
-	if ((references[dir.url()])==1) { 
-			references.remove(dir.url());
-			browsers.remove(dir.url());
-			kdDebug() << dir.url() << " is no longer monitored\n";
-			}
-		else references[dir.url()]--;
-//dDebug() << dir.url() << ": count " << references[dir.url()] << "\n";
-}
-
-
-// FIXME: send whole batches
-// FIXME: handle service type removal
-void DNSSDWatcher::serviceAdded(DNSSD::RemoteService::Ptr srv)
-{
-	KDirNotify_stub st("*","*");
-	if (srv->serviceName().isEmpty()) { // metaservice
-		kdDebug() << "Kicking dnssd:/ and dnssd://" << srv->domain() << "\n";
-		if (references.contains("dnssd:/")) st.FilesAdded("dnssd:/");
-		if (references.contains("dnssd://"+srv->domain())) st.FilesAdded("dnssd://"+srv->domain());
-	} else {
-		kdDebug() << "Kicking dnssd:/" << srv->type() << " and dnssd://" << srv->domain() 
-			<< "/" << srv->type() << "\n";
-		if (references.contains("dnssd:/"+srv->type())) st.FilesAdded("dnssd:/"+srv->type());
-		if (references.contains("dnssd://"+srv->domain()+"/"+srv->type()))
-			st.FilesAdded("dnssd://"+srv->domain()+"/"+srv->type());
-	}
-}
-
-// FIXME: use FilesRemoved
-void DNSSDWatcher::serviceRemoved(DNSSD::RemoteService::Ptr srv)
-{
-	serviceAdded(srv);
-}
-
-void DNSSDWatcher::createNotifier(const KURL& url) 
-{
-	QString domain,type,name;
-	dissect(url,name,type,domain);	
-	if (type.isEmpty()) type = DNSSD::ServiceBrowser::AllServices;
-	DNSSD::ServiceBrowser *b;
-	if (domain.isEmpty()) b = new DNSSD::ServiceBrowser(type);
-		else b = new DNSSD::ServiceBrowser(type,domain);
-	connect(b,SIGNAL(serviceAdded(DNSSD::RemoteService::Ptr)),SLOT(serviceAdded(DNSSD::RemoteService::Ptr)));
-	connect(b,SIGNAL(serviceRemoved(DNSSD::RemoteService::Ptr)),SLOT(serviceRemoved(DNSSD::RemoteService::Ptr)));
-	browsers.insert(url.url(),b);
-	b->startBrowse();
-	references[url.url()]=1;
+//TODO
+//	return watchers.keys();
+	QStringList keys;
+	for (QDictIterator<Watcher> it(watchers) ; it.current(); ++it ) {
+		keys << it.currentKey();
+		kdDebug() << it.currentKey() << " " << (*it)->refcount << "\n";
+		}
+return keys;
 }
 
 
@@ -113,6 +55,37 @@ void DNSSDWatcher::dissect(const KURL& url,QString& name,QString& type,QString& 
 	name = url.path().section("/",2,-1);
 }
 
+
+
+void DNSSDWatcher::enteredDirectory(const KURL& dir)
+{
+	if (dir.protocol()!="dnssd") return;
+	kdDebug() << "entereed: " << dir.prettyURL() << "\n";
+	if (watchers[dir.url()]) watchers[dir.url()]->refcount++;
+		else createNotifier(dir);
+//	kdDebug() << dir.url() << ": count " << references[dir.url()] << "\n";
+}
+
+
+void DNSSDWatcher::leftDirectory(const KURL& dir)
+{
+	if (dir.protocol()!="dnssd") return;
+//	kdDebug() << "left:  " << dir.prettyURL() << ", referenced:" << watchers.contains(dir.url()).refcount << endl;
+	if (!watchers[dir.url()]) return;
+	if ((watchers[dir.url()])->refcount==1) watchers.remove(dir.url());
+		else watchers[dir.url()]->refcount--;
+//dDebug() << dir.url() << ": count " << references[dir.url()] << "\n";
+}
+
+
+void DNSSDWatcher::createNotifier(const KURL& url) 
+{
+	QString domain,type,name;
+	dissect(url,name,type,domain);	
+	if (type.isEmpty()) type = DNSSD::ServiceBrowser::AllServices;
+	Watcher *w = new Watcher(type,domain);
+	watchers.insert(url.url(),w);
+}
 
 extern "C" {
 	KDE_EXPORT KDEDModule *create_dnssdwatcher(const QCString &obj)

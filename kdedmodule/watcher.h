@@ -16,34 +16,33 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef _DNSSDWATCHER_H_
-#define _DNSSDWATCHER_H_
+#ifndef _WATCHER_H_
+#define _WATCHER_H_
 
-#include <qdict.h>
-#include <kdedmodule.h>
 #include <qstring.h>
-#include <qstringlist.h>
-#include <kurl.h>
+#include <dnssd/servicebrowser.h>
+#include <dnssd/remoteservice.h>
 
-class Watcher;
-class DNSSDWatcher : public KDEDModule
+class Watcher : public QObject
 {
 Q_OBJECT
-K_DCOP
 public:
-	DNSSDWatcher(const QCString& obj);
-
-k_dcop:
-	QStringList watchedDirectories();
-	void enteredDirectory(const KURL& dir);
-	void leftDirectory(const KURL& dir);
-
+	Watcher(const QString& type, const QString& domain);
+	~Watcher();
+		
+	unsigned int refcount;
 private:
-	QDict<Watcher> watchers;
+	DNSSD::ServiceBrowser* browser;
+	bool updateNeeded;
+	QString m_type;
+	QString m_domain;
+	QValueList<DNSSD::RemoteService::Ptr> removed;
 	
-	void createNotifier(const KURL& url);
-	void dissect(const KURL& url,QString& name,QString& type,QString& domain);
-
+private slots:
+	void serviceRemoved(DNSSD::RemoteService::Ptr srv);
+	void serviceAdded(DNSSD::RemoteService::Ptr srv);
+	void finished();
+	
 };
 
 #endif
