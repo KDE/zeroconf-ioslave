@@ -1,9 +1,9 @@
-INCLUDES = -I.. $(all_includes)
+INCLUDES = $(all_includes)
 
 kde_module_LTLIBRARIES = kio_dnssd.la
 
 kio_dnssd_la_SOURCES = dnssd.cpp
-kio_dnssd_la_LIBADD = ../dnssd/libkdnssd.la -lkio
+kio_dnssd_la_LIBADD = -lkdnssd -lkio
 kio_dnssd_la_LDFLAGS = -avoid-version -module $(all_libraries) $(KDE_PLUGIN)
 
 protocol_DATA = dnssd.protocol
