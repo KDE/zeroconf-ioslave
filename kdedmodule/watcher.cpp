@@ -36,18 +36,15 @@ Watcher::Watcher(const QString& type, const QString& domain)
 		SLOT(serviceRemoved(DNSSD::RemoteService::Ptr)));
 	connect(browser,SIGNAL(finished()),SLOT(finished()));
 	browser->startBrowse();
-	kdDebug() << "New watcher for " << type << "@" << domain << "\n";
 }
 
 Watcher::~Watcher()
 {
-	kdDebug() << "Deleting watcher for " << m_type << "@" << m_domain << "\n";
 	delete browser;
 }
 
 void Watcher::serviceAdded(DNSSD::RemoteService::Ptr srv)
 {
-	kdDebug() << "Received added for " << srv->serviceName() << "\n";
 	updateNeeded=true;
 }
 
@@ -62,7 +59,7 @@ void Watcher::finished()
 	KDirNotify_stub st("*","*");
 	kdDebug() << "Finished for " << m_type << "@" << m_domain << "\n";
 	if (updateNeeded || removed.count()) {
-		QString url = "dnssd:/";
+		QString url = "zeroconf:/";
 		if (!m_domain.isEmpty()) url+="/"+m_domain+"/";
 		if (m_type!=DNSSD::ServiceBrowser::AllServices) url+=m_type;
 		kdDebug() << "Sending update: " << url << "\n";
@@ -73,7 +70,7 @@ void Watcher::finished()
 		QStringList urls;
 		for (QValueList<DNSSD::RemoteService::Ptr>::ConstIterator it=removed.begin();
 			it!=removed.end(); ++it) {
-				QString url="dnssd:/";
+				QString url="zeroconf:/";
 				kdDebug() << "In removed() , m_type is " << m_type << " and DNSSD::Ref is " << DNSSD::ServiceBrowser::AllServices << "\n";
 				if (!m_domain.isEmpty()) url+="/"+(*it)->domain()+"/";
 					else if (!m_domain.isEmpty()) url+="/"+m_domain+"/";

@@ -59,22 +59,18 @@ void DNSSDWatcher::dissect(const KURL& url,QString& name,QString& type,QString& 
 
 void DNSSDWatcher::enteredDirectory(const KURL& dir)
 {
-	if (dir.protocol()!="dnssd") return;
-	kdDebug() << "entereed: " << dir.prettyURL() << "\n";
+	if (dir.protocol()!="zeroconf") return;
 	if (watchers[dir.url()]) watchers[dir.url()]->refcount++;
 		else createNotifier(dir);
-//	kdDebug() << dir.url() << ": count " << references[dir.url()] << "\n";
 }
 
 
 void DNSSDWatcher::leftDirectory(const KURL& dir)
 {
-	if (dir.protocol()!="dnssd") return;
-//	kdDebug() << "left:  " << dir.prettyURL() << ", referenced:" << watchers.contains(dir.url()).refcount << endl;
+	if (dir.protocol()!="zeroconf") return;
 	if (!watchers[dir.url()]) return;
 	if ((watchers[dir.url()])->refcount==1) watchers.remove(dir.url());
 		else watchers[dir.url()]->refcount--;
-//dDebug() << dir.url() << ": count " << references[dir.url()] << "\n";
 }
 
 
