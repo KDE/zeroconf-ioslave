@@ -4,6 +4,7 @@ Used entries:
 
 Type      	- obligatory, must match file name 
 Name	  	- obligarory, specifies user friendly name shown in konqueror/ file dialog
+Name[language]  - optional, contains the localized friendly name. E.g. Name[gb]=Colour server
 Exec      	- optional, specifies executable for helper service - used if service has no
 		  corresponding helper protocol
 Protocol  	- optional, specifies real protocol name, will be taken from service name
