@@ -22,6 +22,7 @@ Description[pt_BR]=Um 'kioslave' para DNSSD
 Description[ru]=Kioslave для DNSSD
 Description[sv]=En I/O-slav för DNSSD
 Description[uk]=Kioslave для DNSSD
+Description[zh_CN]=DNSSD 的 kioslave
 maxInstances=4
 Class=:local
 
