@@ -88,9 +88,6 @@ void kio_dnssdProtocol::get(const KURL& url )
 		resolveAndRedirect(url,true);
 		error(KIO::ERR_SLAVE_DEFINED,
 			i18n("Requested service has been launched in separate window."));
-/*		data(QByteArray());
-		emit mimeType("inode/directory");
-		finished();*/
 		break;
 	}
 	case Service:
@@ -102,13 +99,11 @@ void kio_dnssdProtocol::get(const KURL& url )
 }
 void kio_dnssdProtocol::mimetype(const KURL& url )
 {
-	kdDebug() << "Mimetype query\n";
 	resolveAndRedirect(url);
 }
 
 UrlType kio_dnssdProtocol::checkURL(const KURL& url)
 {
-	kdDebug() << "Checking URL " << url.url() << ", path is " << url.path() << endl;
 	if (url.path()=="/") return RootDir;
 	const QString& path = url.path();
 	const QString& type = path.section("/",1,1);
@@ -119,6 +114,7 @@ UrlType kio_dnssdProtocol::checkURL(const KURL& url)
 	if (service.isEmpty()) return ServiceDir;
 	if (!service.isEmpty() && !domain.isEmpty()) {
 		if (!setConfig(type)) return Invalid;
+		if (!configData->readEntry("Exec").isNull()) return HelperProtocol;
 		return (KProtocolInfo::isHelperProtocol( configData->readEntry( "Protocol",
 			type.section(".",0,0).mid(1)))) ? HelperProtocol : Service;
 		}
@@ -142,7 +138,6 @@ void kio_dnssdProtocol::stat(const KURL& url)
 	switch (t) {
 	case RootDir:
 	case ServiceDir:
-		kdDebug() << "Reporting as dir\n";
 		buildDirEntry(entry,"");
 		statEntry(entry);
 		finished();
@@ -173,7 +168,6 @@ void kio_dnssdProtocol::resolveAndRedirect(const KURL& url, bool useKRun)
 	if (toResolve!=0)
 		if (toResolve->serviceName()==name && toResolve->type()==type &&
 		        toResolve->domain()==domain && toResolve->isResolved()) {
-			kdDebug() << "Lucky, already resolved\n";
 		}  else {
 			delete toResolve;
 			toResolve = 0;
@@ -199,11 +193,16 @@ void kio_dnssdProtocol::resolveAndRedirect(const KURL& url, bool useKRun)
 	destUrl.setHost(toResolve->hostName());
 	destUrl.setPort(toResolve->port());
 	// krun object will autodelete itself
-	if (useKRun) KRun::run(KProtocolInfo::exec(getProtocol(type)),destUrl);
-		else {
-			redirection(destUrl);
-			finished();
-		}
+	if (useKRun) {
+		QString exec = configData->readEntry("Exec");
+		// or try getting it from helper protocol
+		if (exec.isNull()) exec = KProtocolInfo::exec(getProtocol(type));
+		KRun::run(exec,destUrl);
+	}
+	else {
+		redirection(destUrl);
+		finished();
+	}
 }
 
 bool kio_dnssdProtocol::setConfig(const QString& type)
@@ -213,7 +212,6 @@ bool kio_dnssdProtocol::setConfig(const QString& type)
 		if (configData->readEntry("Type")!=type) delete configData;
 		else return true;
 	configData = new KConfig("dnssd/"+type,false,false,"data");
-	kdDebug() << "Result: " << configData->readEntry("Type") << endl;
 	return (configData->readEntry("Type")==type);
 }
 
@@ -260,9 +258,10 @@ void kio_dnssdProtocol::buildServiceEntry(UDSEntry& entry,const QString& name,co
 	atom.m_long = 0666;
 	setConfig(type);
 	entry.append(atom);
-	if (!KProtocolInfo::icon(getProtocol(type)).isNull()) {
+	QString icon=configData->readEntry("Icon",KProtocolInfo::icon(getProtocol(type)));
+	if (!icon.isNull()) {
 		atom.m_uds = UDS_ICON_NAME;
-		atom.m_str = KProtocolInfo::icon(getProtocol(type));
+		atom.m_str = icon;
 		entry.append(atom);
 	}
 	atom.m_uds = UDS_FILE_TYPE;
@@ -276,19 +275,16 @@ void kio_dnssdProtocol::buildServiceEntry(UDSEntry& entry,const QString& name,co
 	entry.append(atom);
 	atom.m_uds=UDS_URL;
 	atom.m_str=encname;
-	kdDebug() << "Name before: " << name << ", after: " << encname << "\n";
 	entry.append(atom);
 }
 
 void kio_dnssdProtocol::listDir(const KURL& url )
 {
-	kdDebug() << "Listing started for " << url.prettyURL() << endl;
 
 	UrlType t  = checkURL(url);
 	UDSEntry entry;
 	switch (t) {
 	case RootDir:
-		kdDebug() << "Listing root dir\n";
 		if (url.host().isEmpty())
 			browser = new DNSSD::ServiceBrowser(DNSSD::ServiceBrowser::AllServices);
 			else browser = new DNSSD::ServiceBrowser(DNSSD::ServiceBrowser::AllServices,url.host());
@@ -304,26 +300,23 @@ void kio_dnssdProtocol::listDir(const KURL& url )
 		break;
 	case Service:
 		resolveAndRedirect(url);
-	  	break;
+	  	return;
 	default:
 		error(ERR_MALFORMED_URL,i18n("invalid URL"));
 		return;
 	}
 	connect(browser,SIGNAL(finished()),this,SLOT(allReported()));
 	browser->startBrowse();
-	kdDebug() << "entering LOOP\n";
 	kapp->eventLoop()->enterLoop();
 }
 void kio_dnssdProtocol::allReported()
 {
 	UDSEntry entry;
-// 	kdDebug() << "Listing finished\n";
 	listEntry(entry,true);
 	finished();
 	delete browser;
 	browser=0;
 	mergedtypes.clear();
-	kdDebug() << "exiting LOOP\n";
 	kapp->eventLoop()->exitLoop();
 }
 void kio_dnssdProtocol::newType(DNSSD::RemoteService::Ptr srv)
