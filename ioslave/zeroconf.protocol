@@ -14,6 +14,7 @@ moving=false
 Icon=network_local
 Description=A kioslave for ZeroConf
 Description[ca]=Un kioslave per ZeroConf
+Description[cs]=Pomocný protokol pro Zeroconf
 Description[da]=En kioslave for Zeroconf
 Description[de]=Ein kioslave für ZeroConf
 Description[es]=A esclavo kio para ZeroConf
