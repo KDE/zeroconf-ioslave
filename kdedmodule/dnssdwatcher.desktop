@@ -1,7 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Type=Service
-Name=DNS-SD services Watcher
+Name=DNS-SD Services Watcher
 Comment=Keeps track of DNS-SD services and updates directory listings 
 ServiceTypes=KDEDModule
 X-KDE-ModuleType=Library

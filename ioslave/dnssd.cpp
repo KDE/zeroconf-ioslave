@@ -96,7 +96,7 @@ void kio_dnssdProtocol::get(const KURL& url )
 	case Service:
 		resolveAndRedirect(url);
 		break;
-	case Lisa: 
+	case Lisa:
 		redirectToLisa(url);
 		kdDebug() << "Lisa requested\n";
 		break;
@@ -162,9 +162,9 @@ void kio_dnssdProtocol::stat(const KURL& url)
 		dissect(url,name,type,domain);
 		buildServiceEntry(entry,name,type,domain);
 		statEntry(entry);
-		finished(); 
+		finished();
 		break;
-	}		
+	}
 	case Lisa:
 		kdDebug() << "Lisa requested\n";
 		redirectToLisa(url);
@@ -209,7 +209,7 @@ void kio_dnssdProtocol::resolveAndRedirect(const KURL& url, bool useKRun)
 	destUrl.setHost(toResolve->hostName());
 	destUrl.setPort(toResolve->port());
 	// krun object will autodelete itself
-	if (useKRun) KRun::run(KProtocolInfo::exec(getProtocol(type)),destUrl); 
+	if (useKRun) KRun::run(KProtocolInfo::exec(getProtocol(type)),destUrl);
 		else {
 			redirection(destUrl);
 			finished();
@@ -311,13 +311,13 @@ void kio_dnssdProtocol::listDir(const KURL& url )
 	UrlType t  = checkURL(url);
 	UDSEntry entry;
 	switch (t) {
-	case RootDir: 
+	case RootDir:
 		kdDebug() << "Listing root dir\n";
 		if (url.host().isEmpty()) {   // "Computers" pseudo-service only for all domains
-			buildDirEntry(entry,i18n("Network hosts"),"computers");
+			buildDirEntry(entry,i18n("Network Hosts"),"computers");
 			listEntry(entry,false);
 		}
-		if (url.host().isEmpty()) 
+		if (url.host().isEmpty())
 			browser = new DNSSD::ServiceBrowser(DNSSD::ServiceBrowser::AllServices);
 			else browser = new DNSSD::ServiceBrowser(DNSSD::ServiceBrowser::AllServices,url.host());
 		connect(browser,SIGNAL(serviceAdded(DNSSD::RemoteService::Ptr)),
@@ -379,7 +379,7 @@ void kio_dnssdProtocol::newService(DNSSD::RemoteService::Ptr srv)
 
 extern "C"
 {
-	int kdemain( int argc, char **argv ) 
+	int kdemain( int argc, char **argv )
 	{
 		// KApplication is necessary to use other ioslaves
 		putenv(strdup("SESSION_MANAGER="));
