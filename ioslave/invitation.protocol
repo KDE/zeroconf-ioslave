@@ -1,0 +1,18 @@
+[Protocol]
+exec=kio_zeroconf
+protocol=invitation
+
+input=none
+output=filesystem
+listing=Name,Link,Type
+reading=true
+writing=false
+makedir=false
+deleting=false
+linking=false
+moving=false
+Icon=network_local
+Description=SD invitations
+maxInstances=4
+Class=:remote
+
