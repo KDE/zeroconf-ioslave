@@ -333,7 +333,7 @@ void ZeroConfProtocol::newService(DNSSD::RemoteService::Ptr srv)
 
 extern "C"
 {
-	int kdemain( int argc, char **argv )
+	int KDE_EXPORT kdemain( int argc, char **argv )
 	{
 		// KApplication is necessary to use other ioslaves
 		putenv(strdup("SESSION_MANAGER="));
