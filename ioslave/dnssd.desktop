@@ -1,0 +1,5 @@
+[Desktop Entry]
+Icon=network_local
+Name=Network services
+Type=Link
+URL=dnssd:/
