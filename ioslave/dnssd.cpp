@@ -96,10 +96,6 @@ void kio_dnssdProtocol::get(const KURL& url )
 	case Service:
 		resolveAndRedirect(url);
 		break;
-	case Lisa:
-		redirectToLisa(url);
-		kdDebug() << "Lisa requested\n";
-		break;
 	default:
 		error(ERR_MALFORMED_URL,i18n("invalid URL"));
 	}
@@ -107,8 +103,7 @@ void kio_dnssdProtocol::get(const KURL& url )
 void kio_dnssdProtocol::mimetype(const KURL& url )
 {
 	kdDebug() << "Mimetype query\n";
-	if (checkURL(url)==Lisa) redirectToLisa(url);
-	else resolveAndRedirect(url);
+	resolveAndRedirect(url);
 }
 
 UrlType kio_dnssdProtocol::checkURL(const KURL& url)
@@ -118,7 +113,6 @@ UrlType kio_dnssdProtocol::checkURL(const KURL& url)
 	const QString& path = url.path();
 	const QString& type = path.section("/",1,1);
 	const QString& proto = type.section(".",1,-1);
-	if (type=="computers") return Lisa;
 	if (type[0]!="_" || (proto!="_udp" && proto!="_tcp")) return Invalid;
 	const QString& domain = url.host();
 	const QString& service = path.section("/",2,-1);
@@ -165,10 +159,6 @@ void kio_dnssdProtocol::stat(const KURL& url)
 		finished();
 		break;
 	}
-	case Lisa:
-		kdDebug() << "Lisa requested\n";
-		redirectToLisa(url);
-		break;
 	default:
 		error(ERR_MALFORMED_URL,i18n("invalid URL"));
 	}
@@ -259,20 +249,6 @@ QString kio_dnssdProtocol::getProtocol(const QString& type)
 	return configData->readEntry("Protocol",type.section(".",0,0).mid(1));
 }
 
-// URL for Lisa : dnssd://hostname/computers/path
-
-void kio_dnssdProtocol::redirectToLisa(const KURL &url)
-{
-	KURL newURL;
-	newURL.setProtocol("lan");
-	newURL.setHost(url.host());
-	newURL.setPath("/"+url.path().section("/",2,-1));
-	kdDebug() << "URL rewritten for Lisa: " << newURL.prettyURL() << "\n";
-	redirection(newURL);
-	finished();
-}
-
-
 void kio_dnssdProtocol::buildServiceEntry(UDSEntry& entry,const QString& name,const QString& type,const QString& domain)
 {
 	UDSAtom atom;
@@ -313,10 +289,6 @@ void kio_dnssdProtocol::listDir(const KURL& url )
 	switch (t) {
 	case RootDir:
 		kdDebug() << "Listing root dir\n";
-		if (url.host().isEmpty()) {   // "Computers" pseudo-service only for all domains
-			buildDirEntry(entry,i18n("Network Hosts"),"computers");
-			listEntry(entry,false);
-		}
 		if (url.host().isEmpty())
 			browser = new DNSSD::ServiceBrowser(DNSSD::ServiceBrowser::AllServices);
 			else browser = new DNSSD::ServiceBrowser(DNSSD::ServiceBrowser::AllServices,url.host());
@@ -330,10 +302,6 @@ void kio_dnssdProtocol::listDir(const KURL& url )
 		connect(browser,SIGNAL(serviceAdded(DNSSD::RemoteService::Ptr)),
 			this,SLOT(newService(DNSSD::RemoteService::Ptr)));
 		break;
-	case Lisa:
-		kdDebug() << "Lisa requested\n";
-		redirectToLisa(url);
-		return;
 	default:
 		error(ERR_MALFORMED_URL,i18n("invalid URL"));
 		return;

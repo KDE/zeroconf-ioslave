@@ -93,7 +93,6 @@ void DNSSDWatcher::createNotifier(const KURL& url)
 {
 	QString domain,type,name;
 	dissect(url,name,type,domain);	
-	if (!name.isEmpty() || type=="computers") return; 
 	if (type.isEmpty()) type = DNSSD::ServiceBrowser::AllServices;
 	DNSSD::ServiceBrowser *b;
 	if (domain.isEmpty()) b = new DNSSD::ServiceBrowser(type);

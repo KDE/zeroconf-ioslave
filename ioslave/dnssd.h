@@ -36,7 +36,7 @@
 class QCString;
 using namespace KIO;
 
-enum UrlType { RootDir, ServiceDir, Service, HelperProtocol, Invalid, Lisa };
+enum UrlType { RootDir, ServiceDir, Service, HelperProtocol, Invalid };
 
 class kio_dnssdProtocol : public QObject, public KIO::SlaveBase
 {
@@ -61,7 +61,6 @@ private:
 	// resolve given service and redirect() to it or use KRun on it (used for helper protocols)
 	void resolveAndRedirect(const KURL& url, bool useKRun = false);
 	QString getProtocol(const QString& type);
-	void redirectToLisa(const KURL& url);
 	DNSSD::ServiceBrowser* browser;
 	// service types merged from all domains - to avoid duplicates
 	QStringList mergedtypes;
