@@ -385,10 +385,8 @@ extern "C"
 		putenv(strdup("SESSION_MANAGER="));
 		KCmdLineArgs::init(argc, argv, "kio_dnssd", 0, 0, 0, 0);
 		KCmdLineArgs::addCmdLineOptions( options );
+		KApplication::disableAutoDcopRegistration();
 		KApplication app;
-		// We want to be anonymous even if we use DCOP
-	//	app.dcopClient()->attach();
-
 		KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 		kio_dnssdProtocol slave( args->arg(1), args->arg(2) );
 		slave.dispatchLoop();
