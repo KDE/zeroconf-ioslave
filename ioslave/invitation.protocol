@@ -13,6 +13,7 @@ linking=false
 moving=false
 Icon=network_local
 Description=SD invitations
+Description[bg]=Покани SD
 Description[sv]=SD-inbjudningar
 maxInstances=4
 Class=:remote
