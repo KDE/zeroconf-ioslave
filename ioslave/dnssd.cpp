@@ -69,12 +69,6 @@ ZeroConfProtocol::ZeroConfProtocol(const QCString &pool_socket, const QCString &
 {}
 
 
-ZeroConfProtocol::~ZeroConfProtocol()
-{
-	kdDebug() << "ZeroConfProtocol::~ZeroConfProtocol()" << endl;
-}
-
-
 void ZeroConfProtocol::get(const KURL& url )
 {
 	if (!dnssdOK()) return;
@@ -83,8 +77,13 @@ void ZeroConfProtocol::get(const KURL& url )
 	case HelperProtocol:
 	{
 		resolveAndRedirect(url,true);
-		error(KIO::ERR_SLAVE_DEFINED,
-			i18n("Requested service has been launched in separate window."));
+		mimeType("text/html");
+		QString reply= "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n";
+		reply+="</head>\n<body>\n<h2>"+i18n("Requested service has been launched in separate window.");
+		reply+="</h2>\n</body></html>";
+		data(reply.utf8());
+		data(QByteArray());
+		finished();
 		break;
 	}
 	case Service:
