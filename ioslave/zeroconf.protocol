@@ -16,6 +16,7 @@ Description=A kioslave for ZeroConf
 Description[ca]=Un kioslave per ZeroConf
 Description[da]=En kioslave for Zeroconf
 Description[de]=Ein kioslave für ZeroConf
+Description[es]=A esclavo kio para ZeroConf
 Description[et]=ZeroConfi I/O-moodul
 Description[fr]=Un module d'entrée / sortie pour ZeroConf
 Description[is]=kioslave fyrir ZeroConf
