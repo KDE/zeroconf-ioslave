@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2004 by Jakub Stachowski                                *
+ *   Copyright (C) 2004, 2005 by Jakub Stachowski                                *
  *   qbast@go2.pl                                                          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -42,7 +42,7 @@ class ZeroConfProtocol : public QObject, public KIO::SlaveBase
 {
 	Q_OBJECT
 public:
-	ZeroConfProtocol(const QCString &pool_socket, const QCString &app_socket);
+	ZeroConfProtocol(const QCString& protocol, const QCString &pool_socket, const QCString &app_socket);
 	virtual void get(const KURL& url);
 	virtual void mimetype(const KURL& url);
 	virtual void stat(const KURL& url);

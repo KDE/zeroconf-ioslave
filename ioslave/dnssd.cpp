@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2004 by Jakub Stachowski                                *
+ *   Copyright (C) 2004, 2005 by Jakub Stachowski                                *
  *   qbast@go2.pl                                                          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -63,8 +63,8 @@ static const KCmdLineOptions options[] =
 using namespace KIO;
 
 
-ZeroConfProtocol::ZeroConfProtocol(const QCString &pool_socket, const QCString &app_socket)
-		: SlaveBase("zeroconf", pool_socket, app_socket), browser(0),toResolve(0),
+ZeroConfProtocol::ZeroConfProtocol(const QCString& protocol, const QCString &pool_socket, const QCString &app_socket)
+		: SlaveBase(protocol, pool_socket, app_socket), browser(0),toResolve(0),
 		configData(0)
 {}
 
@@ -115,7 +115,8 @@ UrlType ZeroConfProtocol::checkURL(const KURL& url)
 	return Invalid;
 }
 
-// URL zeroconf://domain/_http._tcp/some service
+// URL zeroconf://domain/_http._tcp/some%20service
+// URL invitation://host:port/_http._tcp/some%20service?u=username&root=directory
 void ZeroConfProtocol::dissect(const KURL& url,QString& name,QString& type,QString& domain)
 {
 	type = url.path().section("/",1,1);
@@ -178,18 +179,25 @@ void ZeroConfProtocol::resolveAndRedirect(const KURL& url, bool useKRun)
 {
 	QString name,type,domain;
 	dissect(url,name,type,domain);
-	kdDebug() << "Resolve for  " << name << ", " << type << ", " << domain  << "\n";
-	if (toResolve!=0)
-		if (toResolve->serviceName()==name && toResolve->type()==type &&
-		        toResolve->domain()==domain && toResolve->isResolved()) {
-		}  else {
-			delete toResolve;
-			toResolve = 0;
+	if (url.protocol()=="invitation") {
+		delete toResolve;
+		toResolve=0;
+		toResolve= new DNSSD::RemoteService(url);
+		if (!toResolve->isResolved()) error(ERR_MALFORMED_URL,i18n("Invalid URL"));
+	} else {
+		kdDebug() << "Resolve for  " << name << ", " << type << ", " << domain  << "\n";
+		if (toResolve!=0)
+			if (toResolve->serviceName()==name && toResolve->type()==type &&
+			        toResolve->domain()==domain && toResolve->isResolved()) {
+			}  else {
+				delete toResolve;
+				toResolve = 0;
+			}
+		if (toResolve==0) {
+			toResolve = new DNSSD::RemoteService(name,type,domain);
+			// or maybe HOST_NOT_FOUND?
+			if (!toResolve->resolve()) error(ERR_SERVICE_NOT_AVAILABLE,i18n("Unable to resolve service"));
 		}
-	if (toResolve==0) {
-		toResolve = new DNSSD::RemoteService(name,type,domain);
-		// or maybe HOST_NOT_FOUND?
-		if (!toResolve->resolve()) error(ERR_SERVICE_NOT_AVAILABLE,i18n("Unable to resolve service"));
 	}
 	KURL destUrl;
 	kdDebug() << "Resolved: " << toResolve->hostName() << "\n";
@@ -342,7 +350,7 @@ extern "C"
 		KApplication::disableAutoDcopRegistration();
 		KApplication app;
 		KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-		ZeroConfProtocol slave( args->arg(1), args->arg(2) );
+		ZeroConfProtocol slave( args->arg(0), args->arg(1), args->arg(2) );
 		slave.dispatchLoop();
 		return 0;
 	}
