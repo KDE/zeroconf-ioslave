@@ -1,5 +1,16 @@
 [Desktop Entry]
 Icon=network_local
 Name=Network services
+Name[bg]=Мрежови услуги
+Name[da]=Netværkstjenester
+Name[de]=Netzwerk-Dienste
+Name[fr]=Services réseaux
+Name[ga]=Seirbhísí líonra
+Name[nl]=Netwerkdiensten
+Name[pt]=Serviços de rede
+Name[pt_BR]=Serviços de rede
+Name[ru]=Сетевые службы
+Name[sv]=Nätverkstjänster
+Name[uk]=Мережеві служби
 Type=Link
 URL=dnssd:/

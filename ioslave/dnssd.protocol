@@ -13,6 +13,7 @@ linking=false
 moving=false
 Icon=network_local
 Description=A kioslave for DNSSD
+Description[da]=En kioslave for DNSSD
 Description[de]=Ein kioslave für DNSSD
 Description[fr]=Un module d'entrée / sortie pour DNSSD
 Description[nl]=Een kioslave voor DNSSD

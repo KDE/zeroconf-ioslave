@@ -2,6 +2,15 @@
 Encoding=UTF-8
 Type=Service
 Name=DNS-SD Services Watcher
+Name[da]=DNS-SD overvågning af tjenester
+Name[de]=DNS-SD Dienste-Monitor
+Name[fr]=Surveillance des services DNS-SD
+Name[nl]=DNS-SD-diensten observatie
+Name[pt]=Vigia de Serviços DNS-SD
+Name[pt_BR]=Vigia de Serviços DNS-SD
+Name[ru]=Наблюдение за службами DNS-SD
+Name[sv]=DNS-SD tjänstbevakning
+Name[uk]=Спостереження за службами DNS-SD
 Comment=Keeps track of DNS-SD services and updates directory listings 
 ServiceTypes=KDEDModule
 X-KDE-ModuleType=Library
