@@ -20,6 +20,7 @@ Description[is]=kioslave fyrir ZeroConf
 Description[pt]=Um 'kioslave' para o ZeroConf
 Description[pt_BR]=Um 'kioslave' para o ZeroConf
 Description[sv]=En I/O-slav för Zeroconf
+Description[uk]=Kioslave для ZeroConf
 maxInstances=4
 Class=:local
 
