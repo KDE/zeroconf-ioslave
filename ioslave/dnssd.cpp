@@ -78,13 +78,10 @@ kio_dnssdProtocol::~kio_dnssdProtocol()
 
 void kio_dnssdProtocol::get(const KURL& url )
 {
-	kdDebug() << "kio_dnssd::get(const KURL& url)" << endl ;
 	UrlType t = checkURL(url);
 	switch (t) {
 	case HelperProtocol:
 	{
-		QString name,type,domain;
-		dissect(url,name,type,domain);
 		resolveAndRedirect(url,true);
 		error(KIO::ERR_SLAVE_DEFINED,
 			i18n("Requested service has been launched in separate window."));
@@ -105,14 +102,12 @@ void kio_dnssdProtocol::mimetype(const KURL& url )
 UrlType kio_dnssdProtocol::checkURL(const KURL& url)
 {
 	if (url.path()=="/") return RootDir;
-	const QString& path = url.path();
-	const QString& type = path.section("/",1,1);
-	const QString& proto = type.section(".",1,-1);
-	if (type[0]!="_" || (proto!="_udp" && proto!="_tcp")) return Invalid;
-	const QString& domain = url.host();
-	const QString& service = path.section("/",2,-1);
+	QString service, type, domain;
+	dissect(url,service,type,domain);
+	const QString& proto = type.section('.',1,-1);
+	if (type[0]!='_' || (proto!="_udp" && proto!="_tcp")) return Invalid;
 	if (service.isEmpty()) return ServiceDir;
-	if (!service.isEmpty() && !domain.isEmpty()) {
+	if (!domain.isEmpty()) {
 		if (!setConfig(type)) return Invalid;
 		if (!configData->readEntry("Exec").isNull()) return HelperProtocol;
 		return (KProtocolInfo::isHelperProtocol( configData->readEntry( "Protocol",
@@ -132,7 +127,6 @@ void kio_dnssdProtocol::dissect(const KURL& url,QString& name,QString& type,QStr
 
 void kio_dnssdProtocol::stat(const KURL& url)
 {
-	kdDebug() << "Stat for " << url.prettyURL() << endl;
 	UDSEntry entry;
 	UrlType t = checkURL(url);
 	switch (t) {
@@ -158,7 +152,11 @@ void kio_dnssdProtocol::stat(const KURL& url)
 		error(ERR_MALFORMED_URL,i18n("invalid URL"));
 	}
 }
-
+QString kio_dnssdProtocol::getAttribute(const QString& name)
+{
+	QString entry = configData->readEntry(name);
+	return (entry.isNull()) ? QString::null : toResolve->textData()[entry];
+}
 
 void kio_dnssdProtocol::resolveAndRedirect(const KURL& url, bool useKRun)
 {
@@ -174,31 +172,19 @@ void kio_dnssdProtocol::resolveAndRedirect(const KURL& url, bool useKRun)
 		}
 	if (toResolve==0) {
 		toResolve = new DNSSD::RemoteService(name,type,domain);
-		bool res = toResolve->resolve();
 		// or maybe HOST_NOT_FOUND?
-		if (!res) error(ERR_SERVICE_NOT_AVAILABLE,i18n("Unable to resolve service"));
+		if (!toResolve->resolve()) error(ERR_SERVICE_NOT_AVAILABLE,i18n("Unable to resolve service"));
 	}
 	KURL destUrl;
 	kdDebug() << "Resolved: " << toResolve->hostName() << "\n";
 	destUrl.setProtocol(getProtocol(type));
-	QString entry = configData->readEntry("UserEntry");
-	if (!entry.isNull() && !toResolve->textData()[entry].isNull())
-		destUrl.setUser(toResolve->textData()[entry]);
-	entry = configData->readEntry("PasswordEntry");
-	if (!entry.isNull() && !toResolve->textData()[entry].isNull())
-		destUrl.setPass(toResolve->textData()[entry]);
-	entry = configData->readEntry("PathEntry");
-	if (!entry.isNull() && !toResolve->textData()[entry].isNull())
-		destUrl.setPath(toResolve->textData()[entry]);
+	destUrl.setUser(getAttribute("UserEntry"));
+	destUrl.setPass(getAttribute("PasswordEntry"));
+	destUrl.setPath(getAttribute("PathEntry"));
 	destUrl.setHost(toResolve->hostName());
 	destUrl.setPort(toResolve->port());
-	// krun object will autodelete itself
-	if (useKRun) {
-		QString exec = configData->readEntry("Exec");
-		// or try getting it from helper protocol
-		if (exec.isNull()) exec = KProtocolInfo::exec(getProtocol(type));
-		KRun::run(exec,destUrl);
-	}
+	// get exec from config or try getting it from helper protocol
+	if (useKRun) KRun::run(configData->readEntry("Exec",KProtocolInfo::exec(getProtocol(type))),destUrl);
 	else {
 		redirection(destUrl);
 		finished();
@@ -215,31 +201,31 @@ bool kio_dnssdProtocol::setConfig(const QString& type)
 	return (configData->readEntry("Type")==type);
 }
 
+inline void buildAtom(UDSEntry& entry,UDSAtomTypes type, const QString& data)
+{
+	UDSAtom atom;
+	atom.m_uds=type;
+	atom.m_str=data;
+	entry.append(atom);
+}
+inline void buildAtom(UDSEntry& entry,UDSAtomTypes type, long data)
+{
+	UDSAtom atom;
+	atom.m_uds=type;
+	atom.m_long=data;
+	entry.append(atom);
+}
+
 
 void kio_dnssdProtocol::buildDirEntry(UDSEntry& entry,const QString& name,const QString& type)
 {
-	UDSAtom atom;
 	entry.clear();
-	atom.m_uds=UDS_NAME;
-	atom.m_str=name;
-	entry.append(atom);
-	atom.m_uds = UDS_ACCESS;
-	atom.m_long = 0555;
-	entry.append(atom);
-	atom.m_uds = UDS_SIZE;
-	atom.m_long = 0;
-	entry.append(atom);
-	atom.m_uds = UDS_FILE_TYPE;
-	atom.m_long = S_IFDIR;
-	entry.append(atom);
-	atom.m_uds = UDS_MIME_TYPE;
-	atom.m_str = "inode/directory";
-	entry.append(atom);
-	if (!type.isNull()) {
-		atom.m_uds=UDS_URL;
-		atom.m_str="dnssd:/"+type+"/";
-		entry.append(atom);
-	}
+	buildAtom(entry,UDS_NAME,name);
+	buildAtom(entry,UDS_ACCESS,0555);
+	buildAtom(entry,UDS_SIZE,0);
+	buildAtom(entry,UDS_FILE_TYPE,S_IFDIR);
+	buildAtom(entry,UDS_MIME_TYPE,"inode/directory");
+	if (!type.isNull()) buildAtom(entry,UDS_URL,"dnssd:/"+type+"/");
 }
 QString kio_dnssdProtocol::getProtocol(const QString& type)
 {
@@ -249,33 +235,20 @@ QString kio_dnssdProtocol::getProtocol(const QString& type)
 
 void kio_dnssdProtocol::buildServiceEntry(UDSEntry& entry,const QString& name,const QString& type,const QString& domain)
 {
-	UDSAtom atom;
-	entry.clear();
-	atom.m_uds=UDS_NAME;
-	atom.m_str=name;
-	entry.append(atom);
-	atom.m_uds = UDS_ACCESS;
-	atom.m_long = 0666;
 	setConfig(type);
-	entry.append(atom);
+	entry.clear();
+	buildAtom(entry,UDS_NAME,name);
+	buildAtom(entry,UDS_ACCESS,0666);
 	QString icon=configData->readEntry("Icon",KProtocolInfo::icon(getProtocol(type)));
-	if (!icon.isNull()) {
-		atom.m_uds = UDS_ICON_NAME;
-		atom.m_str = icon;
-		entry.append(atom);
-	}
-	atom.m_uds = UDS_FILE_TYPE;
+	if (!icon.isNull()) buildAtom(entry,UDS_ICON_NAME,icon);
 	KURL protourl;
 	protourl.setProtocol(getProtocol(type));
 	QString encname = "dnssd://" + domain +"/" +type+ "/" + name;
 	if (KProtocolInfo::supportsListing(protourl)) {
-		atom.m_long=S_IFDIR;
+		buildAtom(entry,UDS_FILE_TYPE,S_IFDIR);
 		encname+="/";
-	} else atom.m_long=S_IFREG;
-	entry.append(atom);
-	atom.m_uds=UDS_URL;
-	atom.m_str=encname;
-	entry.append(atom);
+	} else buildAtom(entry,UDS_FILE_TYPE,S_IFREG);
+	buildAtom(entry,UDS_URL,encname);
 }
 
 void kio_dnssdProtocol::listDir(const KURL& url )
