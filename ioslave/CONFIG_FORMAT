@@ -48,6 +48,6 @@ Name=Battleship games
 Type=_kbattleship._tcp
 Exec=kbattleship %u
 
-URL will be resolved into kbattleship://host:port/, then "kbattleship kbattleship://host:port/" will be launched
+URL will be resolved into kbattleship://user@host:port/, then "kbattleship kbattleship://user@host:port/" will be launched
 
 
