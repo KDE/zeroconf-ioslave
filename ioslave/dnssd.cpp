@@ -311,6 +311,9 @@ void kio_dnssdProtocol::listDir(const KURL& url )
 		connect(browser,SIGNAL(serviceAdded(DNSSD::RemoteService::Ptr)),
 			this,SLOT(newService(DNSSD::RemoteService::Ptr)));
 		break;
+	case Service:
+		resolveAndRedirect(url);
+	  	break;
 	default:
 		error(ERR_MALFORMED_URL,i18n("invalid URL"));
 		return;
