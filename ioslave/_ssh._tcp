@@ -1,0 +1,4 @@
+Name=Remote shell (ssh)
+Type=_ssh._tcp
+UserEntry=u
+PasswordEntry=p

@@ -32,7 +32,6 @@
 #include <netdb.h>
 
 #include <kconfig.h>
-#include <kservice.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <kinstance.h>
@@ -120,8 +119,8 @@ UrlType kio_dnssdProtocol::checkURL(const KURL& url)
 	if (service.isEmpty()) return ServiceDir;
 	if (!service.isEmpty() && !domain.isEmpty()) {
 		if (!setConfig(type)) return Invalid;
-		if (configData->readEntry("Helper").isNull()) return Service;
-			else return HelperProtocol;
+		return (KProtocolInfo::isHelperProtocol( configData->readEntry( "Protocol",
+			type.section(".",0,0).mid(1)))) ? HelperProtocol : Service;
 		}
 	return Invalid;
 }
@@ -200,15 +199,7 @@ void kio_dnssdProtocol::resolveAndRedirect(const KURL& url, bool useKRun)
 	destUrl.setHost(toResolve->hostName());
 	destUrl.setPort(toResolve->port());
 	// krun object will autodelete itself
-	if (useKRun) {
-		QString helper = configData->readEntry("Helper");
-		KService::Ptr srv = KService::serviceByDesktopName(helper);
-		if (srv == NULL) {
-			error(ERR_CANNOT_LAUNCH_PROCESS,i18n("Helper application not found"));
-			return;
-		}
-		KRun::run(*srv,KURL::List(destUrl),false);
-		}
+	if (useKRun) KRun::run(KProtocolInfo::exec(getProtocol(type)),destUrl);
 		else {
 			redirection(destUrl);
 			finished();
