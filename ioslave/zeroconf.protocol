@@ -13,6 +13,7 @@ linking=false
 moving=false
 Icon=network_local
 Description=A kioslave for ZeroConf
+Description[ca]=Un kioslave per ZeroConf
 Description[da]=En kioslave for Zeroconf
 Description[et]=ZeroConfi I/O-moodul
 Description[fr]=Un module d'entrée / sortie pour ZeroConf
