@@ -1,5 +1,17 @@
 [Desktop Entry]
+Encoding=UTF-8
 Icon=network_local
 Name=Network Services
+Name[bg]=Мрежови услуги
+Name[br]=Servijoù rouedad
+Name[ca]=Serveis de xarxa
+Name[et]=Võrguteenused
+Name[ga]=Seirbhísí Líonra
+Name[is]=Netþjónustur
+Name[pt]=Serviços de Rede
+Name[pt_BR]=Serviços de Rede
+Name[sv]=Nätverkstjänster
+Name[uk]=Мережеві служби
+Name[zh_CN]=网络服务
 Type=Link
 URL=zeroconf:/
