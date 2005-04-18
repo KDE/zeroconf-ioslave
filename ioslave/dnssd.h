@@ -35,6 +35,7 @@
 
 class QCString;
 using namespace KIO;
+using namespace DNSSD;
 
 enum UrlType { RootDir, ServiceDir, Service, HelperProtocol, Invalid };
 
@@ -66,11 +67,11 @@ private:
 	// try to load config file for given service type (or just return if already loaded)
 	bool setConfig(const QString& type);
 
-	DNSSD::ServiceBrowser* browser;
+	ServiceBrowser* browser;
 	// service types merged from all domains - to avoid duplicates
 	QStringList mergedtypes;
 	// last resolved or still being resolved services - acts as one-entry cache
-	DNSSD::RemoteService *toResolve;
+	RemoteService *toResolve;
 	// Config file for service - also acts as one-entry cache
 	KConfig *configData;
 	// listDir for all domains (zeroconf:/) or one specified (zeroconf://domain/)

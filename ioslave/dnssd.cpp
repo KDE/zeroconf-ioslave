@@ -60,9 +60,6 @@ static const KCmdLineOptions options[] =
 	KCmdLineLastOption
 };
 
-using namespace KIO;
-
-
 ZeroConfProtocol::ZeroConfProtocol(const QCString& protocol, const QCString &pool_socket, const QCString &app_socket)
 		: SlaveBase(protocol, pool_socket, app_socket), browser(0),toResolve(0),
 		configData(0)
@@ -127,12 +124,12 @@ void ZeroConfProtocol::dissect(const KURL& url,QString& name,QString& type,QStri
 
 bool ZeroConfProtocol::dnssdOK()
 {
-	switch(DNSSD::ServiceBrowser::isAvailable()) {	    
-        	case DNSSD::ServiceBrowser::Stopped:
+	switch(ServiceBrowser::isAvailable()) {	    
+        	case ServiceBrowser::Stopped:
 			error(KIO::ERR_UNSUPPORTED_ACTION,
 			i18n("<p>The Zeroconf daemon (mdnsd) is not running. </p>"));
 			return false;
-		case DNSSD::ServiceBrowser::Unsupported:
+		case ServiceBrowser::Unsupported:
 	    		error(KIO::ERR_UNSUPPORTED_ACTION,
 			i18n("<p>KDE has been built without Zeroconf support.</p>"));
 			return false;
@@ -182,7 +179,7 @@ void ZeroConfProtocol::resolveAndRedirect(const KURL& url, bool useKRun)
 	if (url.protocol()=="invitation") {
 		delete toResolve;
 		toResolve=0;
-		toResolve= new DNSSD::RemoteService(url);
+		toResolve= new RemoteService(url);
 		if (!toResolve->isResolved()) error(ERR_MALFORMED_URL,i18n("Invalid URL"));
 	} else {
 		kdDebug() << "Resolve for  " << name << ", " << type << ", " << domain  << "\n";
@@ -194,7 +191,7 @@ void ZeroConfProtocol::resolveAndRedirect(const KURL& url, bool useKRun)
 				toResolve = 0;
 			}
 		if (toResolve==0) {
-			toResolve = new DNSSD::RemoteService(name,type,domain);
+			toResolve = new RemoteService(name,type,domain);
 			// or maybe HOST_NOT_FOUND?
 			if (!toResolve->resolve()) error(ERR_SERVICE_NOT_AVAILABLE,i18n("Unable to resolve service"));
 		}
@@ -284,15 +281,15 @@ void ZeroConfProtocol::listDir(const KURL& url )
 	switch (t) {
 	case RootDir:
 		if (allDomains=url.host().isEmpty())
-			browser = new DNSSD::ServiceBrowser(DNSSD::ServiceBrowser::AllServices);
-			else browser = new DNSSD::ServiceBrowser(DNSSD::ServiceBrowser::AllServices,url.host());
+			browser = new ServiceBrowser(ServiceBrowser::AllServices);
+			else browser = new ServiceBrowser(ServiceBrowser::AllServices,url.host());
 		connect(browser,SIGNAL(serviceAdded(DNSSD::RemoteService::Ptr)),
 			this,SLOT(newType(DNSSD::RemoteService::Ptr)));
 		break;
 	case ServiceDir:
 		if (url.host().isEmpty())
-			browser = new DNSSD::ServiceBrowser(url.path(-1).section("/",1,-1));
-			else browser = new DNSSD::ServiceBrowser(url.path(-1).section("/",1,-1),url.host());
+			browser = new ServiceBrowser(url.path(-1).section("/",1,-1));
+			else browser = new ServiceBrowser(url.path(-1).section("/",1,-1),url.host());
 		connect(browser,SIGNAL(serviceAdded(DNSSD::RemoteService::Ptr)),
 			this,SLOT(newService(DNSSD::RemoteService::Ptr)));
 		break;
