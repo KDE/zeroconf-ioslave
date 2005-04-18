@@ -28,8 +28,8 @@
 Watcher::Watcher(const QString& type, const QString& domain) 
 	: refcount(1), updateNeeded(false), m_type(type), m_domain(domain)
 {
-	if (domain.isEmpty()) browser = new DNSSD::ServiceBrowser(type);
-		else browser = new DNSSD::ServiceBrowser(type,domain);
+	if (domain.isEmpty()) browser = new ServiceBrowser(type);
+		else browser = new ServiceBrowser(type,domain);
 	connect(browser,SIGNAL(serviceAdded(DNSSD::RemoteService::Ptr)),
 		SLOT(serviceAdded(DNSSD::RemoteService::Ptr)));
 	connect(browser,SIGNAL(serviceRemoved(DNSSD::RemoteService::Ptr)),
@@ -43,7 +43,7 @@ Watcher::~Watcher()
 	delete browser;
 }
 
-void Watcher::serviceAdded(DNSSD::RemoteService::Ptr srv)
+void Watcher::serviceAdded(DNSSD::RemoteService::Ptr)
 {
 	updateNeeded=true;
 }
@@ -61,26 +61,10 @@ void Watcher::finished()
 	if (updateNeeded || removed.count()) {
 		QString url = "zeroconf:/";
 		if (!m_domain.isEmpty()) url+="/"+m_domain+"/";
-		if (m_type!=DNSSD::ServiceBrowser::AllServices) url+=m_type;
+		if (m_type!=ServiceBrowser::AllServices) url+=m_type;
 		kdDebug() << "Sending update: " << url << "\n";
 		st.FilesAdded(url);
 		}
-// why the hell it does not work?!
-/*	else if (removed.count()) {
-		QStringList urls;
-		for (QValueList<DNSSD::RemoteService::Ptr>::ConstIterator it=removed.begin();
-			it!=removed.end(); ++it) {
-				QString url="zeroconf:/";
-				kdDebug() << "In removed() , m_type is " << m_type << " and DNSSD::Ref is " << DNSSD::ServiceBrowser::AllServices << "\n";
-				if (!m_domain.isEmpty()) url+="/"+(*it)->domain()+"/";
-					else if (!m_domain.isEmpty()) url+="/"+m_domain+"/";
-				if (m_type!=DNSSD::ServiceBrowser::AllServices) url+=(*it)->type();
-				if (!(*it)->serviceName().isEmpty()) url+="/"+(*it)->serviceName();
-				urls << url;
-				}
-		st.FilesRemoved(urls);
-		kdDebug() << "Sending remove: " << urls << "\n";
-	} */
 	removed.clear();
 	updateNeeded=false;
 }

@@ -23,6 +23,8 @@
 #include <dnssd/servicebrowser.h>
 #include <dnssd/remoteservice.h>
 
+using namespace DNSSD;
+
 class Watcher : public QObject
 {
 Q_OBJECT
@@ -32,7 +34,7 @@ public:
 		
 	unsigned int refcount;
 private:
-	DNSSD::ServiceBrowser* browser;
+	ServiceBrowser* browser;
 	bool updateNeeded;
 	QString m_type;
 	QString m_domain;
@@ -40,7 +42,7 @@ private:
 	
 private slots:
 	void serviceRemoved(DNSSD::RemoteService::Ptr srv);
-	void serviceAdded(DNSSD::RemoteService::Ptr srv);
+	void serviceAdded(DNSSD::RemoteService::Ptr);
 	void finished();
 	
 };
