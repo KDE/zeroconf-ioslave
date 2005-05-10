@@ -127,11 +127,11 @@ bool ZeroConfProtocol::dnssdOK()
 	switch(ServiceBrowser::isAvailable()) {	    
         	case ServiceBrowser::Stopped:
 			error(KIO::ERR_UNSUPPORTED_ACTION,
-			i18n("<p>The Zeroconf daemon (mdnsd) is not running. </p>"));
+			i18n("The Zeroconf daemon (mdnsd) is not running."));
 			return false;
 		case ServiceBrowser::Unsupported:
 	    		error(KIO::ERR_UNSUPPORTED_ACTION,
-			i18n("<p>KDE has been built without Zeroconf support.</p>"));
+			i18n("KDE has been built without Zeroconf support."));
 			return false;
           default:
 			return true;
