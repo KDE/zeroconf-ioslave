@@ -22,6 +22,7 @@
 #include <qsocket.h>
 #include <qdatetime.h>
 #include <qbitarray.h>
+#include <qregexp.h>
 
 #include <stdlib.h>
 #include <math.h>
@@ -129,15 +130,15 @@ bool ZeroConfProtocol::dnssdOK()
 	switch(DNSSD::ServiceBrowser::isAvailable()) {	    
         	case DNSSD::ServiceBrowser::Stopped:
 			error(KIO::ERR_UNSUPPORTED_ACTION,
-			i18n("<p>The Zeroconf daemon (mdnsd) is not running. </p>"));
+			i18n("<p>The Zeroconf daemon (mdnsd) is not running. </p>").remove(QRegExp("<[^<]+>")));
 			return false;
 		case DNSSD::ServiceBrowser::Unsupported:
 	    		error(KIO::ERR_UNSUPPORTED_ACTION,
-			i18n("<p>KDE has been built without Zeroconf support.</p>"));
+			i18n("<p>KDE has been built without Zeroconf support.</p>").remove(QRegExp("<[^<]+>")));
 			return false;
           default:
 			return true;
-        }
+	} 
 }
 
 void ZeroConfProtocol::stat(const KURL& url)
