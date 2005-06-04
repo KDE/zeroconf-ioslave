@@ -14,6 +14,7 @@ moving=false
 Icon=network_local
 Description=SD invitations
 Description[bg]=Покани SD
+Description[el]=Προσκλήσεις SD
 Description[sv]=SD-inbjudningar
 Description[uk]=Запрошення SD
 maxInstances=4
