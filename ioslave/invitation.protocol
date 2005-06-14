@@ -16,6 +16,7 @@ Description=SD invitations
 Description[bg]=Покани SD
 Description[da]=SD-invitationer
 Description[el]=Προσκλήσεις SD
+Description[es]=Invitaciones SD
 Description[sv]=SD-inbjudningar
 Description[uk]=Запрошення SD
 maxInstances=4
