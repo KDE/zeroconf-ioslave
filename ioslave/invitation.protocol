@@ -19,6 +19,7 @@ Description[el]=Προσκλήσεις SD
 Description[es]=Invitaciones SD
 Description[et]=SD kutsed
 Description[sv]=SD-inbjudningar
+Description[tr]=SD davetleri
 Description[uk]=Запрошення SD
 maxInstances=4
 Class=:remote
