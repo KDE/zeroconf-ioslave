@@ -22,7 +22,7 @@
 #define _dnssd_H_
 
 #include <qstring.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qobject.h>
 
 #include <kurl.h>
@@ -33,7 +33,7 @@
 #include <qstringlist.h>
 
 
-class QCString;
+class Q3CString;
 using namespace KIO;
 using namespace DNSSD;
 
@@ -43,11 +43,13 @@ class ZeroConfProtocol : public QObject, public KIO::SlaveBase
 {
 	Q_OBJECT
 public:
-	ZeroConfProtocol(const QCString& protocol, const QCString &pool_socket, const QCString &app_socket);
+	ZeroConfProtocol(const Q3CString& protocol, const Q3CString &pool_socket, const Q3CString &app_socket);
 	virtual void get(const KURL& url);
 	virtual void mimetype(const KURL& url);
 	virtual void stat(const KURL& url);
 	virtual void listDir(const KURL& url );
+signals:
+	void leaveModality();
 private:
 	// Create UDSEntry for zeroconf:/ or zeroconf:/type/ paths
 	void buildDirEntry(UDSEntry& entry,const QString& name,const QString& type=QString::null, 
@@ -66,6 +68,8 @@ private:
 	QString getProtocol(const QString& type);
 	// try to load config file for given service type (or just return if already loaded)
 	bool setConfig(const QString& type);
+
+	void enterLoop();
 
 	ServiceBrowser* browser;
 	// service types merged from all domains - to avoid duplicates

@@ -19,7 +19,9 @@
 #ifndef _DNSSDWATCHER_H_
 #define _DNSSDWATCHER_H_
 
-#include <qdict.h>
+#include <q3dict.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <kdedmodule.h>
 #include <qstring.h>
 #include <qstringlist.h>
@@ -31,7 +33,7 @@ class DNSSDWatcher : public KDEDModule
 Q_OBJECT
 K_DCOP
 public:
-	DNSSDWatcher(const QCString& obj);
+	DNSSDWatcher(const Q3CString& obj);
 
 k_dcop:
 	QStringList watchedDirectories();
@@ -39,7 +41,7 @@ k_dcop:
 	void leftDirectory(const KURL& dir);
 
 private:
-	QDict<Watcher> watchers;
+	Q3Dict<Watcher> watchers;
 	
 	void createNotifier(const KURL& url);
 	void dissect(const KURL& url,QString& name,QString& type,QString& domain);

@@ -18,8 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <qcstring.h>
-#include <qsocket.h>
+#include <q3cstring.h>
+#include <q3socket.h>
 #include <qdatetime.h>
 #include <qbitarray.h>
 
@@ -42,7 +42,6 @@
 #include <kcmdlineargs.h>
 #include <klocale.h>
 #include <kurl.h>
-#include <ksock.h>
 #include <qmap.h>
 #include <kapplication.h>
 #include <qeventloop.h>
@@ -60,7 +59,7 @@ static const KCmdLineOptions options[] =
 	KCmdLineLastOption
 };
 
-ZeroConfProtocol::ZeroConfProtocol(const QCString& protocol, const QCString &pool_socket, const QCString &app_socket)
+ZeroConfProtocol::ZeroConfProtocol(const Q3CString& protocol, const Q3CString &pool_socket, const Q3CString &app_socket)
 		: SlaveBase(protocol, pool_socket, app_socket), browser(0),toResolve(0),
 		configData(0)
 {}
@@ -302,7 +301,7 @@ void ZeroConfProtocol::listDir(const KURL& url )
 	}
 	connect(browser,SIGNAL(finished()),this,SLOT(allReported()));
 	browser->startBrowse();
-	kapp->eventLoop()->enterLoop();
+	enterLoop();
 }
 void ZeroConfProtocol::allReported()
 {
@@ -312,7 +311,7 @@ void ZeroConfProtocol::allReported()
 	delete browser;
 	browser=0;
 	mergedtypes.clear();
-	kapp->eventLoop()->exitLoop();
+	emit leaveModality();
 }
 void ZeroConfProtocol::newType(DNSSD::RemoteService::Ptr srv)
 {
@@ -334,7 +333,12 @@ void ZeroConfProtocol::newService(DNSSD::RemoteService::Ptr srv)
 	buildServiceEntry(entry,srv->serviceName(),srv->type(),srv->domain());
 	listEntry(entry,false);
 }
-
+void ZeroConfProtocol::enterLoop()
+{
+	QEventLoop eventLoop;
+	connect(this, SIGNAL(leaveModality()),&eventLoop, SLOT(quit()));
+	eventLoop.exec(QEventLoop::ExcludeUserInputEvents);
+}
 
 extern "C"
 {
