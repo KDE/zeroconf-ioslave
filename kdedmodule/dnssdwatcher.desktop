@@ -28,6 +28,7 @@ Name[uk]=Спостереження за службами DNS-SD
 Name[xx]=xxDNS-SD Services Watcherxx
 Name[zh_CN]=DNS-SD 服务监视器
 Comment=Keeps track of DNS-SD services and updates directory listings
+Comment[ca]=Segueix els serveis DNS-SD i actualitza les llistes de directoris
 Comment[cs]=Udržuje přehled o DNS-SD službách a aktualizuje výpisy adresářů
 Comment[da]=Holder styr på DNS-SD-tjenester og opdaterer lister med mapper
 Comment[de]=Überwacht DNS-SD-Dienste und aktualisiert die Verzeichniseinträge
