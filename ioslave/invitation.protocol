@@ -24,7 +24,6 @@ Description[sr]=SD позивнице
 Description[sr@Latn]=SD позивнице
 Description[sv]=SD-inbjudningar
 Description[tr]=SD davetleri
-Description[uk]=Запрошення SD
 Description[zh_CN]=SD 邀请
 maxInstances=4
 Class=:remote
