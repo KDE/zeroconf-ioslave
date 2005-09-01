@@ -30,6 +30,7 @@ Name[sr@Latn]=Mrežni servisi
 Name[sv]=Nätverkstjänster
 Name[tr]=Ağ Servisleri
 Name[uk]=Мережеві служби
+Name[xx]=xxNetwork Servicesxx
 Name[zh_CN]=网络服务
 Type=Link
 URL=zeroconf:/
