@@ -20,6 +20,7 @@ Description[de]=Ein Ein-/Ausgabemodul für ZeroConf
 Description[el]=Ένα kioslave για το ZeroConf
 Description[es]=A esclavo kio para ZeroConf
 Description[et]=ZeroConfi I/O-moodul
+Description[eu]= kioslave bat ZeroConf-erako
 Description[fi]=Siirräntätyöskentelijä ZeroConfille
 Description[fr]=Un module d'entrée / sortie pour ZeroConf
 Description[hu]=KDE-protokoll a Zeroconf használatához
