@@ -88,7 +88,7 @@ void DNSSDWatcher::createNotifier(const KURL& url)
 extern "C" {
 	KDE_EXPORT KDEDModule *create_dnssdwatcher(const Q3CString &obj)
 	{
-		KGlobal::locale()->insertCatalogue("dnssdwatcher");
+		KGlobal::locale()->insertCatalog("dnssdwatcher");
 		return new DNSSDWatcher(obj);
 	}
 }
