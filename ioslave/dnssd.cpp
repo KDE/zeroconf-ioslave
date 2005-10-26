@@ -221,31 +221,17 @@ bool ZeroConfProtocol::setConfig(const QString& type)
 	return (configData->readEntry("Type")==type);
 }
 
-inline void buildAtom(UDSEntry& entry,UDSAtomTypes type, const QString& data)
-{
-	UDSAtom atom;
-	atom.m_uds=type;
-	atom.m_str=data;
-	entry.append(atom);
-}
-inline void buildAtom(UDSEntry& entry,UDSAtomTypes type, long data)
-{
-	UDSAtom atom;
-	atom.m_uds=type;
-	atom.m_long=data;
-	entry.append(atom);
-}
-
 
 void ZeroConfProtocol::buildDirEntry(UDSEntry& entry,const QString& name,const QString& type, const QString& host)
 {
 	entry.clear();
-	buildAtom(entry,UDS_NAME,name);
-	buildAtom(entry,UDS_ACCESS,0555);
-	buildAtom(entry,UDS_SIZE,0);
-	buildAtom(entry,UDS_FILE_TYPE,S_IFDIR);
-	buildAtom(entry,UDS_MIME_TYPE,"inode/directory");
-	if (!type.isNull()) buildAtom(entry,UDS_URL,"zeroconf:/"+((!host.isNull()) ? "/"+host+"/" : "" )+type+"/");
+	entry.insert(UDS_NAME,name);
+	entry.insert(UDS_ACCESS,0555);
+	entry.insert(UDS_SIZE,0);
+	entry.insert(UDS_FILE_TYPE,S_IFDIR);
+	entry.insert(UDS_MIME_TYPE,QString::fromUtf8("inode/directory"));
+	if (!type.isNull()) 
+			entry.insert(UDS_URL,"zeroconf:/"+((!host.isNull()) ? "/"+host+"/" : "" )+type+"/");
 }
 QString ZeroConfProtocol::getProtocol(const QString& type)
 {
@@ -257,18 +243,20 @@ void ZeroConfProtocol::buildServiceEntry(UDSEntry& entry,const QString& name,con
 {
 	setConfig(type);
 	entry.clear();
-	buildAtom(entry,UDS_NAME,name);
-	buildAtom(entry,UDS_ACCESS,0666);
+	entry.insert(UDS_NAME,name);
+	entry.insert(UDS_ACCESS,0666);
 	QString icon=configData->readEntry("Icon",KProtocolInfo::icon(getProtocol(type)));
-	if (!icon.isNull()) buildAtom(entry,UDS_ICON_NAME,icon);
+	if (!icon.isNull()) 
+			entry.insert(UDS_ICON_NAME,icon);
 	KURL protourl;
 	protourl.setProtocol(getProtocol(type));
 	QString encname = "zeroconf://" + domain +"/" +type+ "/" + name;
 	if (KProtocolInfo::supportsListing(protourl)) {
-		buildAtom(entry,UDS_FILE_TYPE,S_IFDIR);
+		entry.insert(UDS_FILE_TYPE,S_IFDIR);
 		encname+="/";
-	} else buildAtom(entry,UDS_FILE_TYPE,S_IFREG);
-	buildAtom(entry,UDS_URL,encname);
+	} else 
+			entry.insert(UDS_FILE_TYPE,S_IFREG);
+	entry.insert(UDS_URL,encname);
 }
 
 void ZeroConfProtocol::listDir(const KURL& url )
