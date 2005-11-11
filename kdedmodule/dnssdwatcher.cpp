@@ -24,11 +24,9 @@
 #include <dnssd/servicebrowser.h>
 #include <kdirnotify_stub.h>
 #include "watcher.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 
-DNSSDWatcher::DNSSDWatcher(const Q3CString& obj)
+DNSSDWatcher::DNSSDWatcher(const DCOPCString& obj)
 	: KDEDModule(obj)
 {
 	connectDCOPSignal("","KDirNotify","enteredDirectory(KURL)","enteredDirectory(KURL)",false);
@@ -86,7 +84,7 @@ void DNSSDWatcher::createNotifier(const KURL& url)
 }
 
 extern "C" {
-	KDE_EXPORT KDEDModule *create_dnssdwatcher(const Q3CString &obj)
+	KDE_EXPORT KDEDModule *create_dnssdwatcher(const DCOPCString &obj)
 	{
 		KGlobal::locale()->insertCatalog("dnssdwatcher");
 		return new DNSSDWatcher(obj);

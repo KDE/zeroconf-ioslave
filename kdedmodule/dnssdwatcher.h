@@ -20,8 +20,6 @@
 #define _DNSSDWATCHER_H_
 
 #include <q3dict.h>
-//Added by qt3to4:
-#include <Q3CString>
 #include <kdedmodule.h>
 #include <qstring.h>
 #include <qstringlist.h>
@@ -33,7 +31,7 @@ class DNSSDWatcher : public KDEDModule
 Q_OBJECT
 K_DCOP
 public:
-	DNSSDWatcher(const Q3CString& obj);
+	DNSSDWatcher(const DCOPCString& obj);
 
 k_dcop:
 	QStringList watchedDirectories();
