@@ -22,7 +22,6 @@
 #define _dnssd_H_
 
 #include <qstring.h>
-#include <q3cstring.h>
 #include <qobject.h>
 
 #include <kurl.h>
@@ -33,7 +32,6 @@
 #include <qstringlist.h>
 
 
-class Q3CString;
 using namespace KIO;
 using namespace DNSSD;
 
@@ -43,7 +41,7 @@ class ZeroConfProtocol : public QObject, public KIO::SlaveBase
 {
 	Q_OBJECT
 public:
-	ZeroConfProtocol(const Q3CString& protocol, const Q3CString &pool_socket, const Q3CString &app_socket);
+	ZeroConfProtocol(const QByteArray& protocol, const QByteArray &pool_socket, const QByteArray &app_socket);
 	virtual void get(const KURL& url);
 	virtual void mimetype(const KURL& url);
 	virtual void stat(const KURL& url);

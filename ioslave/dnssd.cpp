@@ -59,7 +59,7 @@ static const KCmdLineOptions options[] =
 	KCmdLineLastOption
 };
 
-ZeroConfProtocol::ZeroConfProtocol(const Q3CString& protocol, const Q3CString &pool_socket, const Q3CString &app_socket)
+ZeroConfProtocol::ZeroConfProtocol(const QByteArray& protocol, const QByteArray &pool_socket, const QByteArray &app_socket)
 		: SlaveBase(protocol, pool_socket, app_socket), browser(0),toResolve(0),
 		configData(0)
 {}
