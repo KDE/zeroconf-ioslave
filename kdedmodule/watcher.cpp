@@ -22,7 +22,6 @@
 
 #include <kdirnotify_stub.h>
 #include <qstringlist.h>
-#include <Q3CString>
 
 
 Watcher::Watcher(const QString& type, const QString& domain) 
@@ -56,7 +55,7 @@ void Watcher::serviceRemoved(DNSSD::RemoteService::Ptr srv)
 
 void Watcher::finished() 
 {
-	KDirNotify_stub st(Q3CString("*"),Q3CString("*"));
+	KDirNotify_stub st("*","*");
 	kdDebug() << "Finished for " << m_type << "@" << m_domain << "\n";
 	if (updateNeeded || removed.count()) {
 		QString url = "zeroconf:/";
