@@ -21,7 +21,6 @@
 
 #include <qstring.h>
 //Added by qt3to4:
-#include <Q3ValueList>
 #include <dnssd/servicebrowser.h>
 #include <dnssd/remoteservice.h>
 
@@ -40,7 +39,7 @@ private:
 	bool updateNeeded;
 	QString m_type;
 	QString m_domain;
-	Q3ValueList<DNSSD::RemoteService::Ptr> removed;
+	QList<DNSSD::RemoteService::Ptr> removed;
 	
 private slots:
 	void serviceRemoved(DNSSD::RemoteService::Ptr srv);
