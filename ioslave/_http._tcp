@@ -1,3 +1,5 @@
 Name=WWW servers
 Type=_http._tcp
 PathEntry=path
+UserEntry=u
+PasswordEntry=p
