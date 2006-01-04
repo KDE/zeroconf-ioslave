@@ -167,7 +167,7 @@ void ZeroConfProtocol::stat(const KURL& url)
 }
 QString ZeroConfProtocol::getAttribute(const QString& name)
 {
-	QString entry = configData->readEntry(name);
+	QString entry = configData->readEntry(name,QString());
 	return (entry.isNull()) ? QString::null : toResolve->textData()[entry];
 }
 
