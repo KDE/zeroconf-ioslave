@@ -13,15 +13,7 @@ linking=false
 moving=false
 Icon=network_local
 Description=SD invitations
-Description[bg]=Покани SD
-Description[da]=SD-invitationer
-Description[el]=Προσκλήσεις SD
-Description[es]=Invitaciones SD
-Description[et]=SD kutsed
-Description[pt_BR]=solicitações SD
-Description[sv]=SD-inbjudningar
-Description[tr]=SD davetleri
-Description[uk]=Запрошення SD
+Description[x-test]=xxSD invitationsxx
 maxInstances=4
 Class=:remote
 
