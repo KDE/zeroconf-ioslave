@@ -28,6 +28,7 @@ Description[hu]=SD meghívók
 Description[is]=SD boð
 Description[it]=Inviti SD
 Description[ja]=SD招待
+Description[lt]=SD pakvietimai
 Description[nb]=SD invitasjoner
 Description[nl]=SD-uitnodigingen
 Description[nn]=SD-innbydingar
@@ -42,6 +43,7 @@ Description[sv]=SD-inbjudningar
 Description[tr]=SD davetleri
 Description[uk]=Запрошення SD
 Description[zh_CN]=SD 邀请
+Description[zh_HK]=SD 邀請
 maxInstances=4
 Class=:remote
 

@@ -44,6 +44,7 @@ Description[sv]=En I/O-slav för Zeroconf
 Description[tr]=Zeroconf kioslave'i
 Description[uk]=Kioslave для ZeroConf
 Description[zh_CN]=ZeroConf 的 kioslave
+Description[zh_HK]=用於 ZeroConf 的 kioslave
 maxInstances=4
 Class=:local
 
