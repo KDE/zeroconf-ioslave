@@ -14,6 +14,7 @@ moving=false
 Icon=network_local
 Description=SD invitations
 Description[bg]=Покани SD
+Description[bn]=এসডি আমন্ত্রণ
 Description[ca]=Invitacions SD
 Description[cs]=SD pozvánky
 Description[da]=SD-invitationer
