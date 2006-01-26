@@ -48,7 +48,7 @@ return keys;
 
 
 // from ioslave
-void DNSSDWatcher::dissect(const KURL& url,QString& name,QString& type,QString& domain)
+void DNSSDWatcher::dissect(const KUrl& url,QString& name,QString& type,QString& domain)
 {
 	type = url.path().section("/",1,1);
 	domain = url.host();
@@ -57,7 +57,7 @@ void DNSSDWatcher::dissect(const KURL& url,QString& name,QString& type,QString& 
 
 
 
-void DNSSDWatcher::enteredDirectory(const KURL& dir)
+void DNSSDWatcher::enteredDirectory(const KUrl& dir)
 {
 	if (dir.protocol()!="zeroconf") return;
 	if (watchers[dir.url()]) watchers[dir.url()]->refcount++;
@@ -65,7 +65,7 @@ void DNSSDWatcher::enteredDirectory(const KURL& dir)
 }
 
 
-void DNSSDWatcher::leftDirectory(const KURL& dir)
+void DNSSDWatcher::leftDirectory(const KUrl& dir)
 {
 	if (dir.protocol()!="zeroconf") return;
 	if (!watchers[dir.url()]) return;
@@ -74,7 +74,7 @@ void DNSSDWatcher::leftDirectory(const KURL& dir)
 }
 
 
-void DNSSDWatcher::createNotifier(const KURL& url) 
+void DNSSDWatcher::createNotifier(const KUrl& url) 
 {
 	QString domain,type,name;
 	dissect(url,name,type,domain);	

@@ -65,7 +65,7 @@ ZeroConfProtocol::ZeroConfProtocol(const QByteArray& protocol, const QByteArray 
 {}
 
 
-void ZeroConfProtocol::get(const KURL& url )
+void ZeroConfProtocol::get(const KUrl& url )
 {
 	if (!dnssdOK()) return;
 	UrlType t = checkURL(url);
@@ -89,12 +89,12 @@ void ZeroConfProtocol::get(const KURL& url )
 		error(ERR_MALFORMED_URL,i18n("invalid URL"));
 	}
 }
-void ZeroConfProtocol::mimetype(const KURL& url )
+void ZeroConfProtocol::mimetype(const KUrl& url )
 {
 	resolveAndRedirect(url);
 }
 
-UrlType ZeroConfProtocol::checkURL(const KURL& url)
+UrlType ZeroConfProtocol::checkURL(const KUrl& url)
 {
 	if (url.path()=="/") return RootDir;
 	QString service, type, domain;
@@ -113,7 +113,7 @@ UrlType ZeroConfProtocol::checkURL(const KURL& url)
 
 // URL zeroconf://domain/_http._tcp/some%20service
 // URL invitation://host:port/_http._tcp/some%20service?u=username&root=directory
-void ZeroConfProtocol::dissect(const KURL& url,QString& name,QString& type,QString& domain)
+void ZeroConfProtocol::dissect(const KUrl& url,QString& name,QString& type,QString& domain)
 {
 	type = url.path().section("/",1,1);
 	domain = url.host();
@@ -137,7 +137,7 @@ bool ZeroConfProtocol::dnssdOK()
         }
 }
 
-void ZeroConfProtocol::stat(const KURL& url)
+void ZeroConfProtocol::stat(const KUrl& url)
 {
 	UDSEntry entry;
 	if (!dnssdOK()) return;
@@ -171,7 +171,7 @@ QString ZeroConfProtocol::getAttribute(const QString& name)
 	return (entry.isNull()) ? QString::null : toResolve->textData()[entry];
 }
 
-void ZeroConfProtocol::resolveAndRedirect(const KURL& url, bool useKRun)
+void ZeroConfProtocol::resolveAndRedirect(const KUrl& url, bool useKRun)
 {
 	QString name,type,domain;
 	dissect(url,name,type,domain);
@@ -195,7 +195,7 @@ void ZeroConfProtocol::resolveAndRedirect(const KURL& url, bool useKRun)
 			if (!toResolve->resolve()) error(ERR_SERVICE_NOT_AVAILABLE,i18n("Unable to resolve service"));
 		}
 	}
-	KURL destUrl;
+	KUrl destUrl;
 	kdDebug() << "Resolved: " << toResolve->hostName() << "\n";
 	destUrl.setProtocol(getProtocol(type));
 	destUrl.setUser(getAttribute("UserEntry"));
@@ -248,7 +248,7 @@ void ZeroConfProtocol::buildServiceEntry(UDSEntry& entry,const QString& name,con
 	QString icon=configData->readEntry("Icon",KProtocolInfo::icon(getProtocol(type)));
 	if (!icon.isNull()) 
 			entry.insert(UDS_ICON_NAME,icon);
-	KURL protourl;
+	KUrl protourl;
 	protourl.setProtocol(getProtocol(type));
 	QString encname = "zeroconf://" + domain +"/" +type+ "/" + name;
 	if (KProtocolInfo::supportsListing(protourl)) {
@@ -259,7 +259,7 @@ void ZeroConfProtocol::buildServiceEntry(UDSEntry& entry,const QString& name,con
 	entry.insert(UDS_URL,encname);
 }
 
-void ZeroConfProtocol::listDir(const KURL& url )
+void ZeroConfProtocol::listDir(const KUrl& url )
 {
 
 	if (!dnssdOK()) return;

@@ -35,14 +35,14 @@ public:
 
 k_dcop:
 	QStringList watchedDirectories();
-	void enteredDirectory(const KURL& dir);
-	void leftDirectory(const KURL& dir);
+	void enteredDirectory(const KUrl& dir);
+	void leftDirectory(const KUrl& dir);
 
 private:
 	Q3Dict<Watcher> watchers;
 	
-	void createNotifier(const KURL& url);
-	void dissect(const KURL& url,QString& name,QString& type,QString& domain);
+	void createNotifier(const KUrl& url);
+	void dissect(const KUrl& url,QString& name,QString& type,QString& domain);
 
 };
 

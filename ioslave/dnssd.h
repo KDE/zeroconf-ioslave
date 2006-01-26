@@ -42,10 +42,10 @@ class ZeroConfProtocol : public QObject, public KIO::SlaveBase
 	Q_OBJECT
 public:
 	ZeroConfProtocol(const QByteArray& protocol, const QByteArray &pool_socket, const QByteArray &app_socket);
-	virtual void get(const KURL& url);
-	virtual void mimetype(const KURL& url);
-	virtual void stat(const KURL& url);
-	virtual void listDir(const KURL& url );
+	virtual void get(const KUrl& url);
+	virtual void mimetype(const KUrl& url);
+	virtual void stat(const KUrl& url);
+	virtual void listDir(const KUrl& url );
 signals:
 	void leaveModality();
 private:
@@ -56,11 +56,11 @@ private:
 	void buildServiceEntry(UDSEntry& entry,const QString& name,const QString& type,
 			       const QString& domain);
 	// Returns root dir, service dir, service or invalid
-	UrlType checkURL(const KURL& url);
+	UrlType checkURL(const KUrl& url);
 	// extract name, type and domain from URL
-	void dissect(const KURL& url,QString& name,QString& type,QString& domain);
+	void dissect(const KUrl& url,QString& name,QString& type,QString& domain);
 	// resolve given service and redirect() to it or use KRun on it (used for helper protocols)
-	void resolveAndRedirect(const KURL& url, bool useKRun = false);
+	void resolveAndRedirect(const KUrl& url, bool useKRun = false);
 	bool dnssdOK();
 	QString getAttribute(const QString& name);
 	QString getProtocol(const QString& type);
