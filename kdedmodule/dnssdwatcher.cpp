@@ -41,7 +41,7 @@ QStringList DNSSDWatcher::watchedDirectories()
 	QStringList keys;
 	for (Q3DictIterator<Watcher> it(watchers) ; it.current(); ++it ) {
 		keys << it.currentKey();
-		kdDebug() << it.currentKey() << " " << (*it)->refcount << "\n";
+		kDebug() << it.currentKey() << " " << (*it)->refcount << "\n";
 		}
 return keys;
 }

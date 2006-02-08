@@ -56,12 +56,12 @@ void Watcher::serviceRemoved(DNSSD::RemoteService::Ptr srv)
 void Watcher::finished() 
 {
 	KDirNotify_stub st("*","*");
-	kdDebug() << "Finished for " << m_type << "@" << m_domain << "\n";
+	kDebug() << "Finished for " << m_type << "@" << m_domain << "\n";
 	if (updateNeeded || removed.count()) {
 		QString url = "zeroconf:/";
 		if (!m_domain.isEmpty()) url+="/"+m_domain+"/";
 		if (m_type!=ServiceBrowser::AllServices) url+=m_type;
-		kdDebug() << "Sending update: " << url << "\n";
+		kDebug() << "Sending update: " << url << "\n";
 		st.FilesAdded(url);
 		}
 	removed.clear();

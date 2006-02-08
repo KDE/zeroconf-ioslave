@@ -181,7 +181,7 @@ void ZeroConfProtocol::resolveAndRedirect(const KUrl& url, bool useKRun)
 		toResolve= new RemoteService(url);
 		if (!toResolve->isResolved()) error(ERR_MALFORMED_URL,i18n("Invalid URL"));
 	} else {
-		kdDebug() << "Resolve for  " << name << ", " << type << ", " << domain  << "\n";
+		kDebug() << "Resolve for  " << name << ", " << type << ", " << domain  << "\n";
 		if (toResolve!=0)
 			if (toResolve->serviceName()==name && toResolve->type()==type &&
 			        toResolve->domain()==domain && toResolve->isResolved()) {
@@ -196,7 +196,7 @@ void ZeroConfProtocol::resolveAndRedirect(const KUrl& url, bool useKRun)
 		}
 	}
 	KUrl destUrl;
-	kdDebug() << "Resolved: " << toResolve->hostName() << "\n";
+	kDebug() << "Resolved: " << toResolve->hostName() << "\n";
 	destUrl.setProtocol(getProtocol(type));
 	destUrl.setUser(getAttribute("UserEntry"));
 	destUrl.setPass(getAttribute("PasswordEntry"));
@@ -213,7 +213,7 @@ void ZeroConfProtocol::resolveAndRedirect(const KUrl& url, bool useKRun)
 
 bool ZeroConfProtocol::setConfig(const QString& type)
 {
-	kdDebug() << "Setting config for " << type << endl;
+	kDebug() << "Setting config for " << type << endl;
 	if (configData)
 		if (configData->readEntry("Type")!=type) delete configData;
 		else return true;
@@ -306,7 +306,7 @@ void ZeroConfProtocol::newType(DNSSD::RemoteService::Ptr srv)
 	if (mergedtypes.contains(srv->type())>0) return;
 	mergedtypes << srv->type();
 	UDSEntry entry;
-	kdDebug() << "Got new entry " << srv->type() << endl;
+	kDebug() << "Got new entry " << srv->type() << endl;
 	if (!setConfig(srv->type())) return;
 	QString name = configData->readEntry("Name");
 	if (!name.isNull()) {
