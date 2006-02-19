@@ -2,8 +2,10 @@
 Encoding=UTF-8
 Type=Service
 Name=DNS-SD Services Watcher
+Name[fr]=Surveillance des services DNS-SD
 Name[x-test]=xxDNS-SD Services Watcherxx
 Comment=Keeps track of DNS-SD services and updates directory listings
+Comment[fr]=Conserve une trace des services DNS-SD et actualise les listes de dossiers
 Comment[x-test]=xxKeeps track of DNS-SD services and updates directory listingsxx
 ServiceTypes=KDEDModule
 X-KDE-ModuleType=Library

@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Icon=network_local
 Name=Network Services
+Name[fr]=Services réseaux
 Name[x-test]=xxNetwork Servicesxx
 Type=Link
 URL=zeroconf:/
