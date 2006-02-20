@@ -29,8 +29,8 @@
 DNSSDWatcher::DNSSDWatcher(const DCOPCString& obj)
 	: KDEDModule(obj)
 {
-	connectDCOPSignal("","KDirNotify","enteredDirectory(KURL)","enteredDirectory(KURL)",false);
-	connectDCOPSignal("","KDirNotify","leftDirectory(KURL)","leftDirectory(KURL)",false);
+	connectDCOPSignal("","KDirNotify","enteredDirectory(KUrl)","enteredDirectory(KUrl)",false);
+	connectDCOPSignal("","KDirNotify","leftDirectory(KUrl)","leftDirectory(KUrl)",false);
 	watchers.setAutoDelete(true);
 }
 
