@@ -13,7 +13,7 @@ kde4_add_plugin(kio_zeroconf ${kio_zeroconf_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kio_zeroconf )
 
-target_link_libraries(kio_zeroconf  ${QT_AND_KDECORE_LIBS} kdnssd kio )
+target_link_libraries(kio_zeroconf  ${KDE4_KDECORE_LIBS} kdnssd kio )
 
 install_targets(${LIB_INSTALL_DIR}/kde4 kio_zeroconf )
 
