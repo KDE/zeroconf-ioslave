@@ -15,7 +15,7 @@ kde4_add_plugin(kded_dnssdwatcher ${kded_dnssdwatcher_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kded_dnssdwatcher )
 
-target_link_libraries(kded_dnssdwatcher  ${KDE4_KDECORE_LIBS} kdnssd )
+target_link_libraries(kded_dnssdwatcher  ${KDE4_KIO_LIBS} kdnssd )
 
 install_targets(${LIB_INSTALL_DIR}/kde4 kded_dnssdwatcher )
 
