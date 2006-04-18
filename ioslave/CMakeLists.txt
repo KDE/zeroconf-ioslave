@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kio_zeroconf )
 
 target_link_libraries(kio_zeroconf  ${KDE4_KDECORE_LIBS} kdnssd kio )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kio_zeroconf )
+install_targets(${PLUGIN_INSTALL_DIR} kio_zeroconf )
 
 
 ########### install files ###############
