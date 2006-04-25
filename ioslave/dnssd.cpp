@@ -77,7 +77,7 @@ void ZeroConfProtocol::get(const KUrl& url )
 		QString reply= "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n";
 		reply+="</head>\n<body>\n<h2>"+i18n("Requested service has been launched in separate window.");
 		reply+="</h2>\n</body></html>";
-		data(reply.utf8());
+		data(reply.toUtf8());
 		data(QByteArray());
 		finished();
 		break;
