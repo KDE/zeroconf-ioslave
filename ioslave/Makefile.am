@@ -15,7 +15,5 @@ servicesdir = $(kde_datadir)/zeroconf
 remote_DATA = zeroconf.desktop
 remotedir = $(kde_datadir)/remoteview
 
-messages: rc.cpp
-	$(XGETTEXT) *.cpp -o $(podir)/kio_zeroconf.pot
 
 METASOURCES = AUTO
