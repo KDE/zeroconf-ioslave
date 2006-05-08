@@ -275,8 +275,8 @@ void ZeroConfProtocol::listDir(const KUrl& url )
 		break;
 	case ServiceDir:
 		if (url.host().isEmpty())
-			browser = new ServiceBrowser(url.path(-1).section("/",1,-1));
-			else browser = new ServiceBrowser(url.path(-1).section("/",1,-1),url.host());
+			browser = new ServiceBrowser(url.path(KUrl::RemoveTrailingSlash).section("/",1,-1));
+			else browser = new ServiceBrowser(url.path(KUrl::RemoveTrailingSlash).section("/",1,-1),url.host());
 		connect(browser,SIGNAL(serviceAdded(DNSSD::RemoteService::Ptr)),
 			this,SLOT(newService(DNSSD::RemoteService::Ptr)));
 		break;
