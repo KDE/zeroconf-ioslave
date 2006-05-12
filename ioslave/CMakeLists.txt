@@ -1,4 +1,3 @@
-kde4_header()
 
 
 
@@ -24,7 +23,6 @@ install_files( ${SERVICES_INSTALL_DIR} FILES zeroconf.protocol invitation.protoc
 install_files( ${DATA_INSTALL_DIR}/zeroconf FILES _http._tcp _ftp._tcp _ldap._tcp _webdav._tcp _nfs._tcp _ssh._tcp )
 install_files( ${DATA_INSTALL_DIR}/remoteview FILES zeroconf.desktop )
 
-kde4_footer()
 
 
 
