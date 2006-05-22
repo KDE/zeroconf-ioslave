@@ -47,7 +47,7 @@
 #include <qeventloop.h>
 #include <dnssd/domainbrowser.h>
 #include <krun.h>
-
+#include <kprotocolmanager.h>
 
 #include "dnssd.h"
 
@@ -251,7 +251,7 @@ void ZeroConfProtocol::buildServiceEntry(UDSEntry& entry,const QString& name,con
 	KUrl protourl;
 	protourl.setProtocol(getProtocol(type));
 	QString encname = "zeroconf://" + domain +"/" +type+ "/" + name;
-	if (KProtocolInfo::supportsListing(protourl)) {
+	if (KProtocolManager::supportsListing(protourl)) {
 		entry.insert(UDS_FILE_TYPE,S_IFDIR);
 		encname+="/";
 	} else 
