@@ -336,7 +336,7 @@ extern "C"
 		putenv(strdup("SESSION_MANAGER="));
 		KCmdLineArgs::init(argc, argv, "kio_zeroconf", 0, 0, 0, 0);
 		KCmdLineArgs::addCmdLineOptions( options );
-		KApplication::disableAutoDcopRegistration();
+		//KApplication::disableAutoDcopRegistration();
 		KApplication app;
 		KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 		ZeroConfProtocol slave( args->arg(0), args->arg(1), args->arg(2) );
