@@ -20,9 +20,9 @@
 
 #include <kdebug.h>
 
-#include <kdirnotify_stub.h>
 #include <qstringlist.h>
-
+#include <dbus/qdbus.h>
+#include <kdirnotify.h>
 
 Watcher::Watcher(const QString& type, const QString& domain) 
 	: refcount(1), updateNeeded(false), m_type(type), m_domain(domain)
@@ -55,14 +55,13 @@ void Watcher::serviceRemoved(DNSSD::RemoteService::Ptr srv)
 
 void Watcher::finished() 
 {
-	KDirNotify_stub st("*","*");
 	kDebug() << "Finished for " << m_type << "@" << m_domain << "\n";
 	if (updateNeeded || removed.count()) {
 		QString url = "zeroconf:/";
 		if (!m_domain.isEmpty()) url+="/"+m_domain+"/";
 		if (m_type!=ServiceBrowser::AllServices) url+=m_type;
 		kDebug() << "Sending update: " << url << "\n";
-		st.FilesAdded(url);
+		org::kde::KDirNotify::emitFilesAdded( url );
 		}
 	removed.clear();
 	updateNeeded=false;

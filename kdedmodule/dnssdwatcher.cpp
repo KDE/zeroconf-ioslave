@@ -22,15 +22,16 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <dnssd/servicebrowser.h>
-#include <kdirnotify_stub.h>
 #include "watcher.h"
+#include <dbus/qdbus.h>
 
-
-DNSSDWatcher::DNSSDWatcher(const DCOPCString& obj)
+DNSSDWatcher::DNSSDWatcher(const QString& obj)
 	: KDEDModule(obj)
 {
-	connectDCOPSignal("","KDirNotify","enteredDirectory(KUrl)","enteredDirectory(KUrl)",false);
-	connectDCOPSignal("","KDirNotify","leftDirectory(KUrl)","leftDirectory(KUrl)",false);
+	QDBus::sessionBus().connect(QString(), QString(), "org.kde.KDirNotify",
+                                   "enteredDirectory", this, SLOT(enteredDirectory(QString)));
+	QDBus::sessionBus().connect(QString(), QString(), "org.kde.KDirNotify",
+                                   "leftDirectory", this, SLOT(leftDirectory(QString)));
 	watchers.setAutoDelete(true);
 }
 
@@ -57,16 +58,18 @@ void DNSSDWatcher::dissect(const KUrl& url,QString& name,QString& type,QString& 
 
 
 
-void DNSSDWatcher::enteredDirectory(const KUrl& dir)
+void DNSSDWatcher::enteredDirectory(const QString& _dir)
 {
+	KUrl dir(_dir);
 	if (dir.protocol()!="zeroconf") return;
 	if (watchers[dir.url()]) watchers[dir.url()]->refcount++;
 		else createNotifier(dir);
 }
 
 
-void DNSSDWatcher::leftDirectory(const KUrl& dir)
+void DNSSDWatcher::leftDirectory(const QString& _dir)
 {
+	KUrl dir(_dir);	
 	if (dir.protocol()!="zeroconf") return;
 	if (!watchers[dir.url()]) return;
 	if ((watchers[dir.url()])->refcount==1) watchers.remove(dir.url());
@@ -84,7 +87,7 @@ void DNSSDWatcher::createNotifier(const KUrl& url)
 }
 
 extern "C" {
-	KDE_EXPORT KDEDModule *create_dnssdwatcher(const DCOPCString &obj)
+	KDE_EXPORT KDEDModule *create_dnssdwatcher(const QString &obj)
 	{
 		KGlobal::locale()->insertCatalog("dnssdwatcher");
 		return new DNSSDWatcher(obj);

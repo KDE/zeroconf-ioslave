@@ -29,14 +29,13 @@ class Watcher;
 class DNSSDWatcher : public KDEDModule
 {
 Q_OBJECT
-K_DCOP
 public:
-	DNSSDWatcher(const DCOPCString& obj);
+	DNSSDWatcher(const QString& obj);
 
-k_dcop:
+private slots:
 	QStringList watchedDirectories();
-	void enteredDirectory(const KUrl& dir);
-	void leftDirectory(const KUrl& dir);
+	void enteredDirectory(const QString& dir);
+	void leftDirectory(const QString& dir);
 
 private:
 	Q3Dict<Watcher> watchers;

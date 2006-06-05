@@ -8,8 +8,6 @@ set(kded_dnssdwatcher_PART_SRCS dnssdwatcher.cpp watcher.cpp )
 
 kde4_automoc(${kded_dnssdwatcher_PART_SRCS})
 
-kde4_add_dcop_skels(kded_dnssdwatcher_PART_SRCS dnssdwatcher.h )
-
 kde4_add_plugin(kded_dnssdwatcher ${kded_dnssdwatcher_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kded_dnssdwatcher )
