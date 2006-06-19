@@ -49,6 +49,7 @@ Description[tr]=SD davetleri
 Description[uk]=Запрошення SD
 Description[zh_CN]=SD 邀请
 Description[zh_HK]=SD 邀請
+Description[zh_TW]=SD 邀請
 maxInstances=4
 Class=:remote
 
