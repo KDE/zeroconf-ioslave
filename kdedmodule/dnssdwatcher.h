@@ -30,7 +30,7 @@ class DNSSDWatcher : public KDEDModule
 {
 Q_OBJECT
 public:
-	DNSSDWatcher(const QString& obj);
+	DNSSDWatcher();
 
 private slots:
 	QStringList watchedDirectories();

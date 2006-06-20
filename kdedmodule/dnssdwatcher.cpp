@@ -25,8 +25,8 @@
 #include "watcher.h"
 #include <dbus/qdbus.h>
 
-DNSSDWatcher::DNSSDWatcher(const QString& obj)
-	: KDEDModule(obj)
+DNSSDWatcher::DNSSDWatcher()
+	: KDEDModule()
 {
 	QDBus::sessionBus().connect(QString(), QString(), "org.kde.KDirNotify",
                                    "enteredDirectory", this, SLOT(enteredDirectory(QString)));
@@ -69,7 +69,7 @@ void DNSSDWatcher::enteredDirectory(const QString& _dir)
 
 void DNSSDWatcher::leftDirectory(const QString& _dir)
 {
-	KUrl dir(_dir);	
+	KUrl dir(_dir);
 	if (dir.protocol()!="zeroconf") return;
 	if (!watchers[dir.url()]) return;
 	if ((watchers[dir.url()])->refcount==1) watchers.remove(dir.url());
@@ -77,20 +77,20 @@ void DNSSDWatcher::leftDirectory(const QString& _dir)
 }
 
 
-void DNSSDWatcher::createNotifier(const KUrl& url) 
+void DNSSDWatcher::createNotifier(const KUrl& url)
 {
 	QString domain,type,name;
-	dissect(url,name,type,domain);	
+	dissect(url,name,type,domain);
 	if (type.isEmpty()) type = DNSSD::ServiceBrowser::AllServices;
 	Watcher *w = new Watcher(type,domain);
 	watchers.insert(url.url(),w);
 }
 
 extern "C" {
-	KDE_EXPORT KDEDModule *create_dnssdwatcher(const QString &obj)
+	KDE_EXPORT KDEDModule *create_dnssdwatcher()
 	{
 		KGlobal::locale()->insertCatalog("dnssdwatcher");
-		return new DNSSDWatcher(obj);
+		return new DNSSDWatcher();
 	}
 }
 
