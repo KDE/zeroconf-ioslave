@@ -14,12 +14,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kded_dnssdwatcher )
 
 target_link_libraries(kded_dnssdwatcher  ${KDE4_KIO_LIBS} kdnssd )
 
-install_targets(${PLUGIN_INSTALL_DIR} kded_dnssdwatcher )
+install(TARGETS kded_dnssdwatcher  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR}/kded FILES dnssdwatcher.desktop )
+install( FILES dnssdwatcher.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/kded)
 
 
 
