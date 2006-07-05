@@ -23,7 +23,7 @@
 #include <klocale.h>
 #include <dnssd/servicebrowser.h>
 #include "watcher.h"
-#include <dbus/qdbus.h>
+#include <QtDBus/qdbus.h>
 
 DNSSDWatcher::DNSSDWatcher()
 	: KDEDModule()
