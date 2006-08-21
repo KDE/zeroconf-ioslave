@@ -28,9 +28,8 @@
 DNSSDWatcher::DNSSDWatcher()
 	: KDEDModule()
 {
-	QDBus::sessionBus().connect(QString(), QString(), "org.kde.KDirNotify",
-                                   "enteredDirectory", this, SLOT(enteredDirectory(QString)));
-	QDBus::sessionBus().connect(QString(), QString(), "org.kde.KDirNotify",
+	QDBusConnection::sessionBus().connect(QString(), QString(), "org.kde.KDirNotify",
+                                   "enteredDirectory", this, SLOT(enteredDirectory(QString))); QDBusConnection::sessionBus().connect(QString(), QString(), "org.kde.KDirNotify",
                                    "leftDirectory", this, SLOT(leftDirectory(QString)));
 	watchers.setAutoDelete(true);
 }
