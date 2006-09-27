@@ -253,7 +253,7 @@ void ZeroConfProtocol::buildServiceEntry(UDSEntry& entry,const QString& name,con
 	QString encname = "zeroconf://" + domain +"/" +type+ "/" + name;
 	if (KProtocolManager::supportsListing(protourl)) {
 		entry.insert(UDS_FILE_TYPE,S_IFDIR);
-		encname+="/";
+		encname+='/';
 	} else 
 			entry.insert(UDS_FILE_TYPE,S_IFREG);
 	entry.insert(UDS_URL,encname);
