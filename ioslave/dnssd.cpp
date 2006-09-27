@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2004, 2005 by Jakub Stachowski                                *
+ *   Copyright (C) 2004, 2005 by Jakub Stachowski                          *
  *   qbast@go2.pl                                                          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.             *
+ *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
 #include <q3cstring.h>
@@ -168,7 +168,7 @@ void ZeroConfProtocol::stat(const KUrl& url)
 QString ZeroConfProtocol::getAttribute(const QString& name)
 {
 	QString entry = configData->readEntry(name,QString());
-	return (entry.isNull()) ? QString::null : toResolve->textData()[entry];
+	return (entry.isNull()) ? QString() : toResolve->textData()[entry];
 }
 
 void ZeroConfProtocol::resolveAndRedirect(const KUrl& url, bool useKRun)
@@ -231,7 +231,7 @@ void ZeroConfProtocol::buildDirEntry(UDSEntry& entry,const QString& name,const Q
 	entry.insert(UDS_FILE_TYPE,S_IFDIR);
 	entry.insert(UDS_MIME_TYPE,QString::fromUtf8("inode/directory"));
 	if (!type.isNull()) 
-			entry.insert(UDS_URL,"zeroconf:/"+((!host.isNull()) ? "/"+host+"/" : "" )+type+"/");
+			entry.insert(UDS_URL,"zeroconf:/"+((!host.isNull()) ? '/'+host+'/' : "" )+type+'/');
 }
 QString ZeroConfProtocol::getProtocol(const QString& type)
 {

@@ -58,7 +58,7 @@ void Watcher::finished()
 	kDebug() << "Finished for " << m_type << "@" << m_domain << "\n";
 	if (updateNeeded || removed.count()) {
 		QString url = "zeroconf:/";
-		if (!m_domain.isEmpty()) url+="/"+m_domain+"/";
+		if (!m_domain.isEmpty()) url+='/'+m_domain+'/';
 		if (m_type!=ServiceBrowser::AllServices) url+=m_type;
 		kDebug() << "Sending update: " << url << "\n";
 		org::kde::KDirNotify::emitFilesAdded( url );
