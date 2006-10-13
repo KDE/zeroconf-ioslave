@@ -3,7 +3,7 @@
 
 set(kio_zeroconf_PART_SRCS dnssd.cpp )
 
-kde4_automoc(${kio_zeroconf_PART_SRCS})
+kde4_automoc(kio_zeroconf ${kio_zeroconf_PART_SRCS})
 
 kde4_add_plugin(kio_zeroconf ${kio_zeroconf_PART_SRCS})
 
