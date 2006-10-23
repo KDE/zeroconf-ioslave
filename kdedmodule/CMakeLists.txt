@@ -3,7 +3,7 @@
 
 set(kded_dnssdwatcher_PART_SRCS dnssdwatcher.cpp watcher.cpp )
 
-kde4_automoc(kded_dnssdwatcher ${kded_dnssdwatcher_PART_SRCS})
+kde4_automoc(${kded_dnssdwatcher_PART_SRCS})
 
 kde4_add_plugin(kded_dnssdwatcher ${kded_dnssdwatcher_PART_SRCS})
 
