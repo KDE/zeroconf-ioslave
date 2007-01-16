@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Icon=network_local
 Name=Network Services
+Name[el]=Υπηρεσίες δικτύου
 Name[fr]=Services réseaux
 Name[x-test]=xxNetwork Servicesxx
 Type=Link

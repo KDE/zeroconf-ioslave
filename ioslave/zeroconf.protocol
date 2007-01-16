@@ -13,6 +13,7 @@ linking=false
 moving=false
 Icon=network_local
 Description=A kioslave for ZeroConf
+Description[el]=Ένα kioslave για το ZeroConf
 Description[fr]=Un module d'entrée / sortie pour ZeroConf
 Description[x-test]=xxA kioslave for ZeroConfxx
 maxInstances=4

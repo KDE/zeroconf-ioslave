@@ -13,6 +13,7 @@ linking=false
 moving=false
 Icon=network_local
 Description=SD invitations
+Description[el]=Προσκλήσεις SD
 Description[fr]=Invitations SD
 Description[x-test]=xxSD invitationsxx
 maxInstances=4
