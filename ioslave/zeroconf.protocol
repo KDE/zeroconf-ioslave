@@ -13,6 +13,7 @@ linking=false
 moving=false
 Icon=network_local
 Description=A kioslave for ZeroConf
+Description[be]=Модуль kioslave для ZeroConf
 Description[bn]=জিরো-কন্ফ এর জন্য একটি কে-আই-ও স্লেভ
 Description[br]=Ur c'hioslave evit ZeroConf
 Description[bs]=kioslave za ZeroConf
