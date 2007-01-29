@@ -34,7 +34,7 @@
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <ksocketaddress.h>
