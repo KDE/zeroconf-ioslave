@@ -123,7 +123,7 @@ void ZeroConfProtocol::dissect(const KUrl& url,QString& name,QString& type,QStri
 
 bool ZeroConfProtocol::dnssdOK()
 {
-	switch(ServiceBrowser::isAvailable()) {	    
+	switch(ServiceBrowser::isAvailable()) {
         	case ServiceBrowser::Stopped:
 			error(KIO::ERR_UNSUPPORTED_ACTION,
 			i18n("The Zeroconf daemon (mdnsd) is not running."));
@@ -217,7 +217,7 @@ bool ZeroConfProtocol::setConfig(const QString& type)
 	if (configData)
 		if (configData->readEntry("Type")!=type) delete configData;
 		else return true;
-	configData = new KConfig("zeroconf/"+type,false,false,"data");
+	configData = new KConfig("data", "zeroconf/"+type, KConfig::NoGlobals );
 	return (configData->readEntry("Type")==type);
 }
 
@@ -230,7 +230,7 @@ void ZeroConfProtocol::buildDirEntry(UDSEntry& entry,const QString& name,const Q
 	entry.insert(UDS_SIZE,0);
 	entry.insert(UDS_FILE_TYPE,S_IFDIR);
 	entry.insert(UDS_MIME_TYPE,QString::fromUtf8("inode/directory"));
-	if (!type.isNull()) 
+	if (!type.isNull())
 			entry.insert(UDS_URL,"zeroconf:/"+((!host.isNull()) ? '/'+host+'/' : "" )+type+'/');
 }
 QString ZeroConfProtocol::getProtocol(const QString& type)
@@ -246,7 +246,7 @@ void ZeroConfProtocol::buildServiceEntry(UDSEntry& entry,const QString& name,con
 	entry.insert(UDS_NAME,name);
 	entry.insert(UDS_ACCESS,0666);
 	QString icon=configData->readEntry("Icon",KProtocolInfo::icon(getProtocol(type)));
-	if (!icon.isNull()) 
+	if (!icon.isNull())
 			entry.insert(UDS_ICON_NAME,icon);
 	KUrl protourl;
 	protourl.setProtocol(getProtocol(type));
@@ -254,7 +254,7 @@ void ZeroConfProtocol::buildServiceEntry(UDSEntry& entry,const QString& name,con
 	if (KProtocolManager::supportsListing(protourl)) {
 		entry.insert(UDS_FILE_TYPE,S_IFDIR);
 		encname+='/';
-	} else 
+	} else
 			entry.insert(UDS_FILE_TYPE,S_IFREG);
 	entry.insert(UDS_URL,encname);
 }
@@ -310,7 +310,7 @@ void ZeroConfProtocol::newType(DNSSD::RemoteService::Ptr srv)
 	if (!setConfig(srv->type())) return;
 	QString name = configData->readEntry("Name");
 	if (!name.isNull()) {
-		buildDirEntry(entry,name,srv->type(), (allDomains) ? QString::null : 
+		buildDirEntry(entry,name,srv->type(), (allDomains) ? QString::null :
 			browser->browsedDomains()->domains()[0]);
 		listEntry(entry,false);
 	}
