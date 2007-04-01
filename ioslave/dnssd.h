@@ -76,8 +76,7 @@ private:
 	RemoteService *toResolve;
 	// Config file for service - also acts as one-entry cache
 	KConfig *configData;
-	// listDir for all domains (zeroconf:/) or one specified (zeroconf://domain/)
-	bool allDomains;
+	QString currentDomain;
 private slots:
 	void newType(DNSSD::RemoteService::Ptr);
 	void newService(DNSSD::RemoteService::Ptr);

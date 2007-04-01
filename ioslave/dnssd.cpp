@@ -175,25 +175,18 @@ void ZeroConfProtocol::resolveAndRedirect(const KUrl& url, bool useKRun)
 {
 	QString name,type,domain;
 	dissect(url,name,type,domain);
-	if (url.protocol()=="invitation") {
-		delete toResolve;
-		toResolve=0;
-		toResolve= new RemoteService(url);
-		if (!toResolve->isResolved()) error(ERR_MALFORMED_URL,i18n("Invalid URL"));
-	} else {
-		kDebug() << "Resolve for  " << name << ", " << type << ", " << domain  << "\n";
-		if (toResolve!=0)
-			if (toResolve->serviceName()==name && toResolve->type()==type &&
-			        toResolve->domain()==domain && toResolve->isResolved()) {
-			}  else {
-				delete toResolve;
-				toResolve = 0;
-			}
-		if (toResolve==0) {
-			toResolve = new RemoteService(name,type,domain);
-			// or maybe HOST_NOT_FOUND?
-			if (!toResolve->resolve()) error(ERR_SERVICE_NOT_AVAILABLE,i18n("Unable to resolve service"));
+	kDebug() << "Resolve for  " << name << ", " << type << ", " << domain  << "\n";
+	if (toResolve!=0)
+		if (toResolve->serviceName()==name && toResolve->type()==type &&
+		        toResolve->domain()==domain && toResolve->isResolved()) {
+		}  else {
+			delete toResolve;
+			toResolve = 0;
 		}
+	if (toResolve==0) {
+		toResolve = new RemoteService(name,type,domain);
+		// or maybe HOST_NOT_FOUND?
+		if (!toResolve->resolve()) error(ERR_SERVICE_NOT_AVAILABLE,i18n("Unable to resolve service"));
 	}
 	KUrl destUrl;
 	kDebug() << "Resolved: " << toResolve->hostName() << "\n";
@@ -265,18 +258,19 @@ void ZeroConfProtocol::listDir(const KUrl& url )
 	if (!dnssdOK()) return;
 	UrlType t  = checkURL(url);
 	UDSEntry entry;
+	currentDomain=url.host();
 	switch (t) {
 	case RootDir:
-		if (allDomains=url.host().isEmpty())
+		if (currentDomain.isEmpty())
 			browser = new ServiceBrowser(ServiceBrowser::AllServices);
-			else browser = new ServiceBrowser(ServiceBrowser::AllServices,url.host());
+			else browser = new ServiceBrowser(ServiceBrowser::AllServices, false, url.host());
 		connect(browser,SIGNAL(serviceAdded(DNSSD::RemoteService::Ptr)),
 			this,SLOT(newType(DNSSD::RemoteService::Ptr)));
 		break;
 	case ServiceDir:
 		if (url.host().isEmpty())
 			browser = new ServiceBrowser(url.path(KUrl::RemoveTrailingSlash).section("/",1,-1));
-			else browser = new ServiceBrowser(url.path(KUrl::RemoveTrailingSlash).section("/",1,-1),url.host());
+			else browser = new ServiceBrowser(url.path(KUrl::RemoveTrailingSlash).section("/",1,-1),false,url.host());
 		connect(browser,SIGNAL(serviceAdded(DNSSD::RemoteService::Ptr)),
 			this,SLOT(newService(DNSSD::RemoteService::Ptr)));
 		break;
@@ -310,8 +304,7 @@ void ZeroConfProtocol::newType(DNSSD::RemoteService::Ptr srv)
 	if (!setConfig(srv->type())) return;
 	QString name = configData->readEntry("Name");
 	if (!name.isNull()) {
-		buildDirEntry(entry,name,srv->type(), (allDomains) ? QString::null :
-			browser->browsedDomains()->domains()[0]);
+		buildDirEntry(entry,name,srv->type(), (currentDomain.isEmpty()) ? QString::null : currentDomain);
 		listEntry(entry,false);
 	}
 }

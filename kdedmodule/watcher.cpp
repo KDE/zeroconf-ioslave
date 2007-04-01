@@ -28,7 +28,7 @@ Watcher::Watcher(const QString& type, const QString& domain)
 	: refcount(1), updateNeeded(false), m_type(type), m_domain(domain)
 {
 	if (domain.isEmpty()) browser = new ServiceBrowser(type);
-		else browser = new ServiceBrowser(type,domain);
+		else browser = new ServiceBrowser(type,false, domain);
 	connect(browser,SIGNAL(serviceAdded(DNSSD::RemoteService::Ptr)),
 		SLOT(serviceAdded(DNSSD::RemoteService::Ptr)));
 	connect(browser,SIGNAL(serviceRemoved(DNSSD::RemoteService::Ptr)),
