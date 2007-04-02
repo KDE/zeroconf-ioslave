@@ -37,7 +37,6 @@
 #include <kcomponentdata.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
-#include <ksocketaddress.h>
 #include <kprotocolinfo.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
