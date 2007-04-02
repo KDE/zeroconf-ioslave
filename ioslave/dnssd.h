@@ -28,6 +28,7 @@
 #include <kio/global.h>
 #include <kio/slavebase.h>
 #include <dnssd/servicebrowser.h>
+#include <dnssd/servicetypebrowser.h>
 #include <dnssd/remoteservice.h>
 #include <qstringlist.h>
 
@@ -70,6 +71,7 @@ private:
 	void enterLoop();
 
 	ServiceBrowser* browser;
+	ServiceTypeBrowser* typebrowser;
 	// service types merged from all domains - to avoid duplicates
 	QStringList mergedtypes;
 	// last resolved or still being resolved services - acts as one-entry cache
@@ -78,7 +80,7 @@ private:
 	KConfig *configData;
 	QString currentDomain;
 private slots:
-	void newType(DNSSD::RemoteService::Ptr);
+	void newType(const QString&);
 	void newService(DNSSD::RemoteService::Ptr);
 	void allReported();
 

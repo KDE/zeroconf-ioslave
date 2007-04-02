@@ -22,6 +22,7 @@
 #include <qstring.h>
 //Added by qt3to4:
 #include <dnssd/servicebrowser.h>
+#include <dnssd/servicetypebrowser.h>
 #include <dnssd/remoteservice.h>
 
 using namespace DNSSD;
@@ -36,6 +37,7 @@ public:
 	unsigned int refcount;
 private:
 	ServiceBrowser* browser;
+	ServiceTypeBrowser* typebrowser;
 	bool updateNeeded;
 	QString m_type;
 	QString m_domain;

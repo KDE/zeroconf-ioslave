@@ -80,7 +80,6 @@ void DNSSDWatcher::createNotifier(const KUrl& url)
 {
 	QString domain,type,name;
 	dissect(url,name,type,domain);
-	if (type.isEmpty()) type = DNSSD::ServiceBrowser::AllServices;
 	Watcher *w = new Watcher(type,domain);
 	watchers.insert(url.url(),w);
 }

@@ -261,11 +261,14 @@ void ZeroConfProtocol::listDir(const KUrl& url )
 	switch (t) {
 	case RootDir:
 		if (currentDomain.isEmpty())
-			browser = new ServiceBrowser(ServiceBrowser::AllServices);
-			else browser = new ServiceBrowser(ServiceBrowser::AllServices, false, url.host());
-		connect(browser,SIGNAL(serviceAdded(DNSSD::RemoteService::Ptr)),
-			this,SLOT(newType(DNSSD::RemoteService::Ptr)));
-		break;
+			typebrowser = new ServiceTypeBrowser();
+			else typebrowser = new ServiceTypeBrowser(url.host());
+		connect(typebrowser,SIGNAL(serviceTypeAdded(const QString&)),
+			this,SLOT(newType(const QString&)));
+		connect(typebrowser,SIGNAL(finished()),this,SLOT(allReported()));
+		typebrowser->startBrowse();
+		enterLoop();
+		return;
 	case ServiceDir:
 		if (url.host().isEmpty())
 			browser = new ServiceBrowser(url.path(KUrl::RemoveTrailingSlash).section("/",1,-1));
@@ -291,19 +294,21 @@ void ZeroConfProtocol::allReported()
 	finished();
 	delete browser;
 	browser=0;
+	delete typebrowser;
+	typebrowser=0;
 	mergedtypes.clear();
 	emit leaveModality();
 }
-void ZeroConfProtocol::newType(DNSSD::RemoteService::Ptr srv)
+void ZeroConfProtocol::newType(const QString& type)
 {
-	if (mergedtypes.contains(srv->type())>0) return;
-	mergedtypes << srv->type();
+	if (mergedtypes.contains(type)>0) return;
+	mergedtypes << type;
 	UDSEntry entry;
-	kDebug() << "Got new entry " << srv->type() << endl;
-	if (!setConfig(srv->type())) return;
+	kDebug() << "Got new entry " << type << endl;
+	if (!setConfig(type)) return;
 	QString name = configData->readEntry("Name");
 	if (!name.isNull()) {
-		buildDirEntry(entry,name,srv->type(), (currentDomain.isEmpty()) ? QString::null : currentDomain);
+		buildDirEntry(entry,name,type, (currentDomain.isEmpty()) ? QString::null : currentDomain);
 		listEntry(entry,false);
 	}
 }

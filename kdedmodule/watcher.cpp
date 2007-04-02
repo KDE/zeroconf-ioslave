@@ -59,7 +59,8 @@ void Watcher::finished()
 	if (updateNeeded || removed.count()) {
 		QString url = "zeroconf:/";
 		if (!m_domain.isEmpty()) url+='/'+m_domain+'/';
-		if (m_type!=ServiceBrowser::AllServices) url+=m_type;
+		//FIXME: watch for types
+//		if (m_type!=ServiceBrowser::AllServices) url+=m_type;
 		kDebug() << "Sending update: " << url << "\n";
 		org::kde::KDirNotify::emitFilesAdded( url );
 		}
