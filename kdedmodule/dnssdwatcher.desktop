@@ -2,7 +2,6 @@
 Encoding=UTF-8
 Type=Service
 Name=DNS-SD Services Watcher
-Name[be]=Аглядальнік сервісаў DNS-SD
 Name[ca]=Vigilant de serveis DNS-SD
 Name[cs]=Sledování DNS-SD služeb
 Name[da]=DNS-SD overvågning af tjenester
@@ -42,7 +41,6 @@ Name[x-test]=xxDNS-SD Services Watcherxx
 Name[zh_HK]=DNS-SD 服務監察器
 Name[zh_TW]=DNS-SD 服務監看器
 Comment=Keeps track of DNS-SD services and updates directory listings
-Comment[be]=Назірае за спісам сервісаў DNS-SD і абнаўляе выгляд дырэкторыяў
 Comment[ca]=Segueix els serveis DNS-SD i actualitza les llistes de directoris
 Comment[cs]=Udržuje přehled o DNS-SD službách a aktualizuje výpisy adresářů
 Comment[da]=Holder styr på DNS-SD-tjenester og opdaterer lister med mapper

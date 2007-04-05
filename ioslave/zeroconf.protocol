@@ -13,7 +13,6 @@ linking=false
 moving=false
 Icon=network_local
 Description=A kioslave for ZeroConf
-Description[be]=Модуль kioslave для ZeroConf
 Description[br]=Ur c'hioslave evit ZeroConf
 Description[ca]=Un kioslave per ZeroConf
 Description[cs]=Pomocný protokol pro Zeroconf
