@@ -65,6 +65,10 @@ ZeroConfProtocol::ZeroConfProtocol(const QCString& protocol, const QCString &poo
 		configData(0)
 {}
 
+ZeroConfProtocol::~ZeroConfProtocol()
+{
+   delete configData;
+}
 
 void ZeroConfProtocol::get(const KURL& url )
 {
@@ -216,8 +220,15 @@ bool ZeroConfProtocol::setConfig(const QString& type)
 {
 	kdDebug() << "Setting config for " << type << endl;
 	if (configData)
-		if (configData->readEntry("Type")!=type) delete configData;
-		else return true;
+	{
+		if (configData->readEntry("Type")!=type)
+		{
+		       	delete configData;
+			configData=0L;
+		}
+		else 
+			return true;
+	}
 	configData = new KConfig("zeroconf/"+type,false,false,"data");
 	return (configData->readEntry("Type")==type);
 }
