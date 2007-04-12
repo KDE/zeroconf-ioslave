@@ -32,7 +32,7 @@ Q_OBJECT
 public:
 	DNSSDWatcher();
 
-private slots:
+public slots:
 	QStringList watchedDirectories();
 	void enteredDirectory(const QString& dir);
 	void leftDirectory(const QString& dir);

@@ -17,6 +17,7 @@
 */
 
 #include "dnssdwatcher.h"
+#include "kdnssdadaptor.h"
 
 #include <kdebug.h>
 #include <kglobal.h>
@@ -29,9 +30,11 @@ DNSSDWatcher::DNSSDWatcher()
 	: KDEDModule()
 {
 	QDBusConnection::sessionBus().connect(QString(), QString(), "org.kde.KDirNotify",
-                                   "enteredDirectory", this, SLOT(enteredDirectory(QString))); QDBusConnection::sessionBus().connect(QString(), QString(), "org.kde.KDirNotify",
+                                   "enteredDirectory", this, SLOT(enteredDirectory(QString))); 
+	QDBusConnection::sessionBus().connect(QString(), QString(), "org.kde.KDirNotify",
                                    "leftDirectory", this, SLOT(leftDirectory(QString)));
 	watchers.setAutoDelete(true);
+	new KdnssdAdaptor( this );
 }
 
 QStringList DNSSDWatcher::watchedDirectories()
