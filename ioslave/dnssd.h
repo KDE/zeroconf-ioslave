@@ -43,6 +43,7 @@ class ZeroConfProtocol : public QObject, public KIO::SlaveBase
 	Q_OBJECT
 public:
 	ZeroConfProtocol(const QByteArray& protocol, const QByteArray &pool_socket, const QByteArray &app_socket);
+	~ZeroConfProtocol();
 	virtual void get(const KUrl& url);
 	virtual void mimetype(const KUrl& url);
 	virtual void stat(const KUrl& url);

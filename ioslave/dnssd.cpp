@@ -18,8 +18,6 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#include <q3cstring.h>
-#include <q3socket.h>
 #include <qdatetime.h>
 #include <qbitarray.h>
 
@@ -63,6 +61,10 @@ ZeroConfProtocol::ZeroConfProtocol(const QByteArray& protocol, const QByteArray 
 		configData(0)
 {}
 
+ZeroConfProtocol::~ZeroConfProtocol()
+{
+  delete configData;
+}
 
 void ZeroConfProtocol::get(const KUrl& url )
 {
@@ -207,9 +209,15 @@ bool ZeroConfProtocol::setConfig(const QString& type)
 {
 	kDebug() << "Setting config for " << type << endl;
 	if (configData)
-		if (configData->readEntry("Type")!=type) delete configData;
-		else return true;
+		if (configData->readEntry("Type")!=type)
+		{	
+			delete configData;
+			configData =0L;
+		}
+		else 
+			return true;
 	configData = new KConfig("data", "zeroconf/"+type, KConfig::NoGlobals );
+
 	return (configData->readEntry("Type")==type);
 }
 
