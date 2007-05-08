@@ -198,7 +198,10 @@ void ZeroConfProtocol::resolveAndRedirect(const KUrl& url, bool useKRun)
 	destUrl.setHost(toResolve->hostName());
 	destUrl.setPort(toResolve->port());
 	// get exec from config or try getting it from helper protocol
-	if (useKRun) KRun::run(configData->readEntry("Exec",KProtocolInfo::exec(getProtocol(type))),destUrl);
+	if (useKRun)
+            KRun::run(configData->readEntry("Exec",
+                    KProtocolInfo::exec(getProtocol(type))),
+                    destUrl, 0);
 	else {
 		redirection(destUrl);
 		finished();
