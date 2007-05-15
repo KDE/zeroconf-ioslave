@@ -10,7 +10,7 @@ kde4_automoc(${kded_dnssdwatcher_PART_SRCS})
 kde4_add_plugin(kded_dnssdwatcher ${kded_dnssdwatcher_PART_SRCS})
 
 
-target_link_libraries(kded_dnssdwatcher  ${KDE4_KIO_LIBS} ${KDE4_KDNSSD_LIBS} )
+target_link_libraries(kded_dnssdwatcher  ${KDE4_KIO_LIBS} ${KDE4_KDNSSD_LIBS} ${QT_QT3SUPPORT_LIBRARY} )
 
 install(TARGETS kded_dnssdwatcher  DESTINATION ${PLUGIN_INSTALL_DIR})
 
