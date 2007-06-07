@@ -348,6 +348,7 @@ extern "C"
 		KApplication app;
 		KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 		ZeroConfProtocol slave( args->arg(0), args->arg(1), args->arg(2) );
+		args->clear();
 		slave.dispatchLoop();
 		return 0;
 	}
