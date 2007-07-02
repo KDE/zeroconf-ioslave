@@ -48,14 +48,6 @@
 
 #include "dnssd.h"
 
-static const KCmdLineOptions options[] =
-{
-	{ "+protocol", I18N_NOOP( "Protocol name" ), 0 },
-	{ "+pool", I18N_NOOP( "Socket name" ), 0 },
-	{ "+app", I18N_NOOP( "Socket name" ), 0 },
-	KCmdLineLastOption
-};
-
 ZeroConfProtocol::ZeroConfProtocol(const QByteArray& protocol, const QByteArray &pool_socket, const QByteArray &app_socket)
 		: SlaveBase(protocol, pool_socket, app_socket), browser(0),toResolve(0),
 		configData(0)
@@ -342,12 +334,17 @@ extern "C"
 	{
 		// KApplication is necessary to use other ioslaves
 		putenv(strdup("SESSION_MANAGER="));
-		KCmdLineArgs::init(argc, argv, "kio_zeroconf", 0, 0, 0, 0);
+		KCmdLineArgs::init(argc, argv, "kio_zeroconf", 0, KLocalizedString(), 0, KLocalizedString());
+
+		KCmdLineOptions options;
+		options.add("+protocol", ki18n( "Protocol name" ));
+		options.add("+pool", ki18n( "Socket name" ));
+		options.add("+app", ki18n( "Socket name" ));
 		KCmdLineArgs::addCmdLineOptions( options );
 		//KApplication::disableAutoDcopRegistration();
 		KApplication app;
 		KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-		ZeroConfProtocol slave( args->arg(0), args->arg(1), args->arg(2) );
+		ZeroConfProtocol slave( args->arg(0).toLocal8Bit(), args->arg(1).toLocal8Bit(), args->arg(2).toLocal8Bit() );
 		args->clear();
 		slave.dispatchLoop();
 		return 0;
