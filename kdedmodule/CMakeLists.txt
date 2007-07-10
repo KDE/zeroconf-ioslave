@@ -5,7 +5,6 @@ set(kded_dnssdwatcher_PART_SRCS dnssdwatcher.cpp watcher.cpp )
 
 qt4_add_dbus_adaptor( kded_dnssdwatcher_PART_SRCS org.kde.kdnssd.xml dnssdwatcher.h DNSSDWatcher )
 
-kde4_automoc(${kded_dnssdwatcher_PART_SRCS})
 
 kde4_add_plugin(kded_dnssdwatcher ${kded_dnssdwatcher_PART_SRCS})
 
