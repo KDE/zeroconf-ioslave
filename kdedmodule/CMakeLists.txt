@@ -17,4 +17,4 @@ install(TARGETS kded_dnssdwatcher  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES dnssdwatcher.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/kded)
-install( FILES org.kde.kdnssd.xml DESTINATION ${DBUS_INTERFACES_DIR} )
+install( FILES org.kde.kdnssd.xml DESTINATION ${DBUS_INTERFACES_INSTALL_DIR} )
