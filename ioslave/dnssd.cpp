@@ -220,13 +220,13 @@ bool ZeroConfProtocol::setConfig(const QString& type)
 void ZeroConfProtocol::buildDirEntry(UDSEntry& entry,const QString& name,const QString& type, const QString& host)
 {
 	entry.clear();
-	entry.insert(KIO::UDS_NAME,name);
-	entry.insert(KIO::UDS_ACCESS,0555);
-	entry.insert(KIO::UDS_SIZE,0);
-	entry.insert(KIO::UDS_FILE_TYPE,S_IFDIR);
-	entry.insert(KIO::UDS_MIME_TYPE,QString::fromUtf8("inode/directory"));
+	entry.insert(UDSEntry::UDS_NAME,name);
+	entry.insert(UDSEntry::UDS_ACCESS,0555);
+	entry.insert(UDSEntry::UDS_SIZE,0);
+	entry.insert(UDSEntry::UDS_FILE_TYPE,S_IFDIR);
+	entry.insert(UDSEntry::UDS_MIME_TYPE,QString::fromUtf8("inode/directory"));
 	if (!type.isNull())
-			entry.insert(KIO::UDS_URL,"zeroconf:/"+((!host.isNull()) ? '/'+host+'/' : "" )+type+'/');
+			entry.insert(UDSEntry::UDS_URL,"zeroconf:/"+((!host.isNull()) ? '/'+host+'/' : "" )+type+'/');
 }
 QString ZeroConfProtocol::getProtocol(const QString& type)
 {
@@ -238,20 +238,20 @@ void ZeroConfProtocol::buildServiceEntry(UDSEntry& entry,const QString& name,con
 {
 	setConfig(type);
 	entry.clear();
-	entry.insert(KIO::UDS_NAME,name);
-	entry.insert(KIO::UDS_ACCESS,0666);
+	entry.insert(UDSEntry::UDS_NAME,name);
+	entry.insert(UDSEntry::UDS_ACCESS,0666);
 	QString icon=configData->readEntry("Icon",KProtocolInfo::icon(getProtocol(type)));
 	if (!icon.isNull())
-			entry.insert(KIO::UDS_ICON_NAME,icon);
+			entry.insert(UDSEntry::UDS_ICON_NAME,icon);
 	KUrl protourl;
 	protourl.setProtocol(getProtocol(type));
 	QString encname = "zeroconf://" + domain +"/" +type+ "/" + name;
 	if (KProtocolManager::supportsListing(protourl)) {
-		entry.insert(KIO::UDS_FILE_TYPE,S_IFDIR);
+		entry.insert(UDSEntry::UDS_FILE_TYPE,S_IFDIR);
 		encname+='/';
 	} else
-			entry.insert(KIO::UDS_FILE_TYPE,S_IFREG);
-	entry.insert(KIO::UDS_URL,encname);
+			entry.insert(UDSEntry::UDS_FILE_TYPE,S_IFREG);
+	entry.insert(UDSEntry::UDS_URL,encname);
 }
 
 void ZeroConfProtocol::listDir(const KUrl& url )
