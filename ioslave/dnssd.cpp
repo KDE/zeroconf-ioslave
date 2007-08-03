@@ -202,7 +202,7 @@ void ZeroConfProtocol::resolveAndRedirect(const KUrl& url, bool useKRun)
 
 bool ZeroConfProtocol::setConfig(const QString& type)
 {
-	kDebug() << "Setting config for " << type << endl;
+	kDebug() << "Setting config for " << type;
 	if (configData)
 		if (configData->readEntry("Type")!=type)
 		{	
@@ -307,7 +307,7 @@ void ZeroConfProtocol::newType(const QString& type)
 	if (mergedtypes.contains(type)>0) return;
 	mergedtypes << type;
 	UDSEntry entry;
-	kDebug() << "Got new entry " << type << endl;
+	kDebug() << "Got new entry " << type;
 	if (!setConfig(type)) return;
 	QString name = configData->readEntry("Name");
 	if (!name.isNull()) {
