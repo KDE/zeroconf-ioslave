@@ -311,7 +311,7 @@ void ZeroConfProtocol::newType(const QString& type)
 	if (!setConfig(type)) return;
 	QString name = configData->readEntry("Name");
 	if (!name.isNull()) {
-		buildDirEntry(entry,name,type, (currentDomain.isEmpty()) ? QString::null : currentDomain);
+		buildDirEntry(entry,name,type, (currentDomain.isEmpty()) ? QString::null : currentDomain);	//krazy:exclude=nullstrassign for old broken gcc
 		listEntry(entry,false);
 	}
 }
