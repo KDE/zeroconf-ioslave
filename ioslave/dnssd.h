@@ -52,8 +52,8 @@ signals:
 	void leaveModality();
 private:
 	// Create UDSEntry for zeroconf:/ or zeroconf:/type/ paths
-	void buildDirEntry(UDSEntry& entry,const QString& name,const QString& type=QString::null,	//krazy:exclude=nullstrassign for old broken gcc
-		const QString& host=QString::null);	//krazy:exclude=nullstrassign for old broken gcc
+	void buildDirEntry(UDSEntry& entry,const QString& name,const QString& type=QString(),
+		const QString& host=QString());
 	// Create UDSEntry for single services: dnssd:/type/service
 	void buildServiceEntry(UDSEntry& entry,const QString& name,const QString& type,
 			       const QString& domain);
