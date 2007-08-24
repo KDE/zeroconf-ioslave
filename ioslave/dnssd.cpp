@@ -97,8 +97,8 @@ UrlType ZeroConfProtocol::checkURL(const KUrl& url)
 	if (service.isEmpty()) return ServiceDir;
 	if (!domain.isEmpty()) {
 		if (!setConfig(type)) return Invalid;
-		if (!configData->readEntry("Exec").isNull()) return HelperProtocol;
-		return (KProtocolInfo::isHelperProtocol( configData->readEntry( "Protocol",
+		if (!configData->group("").readEntry("Exec").isNull()) return HelperProtocol;
+		return (KProtocolInfo::isHelperProtocol( configData->group("").readEntry( "Protocol",
 			type.section(".",0,0).mid(1)))) ? HelperProtocol : Service;
 		}
 	return Invalid;
@@ -160,7 +160,7 @@ void ZeroConfProtocol::stat(const KUrl& url)
 }
 QString ZeroConfProtocol::getAttribute(const QString& name)
 {
-	QString entry = configData->readEntry(name,QString());
+	QString entry = configData->group("").readEntry(name,QString());
 	return (entry.isNull()) ? QString() : toResolve->textData()[entry];
 }
 
@@ -191,7 +191,7 @@ void ZeroConfProtocol::resolveAndRedirect(const KUrl& url, bool useKRun)
 	destUrl.setPort(toResolve->port());
 	// get exec from config or try getting it from helper protocol
 	if (useKRun)
-            KRun::run(configData->readEntry("Exec",
+            KRun::run(configData->group("").readEntry("Exec",
                     KProtocolInfo::exec(getProtocol(type))),
                     destUrl, 0);
 	else {
@@ -204,7 +204,7 @@ bool ZeroConfProtocol::setConfig(const QString& type)
 {
 	kDebug() << "Setting config for " << type;
 	if (configData)
-		if (configData->readEntry("Type")!=type)
+		if (configData->group("").readEntry("Type")!=type)
 		{	
 			delete configData;
 			configData =0L;
@@ -213,7 +213,7 @@ bool ZeroConfProtocol::setConfig(const QString& type)
 			return true;
 	configData = new KConfig("data", "zeroconf/"+type, KConfig::NoGlobals );
 
-	return (configData->readEntry("Type")==type);
+	return (configData->group("").readEntry("Type")==type);
 }
 
 
@@ -231,7 +231,7 @@ void ZeroConfProtocol::buildDirEntry(UDSEntry& entry,const QString& name,const Q
 QString ZeroConfProtocol::getProtocol(const QString& type)
 {
 	setConfig(type);
-	return configData->readEntry("Protocol",type.section(".",0,0).mid(1));
+	return configData->group("").readEntry("Protocol",type.section(".",0,0).mid(1));
 }
 
 void ZeroConfProtocol::buildServiceEntry(UDSEntry& entry,const QString& name,const QString& type,const QString& domain)
@@ -240,7 +240,7 @@ void ZeroConfProtocol::buildServiceEntry(UDSEntry& entry,const QString& name,con
 	entry.clear();
 	entry.insert(UDSEntry::UDS_NAME,name);
 	entry.insert(UDSEntry::UDS_ACCESS,0666);
-	QString icon=configData->readEntry("Icon",KProtocolInfo::icon(getProtocol(type)));
+	QString icon=configData->group("").readEntry("Icon",KProtocolInfo::icon(getProtocol(type)));
 	if (!icon.isNull())
 			entry.insert(UDSEntry::UDS_ICON_NAME,icon);
 	KUrl protourl;
@@ -309,7 +309,7 @@ void ZeroConfProtocol::newType(const QString& type)
 	UDSEntry entry;
 	kDebug() << "Got new entry " << type;
 	if (!setConfig(type)) return;
-	QString name = configData->readEntry("Name");
+	QString name = configData->group("").readEntry("Name");
 	if (!name.isNull()) {
 		buildDirEntry(entry,name,type, (currentDomain.isEmpty()) ? QString::null : currentDomain);	//krazy:exclude=nullstrassign for old broken gcc
 		listEntry(entry,false);
