@@ -53,6 +53,7 @@ Description[tr]=Zeroconf kioslave'i
 Description[uk]=Kioslave для ZeroConf
 Description[vi]=Một kioslave cho ZeroConf
 Description[x-test]=xxA kioslave for ZeroConfxx
+Description[zh_CN]=ZeroConf 的 kioslave
 Description[zh_HK]=用於 ZeroConf 的 kioslave
 Description[zh_TW]=ZeroConf 的 kioslave
 maxInstances=4
