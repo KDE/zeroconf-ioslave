@@ -30,6 +30,7 @@
 #include <netdb.h>
 
 #include <kconfig.h>
+#include <kconfiggroup.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <kcomponentdata.h>
@@ -211,8 +212,9 @@ bool ZeroConfProtocol::setConfig(const QString& type)
 		}
 		else 
 			return true;
-	configData = new KConfig("data", "zeroconf/"+type, KConfig::NoGlobals );
-
+        //TODO fixme
+	configData = new KConfig("data"/*, "zeroconf/"+type*/, KConfig::NoGlobals );
+         
 	return (configData->group("").readEntry("Type")==type);
 }
 
