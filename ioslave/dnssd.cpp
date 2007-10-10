@@ -212,8 +212,7 @@ bool ZeroConfProtocol::setConfig(const QString& type)
 		}
 		else 
 			return true;
-        //TODO fixme
-	configData = new KConfig("data"/*, "zeroconf/"+type*/, KConfig::NoGlobals );
+	configData = new KConfig("zeroconf/"+type, KConfig::NoGlobals );
          
 	return (configData->group("").readEntry("Type")==type);
 }
