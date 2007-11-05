@@ -26,27 +26,27 @@
 #include "watcher.h"
 #include <QtDBus>
 
-DNSSDWatcher::DNSSDWatcher()
-	: KDEDModule()
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
+
+K_PLUGIN_FACTORY(DNSSDWatcherFactory,
+                 registerPlugin<DNSSDWatcher>();
+    )
+K_EXPORT_PLUGIN(DNSSDWatcherFactory("dnssdwatcher"))
+
+DNSSDWatcher::DNSSDWatcher(QObject* parent, const QList<QVariant>&)
+	: KDEDModule(parent)
 {
 	QDBusConnection::sessionBus().connect(QString(), QString(), "org.kde.KDirNotify",
-                                   "enteredDirectory", this, SLOT(enteredDirectory(QString))); 
+                                   "enteredDirectory", this, SLOT(enteredDirectory(QString)));
 	QDBusConnection::sessionBus().connect(QString(), QString(), "org.kde.KDirNotify",
                                    "leftDirectory", this, SLOT(leftDirectory(QString)));
-	watchers.setAutoDelete(true);
 	new KdnssdAdaptor( this );
 }
 
 QStringList DNSSDWatcher::watchedDirectories()
 {
-//TODO
-//	return watchers.keys();
-	QStringList keys;
-	for (Q3DictIterator<Watcher> it(watchers) ; it.current(); ++it ) {
-		keys << it.currentKey();
-		kDebug() << it.currentKey() << " " << (*it)->refcount << "\n";
-		}
-return keys;
+	return watchers.keys();
 }
 
 
@@ -64,8 +64,10 @@ void DNSSDWatcher::enteredDirectory(const QString& _dir)
 {
 	KUrl dir(_dir);
 	if (dir.protocol()!="zeroconf") return;
-	if (watchers[dir.url()]) watchers[dir.url()]->refcount++;
-		else createNotifier(dir);
+	if (watchers.contains(dir.url()))
+            watchers[dir.url()]->refcount++;
+        else
+            createNotifier(dir);
 }
 
 
@@ -73,9 +75,14 @@ void DNSSDWatcher::leftDirectory(const QString& _dir)
 {
 	KUrl dir(_dir);
 	if (dir.protocol()!="zeroconf") return;
-	if (!watchers[dir.url()]) return;
-	if ((watchers[dir.url()])->refcount==1) watchers.remove(dir.url());
-		else watchers[dir.url()]->refcount--;
+        Watcher* watcher = watchers.value(dir.url());
+	if (!watcher) return;
+	if (watcher->refcount==1) {
+            delete watcher;
+            watchers.remove(dir.url());
+        } else {
+            watcher->refcount--;
+        }
 }
 
 
@@ -87,12 +94,9 @@ void DNSSDWatcher::createNotifier(const KUrl& url)
 	watchers.insert(url.url(),w);
 }
 
-extern "C" {
-	KDE_EXPORT KDEDModule *create_dnssdwatcher()
-	{
-		KGlobal::locale()->insertCatalog("dnssdwatcher");
-		return new DNSSDWatcher();
-	}
+DNSSDWatcher::~DNSSDWatcher()
+{
+    qDeleteAll( watchers );
 }
 
 #include "dnssdwatcher.moc"

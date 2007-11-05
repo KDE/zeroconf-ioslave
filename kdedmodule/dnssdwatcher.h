@@ -19,10 +19,8 @@
 #ifndef _DNSSDWATCHER_H_
 #define _DNSSDWATCHER_H_
 
-#include <q3dict.h>
+#include <qhash.h>
 #include <kdedmodule.h>
-#include <qstring.h>
-#include <qstringlist.h>
 #include <kurl.h>
 
 class Watcher;
@@ -30,7 +28,8 @@ class DNSSDWatcher : public KDEDModule
 {
 Q_OBJECT
 public:
-	DNSSDWatcher();
+	DNSSDWatcher(QObject* parent, const QList<QVariant>&);
+	~DNSSDWatcher();
 
 public slots:
 	QStringList watchedDirectories();
@@ -38,8 +37,8 @@ public slots:
 	void leftDirectory(const QString& dir);
 
 private:
-	Q3Dict<Watcher> watchers;
-	
+	QHash<QString, Watcher *> watchers;
+
 	void createNotifier(const KUrl& url);
 	void dissect(const KUrl& url,QString& name,QString& type,QString& domain);
 

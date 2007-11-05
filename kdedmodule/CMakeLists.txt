@@ -8,8 +8,7 @@ qt4_add_dbus_adaptor( kded_dnssdwatcher_PART_SRCS org.kde.kdnssd.xml dnssdwatche
 
 kde4_add_plugin(kded_dnssdwatcher ${kded_dnssdwatcher_PART_SRCS})
 
-
-target_link_libraries(kded_dnssdwatcher  ${KDE4_KIO_LIBS} ${KDE4_KDNSSD_LIBS} ${QT_QT3SUPPORT_LIBRARY} )
+target_link_libraries(kded_dnssdwatcher  ${KDE4_KIO_LIBS} ${KDE4_KDNSSD_LIBS} )
 
 install(TARGETS kded_dnssdwatcher  DESTINATION ${PLUGIN_INSTALL_DIR})
 

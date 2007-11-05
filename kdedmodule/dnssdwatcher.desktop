@@ -87,5 +87,4 @@ Comment[zh_TW]=追蹤 DNS-SD 服務並更新目錄清單
 ServiceTypes=KDEDModule
 X-KDE-ModuleType=Library
 X-KDE-Library=dnssdwatcher
-X-KDE-FactoryName=dnssdwatcher
 X-KDE-Kded-autoload=true
