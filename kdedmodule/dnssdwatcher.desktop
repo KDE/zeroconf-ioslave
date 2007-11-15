@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=DNS-SD Services Watcher
 Name[ca]=Vigilant de serveis DNS-SD
@@ -84,7 +83,7 @@ Comment[x-test]=xxKeeps track of DNS-SD services and updates directory listingsx
 Comment[zh_CN]=跟踪 DNS-SD 服务并更新目录列表
 Comment[zh_HK]=監察 DNS-SD 服務並更新目錄清單
 Comment[zh_TW]=追蹤 DNS-SD 服務並更新目錄清單
-ServiceTypes=KDEDModule
+X-KDE-ServiceTypes=KDEDModule
 X-KDE-ModuleType=Library
 X-KDE-Library=dnssdwatcher
 X-KDE-Kded-autoload=true
