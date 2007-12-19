@@ -2,6 +2,7 @@
 Icon=network_local
 Name=Network Services
 Name[bg]=Мрежови услуги
+Name[bn]=নেটওয়ার্ক সার্ভিস
 Name[br]=Servijoù rouedad
 Name[ca]=Serveis de xarxa
 Name[cs]=Síťové služby
@@ -38,6 +39,7 @@ Name[pt]=Serviços de Rede
 Name[pt_BR]=Serviços de Rede
 Name[ro]=Servicii de reţea
 Name[ru]=Сетевые службы
+Name[sk]=Sieťové služby
 Name[sl]=Omrežne storitve
 Name[sr]=Мрежни сервиси
 Name[sr@latin]=Mrežni servisi
