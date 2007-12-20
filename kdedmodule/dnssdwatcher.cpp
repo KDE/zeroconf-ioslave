@@ -24,7 +24,6 @@
 #include <klocale.h>
 #include <dnssd/servicebrowser.h>
 #include "watcher.h"
-#include <QtDBus>
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>

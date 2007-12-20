@@ -21,7 +21,6 @@
 #include <kdebug.h>
 
 #include <qstringlist.h>
-#include <QtDBus>
 #include <kdirnotify.h>
 
 Watcher::Watcher(const QString& type, const QString& domain) 
