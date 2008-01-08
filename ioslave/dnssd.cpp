@@ -18,8 +18,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#include <qdatetime.h>
-#include <qbitarray.h>
+#include "dnssd.h"
 
 #include <stdlib.h>
 #include <math.h>
@@ -40,14 +39,10 @@
 #include <kcmdlineargs.h>
 #include <klocale.h>
 #include <kurl.h>
-#include <qmap.h>
 #include <kapplication.h>
-#include <qeventloop.h>
 #include <dnssd/domainbrowser.h>
 #include <krun.h>
 #include <kprotocolmanager.h>
-
-#include "dnssd.h"
 
 ZeroConfProtocol::ZeroConfProtocol(const QByteArray& protocol, const QByteArray &pool_socket, const QByteArray &app_socket)
 		: SlaveBase(protocol, pool_socket, app_socket), browser(0),toResolve(0),
