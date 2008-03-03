@@ -1,5 +1,0 @@
-Name=sftp remote directory
-Type=_sftp-ssh._tcp
-UserEntry=u
-PasswordEntry=p
-Protocol=sftp

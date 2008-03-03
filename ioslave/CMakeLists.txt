@@ -15,6 +15,5 @@ install(TARGETS kio_zeroconf  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES zeroconf.protocol DESTINATION ${SERVICES_INSTALL_DIR})
-install( FILES _http._tcp _ftp._tcp _ldap._tcp _webdav._tcp _nfs._tcp _ssh._tcp _sftp-ssh._tcp DESTINATION ${DATA_INSTALL_DIR}/zeroconf)
 install( FILES zeroconf.desktop  DESTINATION ${DATA_INSTALL_DIR}/remoteview)
 

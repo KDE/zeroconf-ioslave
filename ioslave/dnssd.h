@@ -36,7 +36,20 @@
 using namespace KIO;
 using namespace DNSSD;
 
-enum UrlType { RootDir, ServiceDir, Service, HelperProtocol, Invalid };
+enum UrlType { RootDir, ServiceDir, Service,  Invalid };
+
+struct ProtocolData {
+    ProtocolData() {}
+    ProtocolData(const QString& _name, const QString& proto, const QString& path=QString(), 
+	const QString& user=QString(), const QString& passwd=QString()) : pathEntry(path), 
+	name(_name), userEntry(user), passwordEntry(passwd), protocol(proto) {}
+	
+    QString pathEntry;
+    QString name;
+    QString userEntry;
+    QString passwordEntry;
+    QString protocol;
+};
 
 class ZeroConfProtocol : public QObject, public KIO::SlaveBase
 {
@@ -52,22 +65,16 @@ signals:
 	void leaveModality();
 private:
 	// Create UDSEntry for zeroconf:/ or zeroconf:/type/ paths
-	void buildDirEntry(UDSEntry& entry,const QString& name,const QString& type=QString(),
-		const QString& host=QString());
+	void buildDirEntry(UDSEntry& entry,const QString& name,const QString& type=QString());
 	// Create UDSEntry for single services: dnssd:/type/service
-	void buildServiceEntry(UDSEntry& entry,const QString& name,const QString& type,
-			       const QString& domain);
+	void buildServiceEntry(UDSEntry& entry,const QString& name,const QString& type);
 	// Returns root dir, service dir, service or invalid
 	UrlType checkURL(const KUrl& url);
-	// extract name, type and domain from URL
-	void dissect(const KUrl& url,QString& name,QString& type,QString& domain);
-	// resolve given service and redirect() to it or use KRun on it (used for helper protocols)
-	void resolveAndRedirect(const KUrl& url, bool useKRun = false);
+	// extract name and type  from URL
+	void dissect(const KUrl& url,QString& name,QString& type);
+	// resolve given service and redirect() to it
+	void resolveAndRedirect(const KUrl& url);
 	bool dnssdOK();
-	QString getAttribute(const QString& name);
-	QString getProtocol(const QString& type);
-	// try to load config file for given service type (or just return if already loaded)
-	bool setConfig(const QString& type);
 
 	void enterLoop();
 
@@ -75,11 +82,10 @@ private:
 	ServiceTypeBrowser* typebrowser;
 	// service types merged from all domains - to avoid duplicates
 	QStringList mergedtypes;
-	// last resolved or still being resolved services - acts as one-entry cache
+
 	RemoteService *toResolve;
-	// Config file for service - also acts as one-entry cache
-	KConfig *configData;
-	QString currentDomain;
+	QHash<QString,ProtocolData> knownProtocols;
+	
 private slots:
 	void newType(const QString&);
 	void newService(DNSSD::RemoteService::Ptr);

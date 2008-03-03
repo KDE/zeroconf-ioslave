@@ -30,7 +30,6 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kdebug.h>
 #include <kmessagebox.h>
 #include <kcomponentdata.h>
 #include <kglobal.h>
@@ -45,38 +44,26 @@
 #include <kprotocolmanager.h>
 
 ZeroConfProtocol::ZeroConfProtocol(const QByteArray& protocol, const QByteArray &pool_socket, const QByteArray &app_socket)
-		: SlaveBase(protocol, pool_socket, app_socket), browser(0),toResolve(0),
-		configData(0)
-{}
+		: SlaveBase(protocol, pool_socket, app_socket), browser(0),toResolve(0)
+{
+    knownProtocols["_ftp._tcp"]=ProtocolData(i18n("FTP servers"),"ftp","path","u","p");    
+    knownProtocols["_webdav._tcp"]=ProtocolData(i18n("WebDav remote directory"),"webdav","path");    
+    knownProtocols["_sftp-ssh._tcp"]=ProtocolData(i18n("Remote disk (sftp)"),"sftp",QString(),"u","p");
+    knownProtocols["_ssh._tcp"]=ProtocolData(i18n("Remote disk (fish)"),"fish",QString(),"u","p");
+    knownProtocols["_nfs._tcp"]=ProtocolData(i18n("NFS remote directory"),"nfs","path");
+}
 
 ZeroConfProtocol::~ZeroConfProtocol()
 {
-  delete configData;
 }
 
 void ZeroConfProtocol::get(const KUrl& url )
 {
 	if (!dnssdOK()) return;
 	UrlType t = checkURL(url);
-	switch (t) {
-	case HelperProtocol:
-	{
-		resolveAndRedirect(url,true);
-		mimeType("text/html");
-		QString reply= "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n";
-		reply+="</head>\n<body>\n<h2>"+i18n("Requested service has been launched in separate window.");
-		reply+="</h2>\n</body></html>";
-		data(reply.toUtf8());
-		data(QByteArray());
-		finished();
-		break;
-	}
-	case Service:
-		resolveAndRedirect(url);
-		break;
-	default:
-		error(ERR_MALFORMED_URL,i18n("invalid URL"));
-	}
+	if (t==Service) resolveAndRedirect(url);
+	else error(ERR_MALFORMED_URL,i18n("invalid URL"));
+	
 }
 void ZeroConfProtocol::mimetype(const KUrl& url )
 {
@@ -86,26 +73,21 @@ void ZeroConfProtocol::mimetype(const KUrl& url )
 UrlType ZeroConfProtocol::checkURL(const KUrl& url)
 {
 	if (url.path()=="/") return RootDir;
-	QString service, type, domain;
-	dissect(url,service,type,domain);
+	QString service, type;
+	dissect(url,service,type);
 	const QString& proto = type.section('.',1,-1);
 	if (type[0]!='_' || (proto!="_udp" && proto!="_tcp")) return Invalid;
 	if (service.isEmpty()) return ServiceDir;
-	if (!domain.isEmpty()) {
-		if (!setConfig(type)) return Invalid;
-		if (!configData->group("").readEntry("Exec").isNull()) return HelperProtocol;
-		return (KProtocolInfo::isHelperProtocol( configData->group("").readEntry( "Protocol",
-			type.section(".",0,0).mid(1)))) ? HelperProtocol : Service;
-		}
-	return Invalid;
+	if (!knownProtocols.contains(type)) return Invalid;
+	return Service;
 }
 
-// URL zeroconf://domain/_http._tcp/some%20service
-// URL invitation://host:port/_http._tcp/some%20service?u=username&root=directory
-void ZeroConfProtocol::dissect(const KUrl& url,QString& name,QString& type,QString& domain)
+// URL zeroconf:/_http._tcp/some%20service
+void ZeroConfProtocol::dissect(const KUrl& url,QString& name,QString& type)
 {
+	// FIXME: encode domain name into url to support many services with the same name on 
+	// different domains
 	type = url.path().section("/",1,1);
-	domain = url.host();
 	name = url.path().section("/",2,-1);
 
 }
@@ -141,79 +123,38 @@ void ZeroConfProtocol::stat(const KUrl& url)
 	case Service:
 		resolveAndRedirect(url);
 	  	break;
-	case HelperProtocol:
-	{
-		QString name,type,domain;
-		dissect(url,name,type,domain);
-		buildServiceEntry(entry,name,type,domain);
-		statEntry(entry);
-		finished();
-		break;
-	}
 	default:
 		error(ERR_MALFORMED_URL,i18n("invalid URL"));
 	}
 }
-QString ZeroConfProtocol::getAttribute(const QString& name)
-{
-	QString entry = configData->group("").readEntry(name,QString());
-	return (entry.isNull()) ? QString() : toResolve->textData()[entry];
-}
 
-void ZeroConfProtocol::resolveAndRedirect(const KUrl& url, bool useKRun)
+void ZeroConfProtocol::resolveAndRedirect(const KUrl& url)
 {
-	QString name,type,domain;
-	dissect(url,name,type,domain);
-	kDebug() << "Resolve for  " << name << ", " << type << ", " << domain  << "\n";
-	if (toResolve!=0)
-		if (toResolve->serviceName()==name && toResolve->type()==type &&
-		        toResolve->domain()==domain && toResolve->isResolved()) {
-		}  else {
-			delete toResolve;
-			toResolve = 0;
-		}
+	QString name,type;
+	dissect(url,name,type);
+	if (toResolve!=0 && (toResolve->serviceName()!=name || toResolve->type()!=type))  {
+		delete toResolve;
+		toResolve = 0;
+	}
 	if (toResolve==0) {
-		toResolve = new RemoteService(name,type,domain);
-		// or maybe HOST_NOT_FOUND?
-		if (!toResolve->resolve()) error(ERR_SERVICE_NOT_AVAILABLE,i18n("Unable to resolve service"));
+		toResolve = new RemoteService(name,type,"");
+		if (!toResolve->resolve()) error(ERR_DOES_NOT_EXIST,name);
 	}
 	KUrl destUrl;
-	kDebug() << "Resolved: " << toResolve->hostName() << "\n";
-	destUrl.setProtocol(getProtocol(type));
-	destUrl.setUser(getAttribute("UserEntry"));
-	destUrl.setPass(getAttribute("PasswordEntry"));
-	destUrl.setPath(getAttribute("PathEntry"));
+	destUrl.setProtocol(knownProtocols[type].protocol);
+	if (!knownProtocols[type].userEntry.isNull()) 
+	    destUrl.setUser(toResolve->textData()[knownProtocols[type].userEntry]);
+	if (!knownProtocols[type].passwordEntry.isNull()) 
+	    destUrl.setPass(toResolve->textData()[knownProtocols[type].passwordEntry]);
+	if (!knownProtocols[type].pathEntry.isNull()) 
+	    destUrl.setPath(toResolve->textData()[knownProtocols[type].pathEntry]);
 	destUrl.setHost(toResolve->hostName());
 	destUrl.setPort(toResolve->port());
-	// get exec from config or try getting it from helper protocol
-	if (useKRun)
-            KRun::run(configData->group("").readEntry("Exec",
-                    KProtocolInfo::exec(getProtocol(type))),
-                    destUrl, 0);
-	else {
-		redirection(destUrl);
-		finished();
-	}
+	redirection(destUrl);
+	finished();
 }
 
-bool ZeroConfProtocol::setConfig(const QString& type)
-{
-	kDebug() << "Setting config for " << type;
-	if (configData)
-		if (configData->group("").readEntry("Type")!=type)
-		{	
-			delete configData;
-			configData =0L;
-		}
-		else 
-			return true;
-	configData = new KConfig("zeroconf/"+type, KConfig::NoGlobals );
-         
-	return (configData->group("").readEntry("Type")==type);
-}
-
-
-void ZeroConfProtocol::buildDirEntry(UDSEntry& entry,const QString& name,const QString& type, const QString& host)
+void ZeroConfProtocol::buildDirEntry(UDSEntry& entry,const QString& name,const QString& type)
 {
 	entry.clear();
 	entry.insert(UDSEntry::UDS_NAME,name);
@@ -222,31 +163,21 @@ void ZeroConfProtocol::buildDirEntry(UDSEntry& entry,const QString& name,const Q
 	entry.insert(UDSEntry::UDS_FILE_TYPE,S_IFDIR);
 	entry.insert(UDSEntry::UDS_MIME_TYPE,QString::fromUtf8("inode/directory"));
 	if (!type.isNull())
-			entry.insert(UDSEntry::UDS_URL,"zeroconf:/"+((!host.isNull()) ? '/'+host+'/' : "" )+type+'/');
-}
-QString ZeroConfProtocol::getProtocol(const QString& type)
-{
-	setConfig(type);
-	return configData->group("").readEntry("Protocol",type.section(".",0,0).mid(1));
+			entry.insert(UDSEntry::UDS_URL,"zeroconf:/"+type+'/');
 }
 
-void ZeroConfProtocol::buildServiceEntry(UDSEntry& entry,const QString& name,const QString& type,const QString& domain)
+void ZeroConfProtocol::buildServiceEntry(UDSEntry& entry,const QString& name,const QString& type)
 {
-	setConfig(type);
 	entry.clear();
 	entry.insert(UDSEntry::UDS_NAME,name);
 	entry.insert(UDSEntry::UDS_ACCESS,0666);
-	QString icon=configData->group("").readEntry("Icon",KProtocolInfo::icon(getProtocol(type)));
+	QString icon=KProtocolInfo::icon(knownProtocols[type].protocol);
 	if (!icon.isNull())
 			entry.insert(UDSEntry::UDS_ICON_NAME,icon);
 	KUrl protourl;
-	protourl.setProtocol(getProtocol(type));
-	QString encname = "zeroconf://" + domain +"/" +type+ "/" + name;
-	if (KProtocolManager::supportsListing(protourl)) {
-		entry.insert(UDSEntry::UDS_FILE_TYPE,S_IFDIR);
-		encname+='/';
-	} else
-			entry.insert(UDSEntry::UDS_FILE_TYPE,S_IFREG);
+	protourl.setProtocol(knownProtocols[type].protocol);
+	QString encname = "zeroconf:/" +type+ "/" + name;
+	entry.insert(UDSEntry::UDS_FILE_TYPE,S_IFDIR);
 	entry.insert(UDSEntry::UDS_URL,encname);
 }
 
@@ -256,12 +187,9 @@ void ZeroConfProtocol::listDir(const KUrl& url )
 	if (!dnssdOK()) return;
 	UrlType t  = checkURL(url);
 	UDSEntry entry;
-	currentDomain=url.host();
 	switch (t) {
 	case RootDir:
-		if (currentDomain.isEmpty())
-			typebrowser = new ServiceTypeBrowser();
-			else typebrowser = new ServiceTypeBrowser(url.host());
+		typebrowser = new ServiceTypeBrowser();
 		connect(typebrowser,SIGNAL(serviceTypeAdded(const QString&)),
 			this,SLOT(newType(const QString&)));
 		connect(typebrowser,SIGNAL(finished()),this,SLOT(allReported()));
@@ -291,9 +219,9 @@ void ZeroConfProtocol::allReported()
 	UDSEntry entry;
 	listEntry(entry,true);
 	finished();
-	delete browser;
+	browser->deleteLater();
 	browser=0;
-	delete typebrowser;
+	typebrowser->deleteLater();
 	typebrowser=0;
 	mergedtypes.clear();
 	emit leaveModality();
@@ -303,18 +231,14 @@ void ZeroConfProtocol::newType(const QString& type)
 	if (mergedtypes.contains(type)>0) return;
 	mergedtypes << type;
 	UDSEntry entry;
-	kDebug() << "Got new entry " << type;
-	if (!setConfig(type)) return;
-	QString name = configData->group("").readEntry("Name");
-	if (!name.isNull()) {
-		buildDirEntry(entry,name,type, (currentDomain.isEmpty()) ? QString::null : currentDomain);	//krazy:exclude=nullstrassign for old broken gcc
-		listEntry(entry,false);
-	}
+	if (!knownProtocols.contains(type)) return;
+	buildDirEntry(entry,knownProtocols[type].name,type);	
+	listEntry(entry,false);
 }
 void ZeroConfProtocol::newService(DNSSD::RemoteService::Ptr srv)
 {
 	UDSEntry entry;
-	buildServiceEntry(entry,srv->serviceName(),srv->type(),srv->domain());
+	buildServiceEntry(entry,srv->serviceName(),srv->type());
 	listEntry(entry,false);
 }
 void ZeroConfProtocol::enterLoop()
