@@ -62,7 +62,7 @@ void ZeroConfProtocol::get(const KUrl& url )
 	if (!dnssdOK()) return;
 	UrlType t = checkURL(url);
 	if (t==Service) resolveAndRedirect(url);
-	else error(ERR_MALFORMED_URL,i18n("invalid URL"));
+	else error(ERR_MALFORMED_URL,url.prettyUrl());
 	
 }
 void ZeroConfProtocol::mimetype(const KUrl& url )
@@ -75,10 +75,8 @@ UrlType ZeroConfProtocol::checkURL(const KUrl& url)
 	if (url.path()=="/") return RootDir;
 	QString service, type;
 	dissect(url,service,type);
-	const QString& proto = type.section('.',1,-1);
-	if (type[0]!='_' || (proto!="_udp" && proto!="_tcp")) return Invalid;
-	if (service.isEmpty()) return ServiceDir;
 	if (!knownProtocols.contains(type)) return Invalid;
+	if (service.isEmpty()) return ServiceDir;
 	return Service;
 }
 
@@ -124,7 +122,7 @@ void ZeroConfProtocol::stat(const KUrl& url)
 		resolveAndRedirect(url);
 	  	break;
 	default:
-		error(ERR_MALFORMED_URL,i18n("invalid URL"));
+		error(ERR_MALFORMED_URL,url.prettyUrl());
 	}
 }
 
@@ -166,21 +164,6 @@ void ZeroConfProtocol::buildDirEntry(UDSEntry& entry,const QString& name,const Q
 			entry.insert(UDSEntry::UDS_URL,"zeroconf:/"+type+'/');
 }
 
-void ZeroConfProtocol::buildServiceEntry(UDSEntry& entry,const QString& name,const QString& type)
-{
-	entry.clear();
-	entry.insert(UDSEntry::UDS_NAME,name);
-	entry.insert(UDSEntry::UDS_ACCESS,0666);
-	QString icon=KProtocolInfo::icon(knownProtocols[type].protocol);
-	if (!icon.isNull())
-			entry.insert(UDSEntry::UDS_ICON_NAME,icon);
-	KUrl protourl;
-	protourl.setProtocol(knownProtocols[type].protocol);
-	QString encname = "zeroconf:/" +type+ "/" + name;
-	entry.insert(UDSEntry::UDS_FILE_TYPE,S_IFDIR);
-	entry.insert(UDSEntry::UDS_URL,encname);
-}
-
 void ZeroConfProtocol::listDir(const KUrl& url )
 {
 
@@ -197,31 +180,29 @@ void ZeroConfProtocol::listDir(const KUrl& url )
 		enterLoop();
 		return;
 	case ServiceDir:
-		if (url.host().isEmpty())
-			browser = new ServiceBrowser(url.path(KUrl::RemoveTrailingSlash).section("/",1,-1));
-			else browser = new ServiceBrowser(url.path(KUrl::RemoveTrailingSlash).section("/",1,-1),false,url.host());
+		browser = new ServiceBrowser(url.path(KUrl::RemoveTrailingSlash).section("/",1,-1));
 		connect(browser,SIGNAL(serviceAdded(DNSSD::RemoteService::Ptr)),
 			this,SLOT(newService(DNSSD::RemoteService::Ptr)));
-		break;
+		connect(browser,SIGNAL(finished()),this,SLOT(allReported()));
+		browser->startBrowse();
+		enterLoop();
+		return;
 	case Service:
 		resolveAndRedirect(url);
 	  	return;
 	default:
-		error(ERR_MALFORMED_URL,i18n("invalid URL"));
+		error(ERR_MALFORMED_URL,url.prettyUrl());
 		return;
 	}
-	connect(browser,SIGNAL(finished()),this,SLOT(allReported()));
-	browser->startBrowse();
-	enterLoop();
 }
 void ZeroConfProtocol::allReported()
 {
 	UDSEntry entry;
 	listEntry(entry,true);
 	finished();
-	browser->deleteLater();
+	if (browser) browser->deleteLater();
 	browser=0;
-	typebrowser->deleteLater();
+	if (typebrowser) typebrowser->deleteLater();
 	typebrowser=0;
 	mergedtypes.clear();
 	emit leaveModality();
@@ -230,15 +211,25 @@ void ZeroConfProtocol::newType(const QString& type)
 {
 	if (mergedtypes.contains(type)>0) return;
 	mergedtypes << type;
-	UDSEntry entry;
 	if (!knownProtocols.contains(type)) return;
+	UDSEntry entry;
 	buildDirEntry(entry,knownProtocols[type].name,type);	
 	listEntry(entry,false);
 }
 void ZeroConfProtocol::newService(DNSSD::RemoteService::Ptr srv)
 {
 	UDSEntry entry;
-	buildServiceEntry(entry,srv->serviceName(),srv->type());
+	entry.clear();
+	entry.insert(UDSEntry::UDS_NAME,srv->serviceName());
+	entry.insert(UDSEntry::UDS_ACCESS,0666);
+	QString icon=KProtocolInfo::icon(knownProtocols[srv->type()].protocol);
+	if (!icon.isNull())
+			entry.insert(UDSEntry::UDS_ICON_NAME,icon);
+	KUrl protourl;
+	protourl.setProtocol(knownProtocols[srv->type()].protocol);
+	QString encname = "zeroconf:/" +srv->type()+ "/" + srv->serviceName();
+	entry.insert(UDSEntry::UDS_FILE_TYPE,S_IFDIR);
+	entry.insert(UDSEntry::UDS_URL,encname);
 	listEntry(entry,false);
 }
 void ZeroConfProtocol::enterLoop()

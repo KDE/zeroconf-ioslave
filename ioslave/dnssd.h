@@ -66,8 +66,6 @@ signals:
 private:
 	// Create UDSEntry for zeroconf:/ or zeroconf:/type/ paths
 	void buildDirEntry(UDSEntry& entry,const QString& name,const QString& type=QString());
-	// Create UDSEntry for single services: dnssd:/type/service
-	void buildServiceEntry(UDSEntry& entry,const QString& name,const QString& type);
 	// Returns root dir, service dir, service or invalid
 	UrlType checkURL(const KUrl& url);
 	// extract name and type  from URL
