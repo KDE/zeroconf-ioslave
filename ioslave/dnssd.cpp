@@ -227,7 +227,7 @@ void ZeroConfProtocol::newService(DNSSD::RemoteService::Ptr srv)
 			entry.insert(UDSEntry::UDS_ICON_NAME,icon);
 	KUrl protourl;
 	protourl.setProtocol(knownProtocols[srv->type()].protocol);
-	QString encname = "zeroconf:/" +srv->type()+ "/" + srv->serviceName();
+	QString encname = "zeroconf:/" +srv->type()+ '/' + srv->serviceName();
 	entry.insert(UDSEntry::UDS_FILE_TYPE,S_IFDIR);
 	entry.insert(UDSEntry::UDS_URL,encname);
 	listEntry(entry,false);
