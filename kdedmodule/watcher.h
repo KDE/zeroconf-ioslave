@@ -26,7 +26,7 @@ class QString;
 namespace DNSSD {
     class ServiceBrowser;
     class ServiceTypeBrowser;
-};
+}
 
 class Watcher : public QObject
 {
