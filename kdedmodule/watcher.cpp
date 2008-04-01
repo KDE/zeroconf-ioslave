@@ -18,52 +18,59 @@
 
 #include "watcher.h"
 
-#include <kdebug.h>
-
-#include <qstringlist.h>
 #include <kdirnotify.h>
+#include <dnssd/remoteservice.h>
+#include <dnssd/servicebrowser.h>
+#include <dnssd/servicetypebrowser.h>
 
-Watcher::Watcher(const QString& type, const QString& domain) 
-	: refcount(1), updateNeeded(false), m_type(type), m_domain(domain)
+Watcher::Watcher() 
+	: refcount(1), updateNeeded(false)
 {
-	if (domain.isEmpty()) browser = new ServiceBrowser(type);
-		else browser = new ServiceBrowser(type,false, domain);
+}
+
+ServiceWatcher::ServiceWatcher(const QString& type) : Watcher(), m_type(type)
+{
+	browser = new DNSSD::ServiceBrowser(type);
+	browser->setParent(this);
 	connect(browser,SIGNAL(serviceAdded(DNSSD::RemoteService::Ptr)),
-		SLOT(serviceAdded(DNSSD::RemoteService::Ptr)));
+		SLOT(scheduleUpdate()));
 	connect(browser,SIGNAL(serviceRemoved(DNSSD::RemoteService::Ptr)),
-		SLOT(serviceRemoved(DNSSD::RemoteService::Ptr)));
+		SLOT(scheduleUpdate()));
 	connect(browser,SIGNAL(finished()),SLOT(finished()));
 	browser->startBrowse();
+	
 }
 
-Watcher::~Watcher()
+TypeWatcher::TypeWatcher() : Watcher()
 {
-	delete browser;
+	typebrowser = new DNSSD::ServiceTypeBrowser();
+	typebrowser->setParent(this);
+	connect(typebrowser,SIGNAL(serviceTypeAdded(const QString&)),
+		this,SLOT(scheduleUpdate()));
+	connect(typebrowser,SIGNAL(serviceTypeRemoved(const QString&)),
+		this,SLOT(scheduleUpdate()));
+	connect(typebrowser,SIGNAL(finished()),this,SLOT(finished()));
+	typebrowser->startBrowse();
 }
 
-void Watcher::serviceAdded(DNSSD::RemoteService::Ptr)
+QString TypeWatcher::constructUrl() 
+{
+    return QString("zeroconf:/");
+}
+
+QString ServiceWatcher::constructUrl()
+{
+    return QString("zeroconf:/")+m_type+"/";
+}
+
+void Watcher::scheduleUpdate()
 {
 	updateNeeded=true;
 }
 
-void Watcher::serviceRemoved(DNSSD::RemoteService::Ptr srv)
-{
-	if (!updateNeeded) removed << srv;
-}
-
-
 void Watcher::finished() 
 {
-	kDebug() << "Finished for " << m_type << "@" << m_domain << "\n";
-	if (updateNeeded || removed.count()) {
-		QString url = "zeroconf:/";
-		if (!m_domain.isEmpty()) url+='/'+m_domain+'/';
-		//FIXME: watch for types
-//		if (m_type!=ServiceBrowser::AllServices) url+=m_type;
-		kDebug() << "Sending update: " << url << "\n";
-		org::kde::KDirNotify::emitFilesAdded( url );
-		}
-	removed.clear();
+	if (updateNeeded) org::kde::KDirNotify::emitFilesAdded( constructUrl() );
 	updateNeeded=false;
 }
 

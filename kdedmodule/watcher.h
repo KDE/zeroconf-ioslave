@@ -19,35 +19,53 @@
 #ifndef _WATCHER_H_
 #define _WATCHER_H_
 
-#include <qstring.h>
-//Added by qt3to4:
-#include <dnssd/servicebrowser.h>
-#include <dnssd/servicetypebrowser.h>
-#include <dnssd/remoteservice.h>
+#include <qobject.h>
 
-using namespace DNSSD;
+class QString;
+
+namespace DNSSD {
+    class ServiceBrowser;
+    class ServiceTypeBrowser;
+};
 
 class Watcher : public QObject
 {
 Q_OBJECT
 public:
-	Watcher(const QString& type, const QString& domain);
-	~Watcher();
+	Watcher();
 		
 	unsigned int refcount;
+protected:
+	virtual QString constructUrl()=0;
 private:
-	ServiceBrowser* browser;
-	ServiceTypeBrowser* typebrowser;
 	bool updateNeeded;
-	QString m_type;
-	QString m_domain;
-	QList<DNSSD::RemoteService::Ptr> removed;
 	
 private slots:
-	void serviceRemoved(DNSSD::RemoteService::Ptr srv);
-	void serviceAdded(DNSSD::RemoteService::Ptr);
+	void scheduleUpdate();
 	void finished();
-	
+};
+
+class TypeWatcher : public Watcher
+{
+Q_OBJECT
+public:
+	TypeWatcher();
+protected:
+	virtual QString constructUrl();
+private:
+	DNSSD::ServiceTypeBrowser* typebrowser;
+};
+
+class ServiceWatcher : public Watcher
+{
+Q_OBJECT
+public:
+	ServiceWatcher(const QString& type);
+protected:
+	virtual QString constructUrl();
+private:
+	DNSSD::ServiceBrowser* browser;
+	QString m_type;
 };
 
 #endif

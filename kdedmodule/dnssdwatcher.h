@@ -21,9 +21,9 @@
 
 #include <qhash.h>
 #include <kdedmodule.h>
-#include <kurl.h>
 
 class Watcher;
+class KUrl;
 class DNSSDWatcher : public KDEDModule
 {
 Q_OBJECT
@@ -40,7 +40,7 @@ private:
 	QHash<QString, Watcher *> watchers;
 
 	void createNotifier(const KUrl& url);
-	void dissect(const KUrl& url,QString& name,QString& type,QString& domain);
+	void dissect(const KUrl& url,QString& name,QString& type);
 
 };
 

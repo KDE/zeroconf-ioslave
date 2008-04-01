@@ -19,10 +19,8 @@
 #include "dnssdwatcher.h"
 #include "kdnssdadaptor.h"
 
-#include <kdebug.h>
 #include <kglobal.h>
-#include <klocale.h>
-#include <dnssd/servicebrowser.h>
+#include <kurl.h>
 #include "watcher.h"
 
 #include <kpluginfactory.h>
@@ -50,10 +48,9 @@ QStringList DNSSDWatcher::watchedDirectories()
 
 
 // from ioslave
-void DNSSDWatcher::dissect(const KUrl& url,QString& name,QString& type,QString& domain)
+void DNSSDWatcher::dissect(const KUrl& url,QString& name,QString& type)
 {
 	type = url.path().section("/",1,1);
-	domain = url.host();
 	name = url.path().section("/",2,-1);
 }
 
@@ -87,10 +84,10 @@ void DNSSDWatcher::leftDirectory(const QString& _dir)
 
 void DNSSDWatcher::createNotifier(const KUrl& url)
 {
-	QString domain,type,name;
-	dissect(url,name,type,domain);
-	Watcher *w = new Watcher(type,domain);
-	watchers.insert(url.url(),w);
+	QString type,name;
+	dissect(url,name,type);
+	if (type.isEmpty()) watchers.insert(url.url(), new TypeWatcher());
+	else watchers.insert(url.url(), new ServiceWatcher(type));
 }
 
 DNSSDWatcher::~DNSSDWatcher()
