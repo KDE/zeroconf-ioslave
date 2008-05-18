@@ -60,7 +60,7 @@ QString TypeWatcher::constructUrl()
 
 QString ServiceWatcher::constructUrl()
 {
-    return QString("zeroconf:/")+m_type+"/";
+    return QString("zeroconf:/")+m_type+'/';
 }
 
 void Watcher::scheduleUpdate()
