@@ -1,6 +1,7 @@
 [Desktop Entry]
 Icon=network-workgroup
 Name=Network Services
+Name[ar]=خدمات الشبكة
 Name[bg]=Мрежови услуги
 Name[bn]=নেটওয়ার্ক সার্ভিস
 Name[br]=Servijoù rouedad
@@ -29,6 +30,7 @@ Name[km]=សេវា​បណ្ដាញ
 Name[ko]=네트워크 서비스
 Name[lt]=Tinklo tarnybos
 Name[lv]=Tīkla servisi
+Name[ml]=ശൃംഖലാ സേവനങ്ങള്‍
 Name[nb]=Nettverkstjenester
 Name[nds]=Nettwarkdeensten
 Name[ne]=सञ्जाल सेवा
@@ -42,6 +44,8 @@ Name[ro]=Servicii de rețea
 Name[ru]=Сетевые службы
 Name[sk]=Sieťové služby
 Name[sl]=Omrežne storitve
+Name[sr]=Мрежни сервиси
+Name[sr@latin]=Mrežni servisi
 Name[sv]=Nätverkstjänster
 Name[tr]=Ağ Servisleri
 Name[uk]=Мережеві служби
