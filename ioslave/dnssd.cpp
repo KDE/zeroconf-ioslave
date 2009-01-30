@@ -69,8 +69,8 @@ void ZeroConfProtocol::dissect(const KUrl& url,QString& name,QString& type)
 {
 	// FIXME: encode domain name into url to support many services with the same name on 
 	// different domains
-	type = url.path().section("/",1,1);
-	name = url.path().section("/",2,-1);
+	type = url.path().section('/',1,1);
+	name = url.path().section('/',2,-1);
 
 }
 
@@ -98,7 +98,7 @@ void ZeroConfProtocol::stat(const KUrl& url)
 	switch (t) {
 	case RootDir:
 	case ServiceDir:
-		buildDirEntry(entry,"");
+		buildDirEntry(entry,QString());
 		statEntry(entry);
 		finished();
 		break;
@@ -119,7 +119,7 @@ void ZeroConfProtocol::resolveAndRedirect(const KUrl& url)
 		toResolve = 0;
 	}
 	if (toResolve==0) {
-		toResolve = new RemoteService(name,type,"");
+		toResolve = new RemoteService(name,type,QString());
 		if (!toResolve->resolve()) error(ERR_DOES_NOT_EXIST,name);
 	}
 	KUrl destUrl;
@@ -143,7 +143,7 @@ void ZeroConfProtocol::buildDirEntry(UDSEntry& entry,const QString& name,const Q
 	entry.insert(UDSEntry::UDS_ACCESS,0555);
 	entry.insert(UDSEntry::UDS_SIZE,0);
 	entry.insert(UDSEntry::UDS_FILE_TYPE,S_IFDIR);
-	entry.insert(UDSEntry::UDS_MIME_TYPE,QString::fromUtf8("inode/directory"));
+	entry.insert(UDSEntry::UDS_MIME_TYPE,"inode/directory");
 	if (!type.isNull())
 			entry.insert(UDSEntry::UDS_URL,"zeroconf:/"+type+'/');
 }
@@ -164,7 +164,7 @@ void ZeroConfProtocol::listDir(const KUrl& url )
 		enterLoop();
 		return;
 	case ServiceDir:
-		browser = new ServiceBrowser(url.path(KUrl::RemoveTrailingSlash).section("/",1,-1));
+		browser = new ServiceBrowser(url.path(KUrl::RemoveTrailingSlash).section('/',1,-1));
 		connect(browser,SIGNAL(serviceAdded(DNSSD::RemoteService::Ptr)),
 			this,SLOT(newService(DNSSD::RemoteService::Ptr)));
 		connect(browser,SIGNAL(finished()),this,SLOT(allReported()));

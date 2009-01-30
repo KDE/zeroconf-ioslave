@@ -50,8 +50,8 @@ QStringList DNSSDWatcher::watchedDirectories()
 // from ioslave
 void DNSSDWatcher::dissect(const KUrl& url,QString& name,QString& type)
 {
-	type = url.path().section("/",1,1);
-	name = url.path().section("/",2,-1);
+	type = url.path().section('/',1,1);
+	name = url.path().section('/',2,-1);
 }
 
 
