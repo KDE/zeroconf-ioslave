@@ -203,7 +203,6 @@ void ZeroConfProtocol::newType(const QString& type)
 void ZeroConfProtocol::newService(DNSSD::RemoteService::Ptr srv)
 {
 	UDSEntry entry;
-	entry.clear();
 	entry.insert(UDSEntry::UDS_NAME,srv->serviceName());
 	entry.insert(UDSEntry::UDS_ACCESS,0666);
 	QString icon=KProtocolInfo::icon(knownProtocols[srv->type()].protocol);
