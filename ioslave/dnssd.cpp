@@ -27,7 +27,7 @@
 
 
 ZeroConfProtocol::ZeroConfProtocol(const QByteArray& protocol, const QByteArray &pool_socket, const QByteArray &app_socket)
-		: SlaveBase(protocol, pool_socket, app_socket), browser(0),toResolve(0)
+    : SlaveBase(protocol, pool_socket, app_socket), browser(0), typebrowser(0), toResolve(0)
 {
     knownProtocols["_ftp._tcp"]=ProtocolData(i18n("FTP servers"),"ftp","path","u","p");    
     knownProtocols["_webdav._tcp"]=ProtocolData(i18n("WebDav remote directory"),"webdav","path");    
@@ -38,6 +38,7 @@ ZeroConfProtocol::ZeroConfProtocol(const QByteArray& protocol, const QByteArray 
 
 ZeroConfProtocol::~ZeroConfProtocol()
 {
+    delete toResolve;
 }
 
 void ZeroConfProtocol::get(const KUrl& url )
