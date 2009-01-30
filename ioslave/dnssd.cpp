@@ -20,28 +20,11 @@
 
 #include "dnssd.h"
 
-#include <stdlib.h>
-#include <math.h>
-#include <unistd.h>
-#include <sys/socket.h>
-#include <sys/stat.h>
-#include <netinet/in.h>
-#include <netdb.h>
+#include <KComponentData>
+#include <KProtocolInfo>
 
-#include <kconfig.h>
-#include <kconfiggroup.h>
-#include <kmessagebox.h>
-#include <kcomponentdata.h>
-#include <kglobal.h>
-#include <kstandarddirs.h>
-#include <kprotocolinfo.h>
-#include <kcmdlineargs.h>
-#include <klocale.h>
-#include <kurl.h>
-#include <kapplication.h>
-#include <dnssd/domainbrowser.h>
-#include <krun.h>
-#include <kprotocolmanager.h>
+#include <QtCore/QCoreApplication>
+
 
 ZeroConfProtocol::ZeroConfProtocol(const QByteArray& protocol, const QByteArray &pool_socket, const QByteArray &app_socket)
 		: SlaveBase(protocol, pool_socket, app_socket), browser(0),toResolve(0)
@@ -239,27 +222,20 @@ void ZeroConfProtocol::enterLoop()
 	eventLoop.exec(QEventLoop::ExcludeUserInputEvents);
 }
 
+
 extern "C"
 {
-	int KDE_EXPORT kdemain( int argc, char **argv )
-	{
-		// KApplication is necessary to use other ioslaves
-		putenv(strdup("SESSION_MANAGER="));
-		KCmdLineArgs::init(argc, argv, "kio_zeroconf", 0, KLocalizedString(), 0, KLocalizedString());
+    int KDE_EXPORT kdemain( int argc, char **argv )
+    {
+        // necessary to use other kio slaves
+        KComponentData componentData("kio_zeroconf");
+        QCoreApplication app(argc,argv);
 
-		KCmdLineOptions options;
-		options.add("+protocol", ki18n( "Protocol name" ));
-		options.add("+pool", ki18n( "Socket name" ));
-		options.add("+app", ki18n( "Socket name" ));
-		KCmdLineArgs::addCmdLineOptions( options );
-		//KApplication::disableAutoDcopRegistration();
-		KApplication app;
-		KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-		ZeroConfProtocol slave( args->arg(0).toLocal8Bit(), args->arg(1).toLocal8Bit(), args->arg(2).toLocal8Bit() );
-		args->clear();
-		slave.dispatchLoop();
-		return 0;
-	}
+        // start the slave
+        ZeroConfProtocol slave(argv[1],argv[2],argv[3]);
+        slave.dispatchLoop();
+        return 0;
+    }
 }
 
 

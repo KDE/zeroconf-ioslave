@@ -21,16 +21,13 @@
 #ifndef _dnssd_H_
 #define _dnssd_H_
 
-#include <qstring.h>
-#include <qobject.h>
+#include <DNSSD/ServiceBrowser>
+#include <dnssd/servicetypebrowser.h> // missing CamelCase version, can be fixed beginning 02.02.09
+#include <DNSSD/RemoteService>
 
-#include <kurl.h>
-#include <kio/global.h>
-#include <kio/slavebase.h>
-#include <dnssd/servicebrowser.h>
-#include <dnssd/servicetypebrowser.h>
-#include <dnssd/remoteservice.h>
-#include <qstringlist.h>
+#include <KIO/SlaveBase>
+
+#include <QtCore/QObject>
 
 
 using namespace KIO;
@@ -61,7 +58,7 @@ public:
 	virtual void mimetype(const KUrl& url);
 	virtual void stat(const KUrl& url);
 	virtual void listDir(const KUrl& url );
-signals:
+Q_SIGNALS:
 	void leaveModality();
 private:
 	// Create UDSEntry for zeroconf:/ or zeroconf:/type/ paths
@@ -84,7 +81,7 @@ private:
 	RemoteService *toResolve;
 	QHash<QString,ProtocolData> knownProtocols;
 	
-private slots:
+private Q_SLOTS:
 	void newType(const QString&);
 	void newService(DNSSD::RemoteService::Ptr);
 	void allReported();
