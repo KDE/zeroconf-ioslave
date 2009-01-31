@@ -33,9 +33,6 @@ class ZeroConfUrl
     enum Type { InvalidUrl, RootDir, ServiceDir, Service };
 
   public:
-    static QString createUrl( const DNSSD::RemoteService::Ptr& remoteService );
-
-  public:
     explicit ZeroConfUrl( const KUrl& url );
 
   public:
@@ -75,11 +72,6 @@ inline ZeroConfUrl::Type ZeroConfUrl::type() const
         /*else*/                 Service;
 
     return result;
-}
-
-inline QString ZeroConfUrl::createUrl( const DNSSD::RemoteService::Ptr& remoteService )
-{
-    return "zeroconf:/" + remoteService->type() + '/' + remoteService->serviceName();
 }
 
 #endif
