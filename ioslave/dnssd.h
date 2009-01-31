@@ -21,71 +21,78 @@
 #ifndef _dnssd_H_
 #define _dnssd_H_
 
+// KDE
 #include <DNSSD/ServiceBrowser>
 #include <dnssd/servicetypebrowser.h> // missing CamelCase version, can be fixed beginning 02.02.09
 #include <DNSSD/RemoteService>
-
 #include <KIO/SlaveBase>
-
+// Qt
 #include <QtCore/QObject>
 
 
 using namespace KIO;
 using namespace DNSSD;
 
-enum UrlType { RootDir, ServiceDir, Service,  Invalid };
+enum UrlType { InvalidUrl, RootDir, ServiceDir, Service };
 
-struct ProtocolData {
+struct ProtocolData
+{
     ProtocolData() {}
-    ProtocolData(const QString& _name, const QString& proto, const QString& path=QString(), 
-	const QString& user=QString(), const QString& passwd=QString()) : pathEntry(path), 
-	name(_name), userEntry(user), passwordEntry(passwd), protocol(proto) {}
-	
-    QString pathEntry;
+    ProtocolData( const QString& _name, const QString& proto,
+                  const QString& path=QString(), const QString& user=QString(), const QString& passwd=QString() )
+     : name(_name), protocol(proto), pathEntry(path), userEntry(user), passwordEntry(passwd)
+    {}
+
+    void feedUrl( KUrl* url, const RemoteService* remoteService ) const;
+
     QString name;
+    QString protocol;
+    QString pathEntry;
     QString userEntry;
     QString passwordEntry;
-    QString protocol;
 };
 
 class ZeroConfProtocol : public QObject, public KIO::SlaveBase
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	ZeroConfProtocol(const QByteArray& protocol, const QByteArray &pool_socket, const QByteArray &app_socket);
-	~ZeroConfProtocol();
-	virtual void get(const KUrl& url);
-	virtual void mimetype(const KUrl& url);
-	virtual void stat(const KUrl& url);
-	virtual void listDir(const KUrl& url );
+    ZeroConfProtocol( const QByteArray& protocol, const QByteArray& pool_socket, const QByteArray& app_socket);
+    virtual ~ZeroConfProtocol();
+
+public: // KIO::SlaveBase API
+    virtual void get( const KUrl& url );
+    virtual void mimetype( const KUrl& url );
+    virtual void stat( const KUrl& url );
+    virtual void listDir( const KUrl& url );
+
 Q_SIGNALS:
-	void leaveModality();
+    void leaveModality();
+
 private:
-	// Create UDSEntry for zeroconf:/ or zeroconf:/type/ paths
-	void buildDirEntry(UDSEntry& entry,const QString& name,const QString& type=QString());
-	// Returns root dir, service dir, service or invalid
-	UrlType checkURL(const KUrl& url);
-	// extract name and type  from URL
-	void dissect(const KUrl& url,QString& name,QString& type);
-	// resolve given service and redirect() to it
-	void resolveAndRedirect(const KUrl& url);
-	bool dnssdOK();
+    // Create UDSEntry for zeroconf:/ or zeroconf:/type/ urls
+    void feedEntryAsDir( UDSEntry* entry, const QString& name, const QString& serviceType = QString() );
+    // resolve given service and redirect() to it
+    void resolveAndRedirect( const KUrl& url );
 
-	void enterLoop();
+    UrlType estimateType( const KUrl& url ) const;
 
-	ServiceBrowser* browser;
-	ServiceTypeBrowser* typebrowser;
-	// service types merged from all domains - to avoid duplicates
-	QStringList mergedtypes;
+    bool dnssdOK();
 
-	RemoteService *toResolve;
-	QHash<QString,ProtocolData> knownProtocols;
-	
+    void enterLoop();
+
 private Q_SLOTS:
-	void newType(const QString&);
-	void newService(DNSSD::RemoteService::Ptr);
-	void allReported();
+    void addServiceType( const QString& );
+    void addService( DNSSD::RemoteService::Ptr );
+    void onBrowserFinished();
 
+private: // data
+    ServiceBrowser* serviceBrowser;
+    ServiceTypeBrowser* serviceTypeBrowser;
+    // service types merged from all domains - to avoid duplicates
+    QStringList ServiceTypesAdded;
+
+    RemoteService* serviceToResolve;
+    QHash<QString,ProtocolData> knownProtocols;
 };
 
 #endif
