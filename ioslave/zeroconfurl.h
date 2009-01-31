@@ -30,6 +30,9 @@
 class ZeroConfUrl
 {
   public:
+    enum Type { InvalidUrl, RootDir, ServiceDir, Service };
+
+  public:
     static QString createUrl( const DNSSD::RemoteService::Ptr& remoteService );
     static QString createUrl( const QString& serviceType );
     static QString serviceTypeFrom( const KUrl& url );
@@ -41,6 +44,7 @@ class ZeroConfUrl
     const QString& serviceType() const;
     const QString& serviceName() const;
     bool matches( const RemoteService* remoteService ) const;
+    ZeroConfUrl::Type type() const;
 
   private:
     QString mServiceType;
@@ -63,6 +67,19 @@ inline bool ZeroConfUrl::matches( const RemoteService* remoteService ) const
 {
     return ( remoteService->serviceName()==mServiceName && remoteService->type()==mServiceType );
 }
+
+// TODO: how is a invalid url defined?
+inline ZeroConfUrl::Type ZeroConfUrl::type() const
+{
+    Type result =
+        mServiceType.isEmpty() ? RootDir :
+        mServiceName.isEmpty() ? ServiceDir :
+        /*else*/                 Service;
+
+    return result;
+}
+
+
 
 inline QString ZeroConfUrl::createUrl( const DNSSD::RemoteService::Ptr& remoteService )
 {

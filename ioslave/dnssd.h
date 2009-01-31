@@ -33,7 +33,7 @@
 using namespace KIO;
 using namespace DNSSD;
 
-enum UrlType { InvalidUrl, RootDir, ServiceDir, Service };
+class ZeroConfUrl;
 
 struct ProtocolData
 {
@@ -72,9 +72,7 @@ private:
     // Create UDSEntry for zeroconf:/ or zeroconf:/type/ urls
     void feedEntryAsDir( UDSEntry* entry, const QString& name, const QString& serviceType = QString() );
     // resolve given service and redirect() to it
-    void resolveAndRedirect( const KUrl& url );
-
-    UrlType estimateType( const KUrl& url ) const;
+    void resolveAndRedirect( const ZeroConfUrl& zeroConfUrl );
 
     bool dnssdOK();
 

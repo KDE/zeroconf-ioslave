@@ -67,16 +67,18 @@ void ZeroConfProtocol::get( const KUrl& url )
     if (!dnssdOK())
         return;
 
-    UrlType type = estimateType( url );
-    if (type==Service)
-        resolveAndRedirect( url );
+    const ZeroConfUrl zeroConfUrl( url );
+
+    ZeroConfUrl::Type type = zeroConfUrl.type();
+    if (type==ZeroConfUrl::Service)
+        resolveAndRedirect( zeroConfUrl );
     else
         error( ERR_MALFORMED_URL, url.prettyUrl() );
 }
 
 void ZeroConfProtocol::mimetype( const KUrl& url )
 {
-    resolveAndRedirect( url );
+    resolveAndRedirect( ZeroConfUrl(url) );
 }
 
 void ZeroConfProtocol::stat( const KUrl& url )
@@ -84,11 +86,14 @@ void ZeroConfProtocol::stat( const KUrl& url )
     if (!dnssdOK())
         return;
 
-    UrlType type = estimateType( url );
+    const ZeroConfUrl zeroConfUrl( url );
+
+    ZeroConfUrl::Type type = zeroConfUrl.type();
+
     switch (type)
     {
-    case RootDir:
-    case ServiceDir:
+    case ZeroConfUrl::RootDir:
+    case ZeroConfUrl::ServiceDir:
     {
         UDSEntry entry;
         feedEntryAsDir( &entry, QString() );
@@ -96,8 +101,8 @@ void ZeroConfProtocol::stat( const KUrl& url )
         finished();
         break;
     }
-    case Service:
-        resolveAndRedirect( url );
+    case ZeroConfUrl::Service:
+        resolveAndRedirect( zeroConfUrl );
         break;
     default:
         error( ERR_MALFORMED_URL, url.prettyUrl() );
@@ -109,10 +114,12 @@ void ZeroConfProtocol::listDir( const KUrl& url )
     if (!dnssdOK())
         return;
 
-    UrlType type = estimateType( url );
+    const ZeroConfUrl zeroConfUrl( url );
+
+    ZeroConfUrl::Type type = zeroConfUrl.type();
     switch (type)
     {
-    case RootDir:
+    case ZeroConfUrl::RootDir:
         serviceTypeBrowser = new ServiceTypeBrowser();
         connect( serviceTypeBrowser, SIGNAL(serviceTypeAdded(const QString&)),
                  SLOT(addServiceType(const QString&)) );
@@ -120,16 +127,21 @@ void ZeroConfProtocol::listDir( const KUrl& url )
         serviceTypeBrowser->startBrowse();
         enterLoop();
         break;
-    case ServiceDir:
-        serviceBrowser = new ServiceBrowser( ZeroConfUrl::serviceTypeFrom(url) );
+    case ZeroConfUrl::ServiceDir:
+        if( !knownProtocols.contains(zeroConfUrl.serviceType()) )
+        {
+            error( ERR_SERVICE_NOT_AVAILABLE, zeroConfUrl.serviceType() );
+            break;
+        }
+        serviceBrowser = new ServiceBrowser( zeroConfUrl.serviceType() );
         connect( serviceBrowser, SIGNAL(serviceAdded(DNSSD::RemoteService::Ptr)),
                  SLOT(addService(DNSSD::RemoteService::Ptr)) );
         connect( serviceBrowser, SIGNAL(finished()), SLOT(onBrowserFinished()) );
         serviceBrowser->startBrowse();
         enterLoop();
         break;
-    case Service:
-        resolveAndRedirect( url );
+    case ZeroConfUrl::Service:
+        resolveAndRedirect( zeroConfUrl );
         break;
     default:
         error( ERR_MALFORMED_URL, url.prettyUrl() );
@@ -159,29 +171,8 @@ bool ZeroConfProtocol::dnssdOK()
     return result;
 }
 
-
-UrlType ZeroConfProtocol::estimateType( const KUrl& url ) const
+void ZeroConfProtocol::resolveAndRedirect( const ZeroConfUrl& zeroConfUrl )
 {
-    UrlType result;
-
-    if (url.path()=="/")
-        result = RootDir;
-    else
-    {
-        const ZeroConfUrl zeroConfUrl( url );
-        const QString serviceProtocolName = zeroConfUrl.serviceType().section('.',0,1).mid(1);
-        const bool isKnown = knownProtocols.contains( zeroConfUrl.serviceType() );
-        result = !isKnown ?                            InvalidUrl :
-                 zeroConfUrl.serviceName().isEmpty() ? ServiceDir :
-                 /*else*/                              Service;
-    }
-
-    return result;
-}
-
-void ZeroConfProtocol::resolveAndRedirect( const KUrl& url )
-{
-    const ZeroConfUrl zeroConfUrl( url );
     if (serviceToResolve && !zeroConfUrl.matches(serviceToResolve))
     {
         delete serviceToResolve;
@@ -189,6 +180,12 @@ void ZeroConfProtocol::resolveAndRedirect( const KUrl& url )
     }
     if (serviceToResolve == 0)
     {
+        if( !knownProtocols.contains(zeroConfUrl.serviceType()) )
+        {
+            error( ERR_SERVICE_NOT_AVAILABLE, zeroConfUrl.serviceType() );
+            return;
+        }
+
         serviceToResolve = new RemoteService( zeroConfUrl.serviceName(), zeroConfUrl.serviceType(), QString() );
         if (!serviceToResolve->resolve())
         {
