@@ -260,7 +260,6 @@ void ZeroConfProtocol::feedEntryAsDir( UDSEntry* entry, const QString& name, con
 {
     entry->insert( UDSEntry::UDS_NAME,      name );
     entry->insert( UDSEntry::UDS_ACCESS,    0555 );
-    entry->insert( UDSEntry::UDS_SIZE,      0 );
     entry->insert( UDSEntry::UDS_FILE_TYPE, S_IFDIR );
     entry->insert( UDSEntry::UDS_MIME_TYPE, "inode/directory" );
     if (!displayName.isEmpty())
