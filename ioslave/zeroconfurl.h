@@ -34,7 +34,6 @@ class ZeroConfUrl
 
   public:
     static QString createUrl( const DNSSD::RemoteService::Ptr& remoteService );
-    static QString createUrl( const QString& serviceType );
 
   public:
     explicit ZeroConfUrl( const KUrl& url );
@@ -81,10 +80,6 @@ inline ZeroConfUrl::Type ZeroConfUrl::type() const
 inline QString ZeroConfUrl::createUrl( const DNSSD::RemoteService::Ptr& remoteService )
 {
     return "zeroconf:/" + remoteService->type() + '/' + remoteService->serviceName();
-}
-inline QString ZeroConfUrl::createUrl( const QString& serviceType )
-{
-    return "zeroconf:/" + serviceType + '/';
 }
 
 #endif
