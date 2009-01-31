@@ -227,7 +227,6 @@ void ZeroConfProtocol::addService( DNSSD::RemoteService::Ptr service )
     entry.insert( UDSEntry::UDS_NAME,      service->serviceName() );
     entry.insert( UDSEntry::UDS_ACCESS,    0666);
     entry.insert( UDSEntry::UDS_FILE_TYPE, S_IFDIR );
-    entry.insert( UDSEntry::UDS_URL,       ZeroConfUrl::createUrl(service) );
     const QString iconName = KProtocolInfo::icon( knownProtocols[service->type()].protocol );
     if (!iconName.isNull())
         entry.insert( UDSEntry::UDS_ICON_NAME, iconName );
