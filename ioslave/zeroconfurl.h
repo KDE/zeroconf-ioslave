@@ -35,7 +35,6 @@ class ZeroConfUrl
   public:
     static QString createUrl( const DNSSD::RemoteService::Ptr& remoteService );
     static QString createUrl( const QString& serviceType );
-    static QString serviceTypeFrom( const KUrl& url );
 
   public:
     explicit ZeroConfUrl( const KUrl& url );
@@ -79,8 +78,6 @@ inline ZeroConfUrl::Type ZeroConfUrl::type() const
     return result;
 }
 
-
-
 inline QString ZeroConfUrl::createUrl( const DNSSD::RemoteService::Ptr& remoteService )
 {
     return "zeroconf:/" + remoteService->type() + '/' + remoteService->serviceName();
@@ -88,10 +85,6 @@ inline QString ZeroConfUrl::createUrl( const DNSSD::RemoteService::Ptr& remoteSe
 inline QString ZeroConfUrl::createUrl( const QString& serviceType )
 {
     return "zeroconf:/" + serviceType + '/';
-}
-inline QString ZeroConfUrl::serviceTypeFrom( const KUrl& url )
-{
-    return url.path( KUrl::RemoveTrailingSlash ).section( '/', 1, 1 );
 }
 
 #endif
