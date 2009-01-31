@@ -70,7 +70,7 @@ Q_SIGNALS:
 
 private:
     // Create UDSEntry for zeroconf:/ or zeroconf:/type/ urls
-    void feedEntryAsDir( UDSEntry* entry, const QString& name, const QString& serviceType = QString() );
+    void feedEntryAsDir( UDSEntry* entry, const QString& name, const QString& displayName = QString() );
     // resolve given service and redirect() to it
     void resolveAndRedirect( const ZeroConfUrl& zeroConfUrl );
 

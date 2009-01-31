@@ -217,7 +217,7 @@ void ZeroConfProtocol::addServiceType( const QString& serviceType )
 
     // action
     UDSEntry entry;
-    feedEntryAsDir( &entry, knownProtocols[serviceType].name, serviceType );
+    feedEntryAsDir( &entry, serviceType, knownProtocols[serviceType].name );
     listEntry( entry, false );
 }
 
@@ -257,15 +257,15 @@ void ZeroConfProtocol::onBrowserFinished()
     emit leaveModality();
 }
 
-void ZeroConfProtocol::feedEntryAsDir( UDSEntry* entry, const QString& name, const QString& serviceType )
+void ZeroConfProtocol::feedEntryAsDir( UDSEntry* entry, const QString& name, const QString& displayName )
 {
     entry->insert( UDSEntry::UDS_NAME,      name );
     entry->insert( UDSEntry::UDS_ACCESS,    0555 );
     entry->insert( UDSEntry::UDS_SIZE,      0 );
     entry->insert( UDSEntry::UDS_FILE_TYPE, S_IFDIR );
     entry->insert( UDSEntry::UDS_MIME_TYPE, "inode/directory" );
-    if (!serviceType.isNull())
-        entry->insert( UDSEntry::UDS_URL,   ZeroConfUrl::createUrl(serviceType) );
+    if (!displayName.isEmpty())
+        entry->insert( UDSEntry::UDS_DISPLAY_NAME, displayName );
 }
 
 void ZeroConfProtocol::enterLoop()
