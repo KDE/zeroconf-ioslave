@@ -59,7 +59,7 @@ void DNSSDWatcher::dissect(const KUrl& url,QString& name,QString& type)
 void DNSSDWatcher::enteredDirectory(const QString& _dir)
 {
 	KUrl dir(_dir);
-	if (dir.protocol()!="zeroconf") return;
+	if (dir.protocol() != QLatin1String("zeroconf")) return;
 	if (watchers.contains(dir.url()))
             watchers[dir.url()]->refcount++;
         else
@@ -70,7 +70,7 @@ void DNSSDWatcher::enteredDirectory(const QString& _dir)
 void DNSSDWatcher::leftDirectory(const QString& _dir)
 {
 	KUrl dir(_dir);
-	if (dir.protocol()!="zeroconf") return;
+	if (dir.protocol() != QLatin1String("zeroconf")) return;
         Watcher* watcher = watchers.value(dir.url());
 	if (!watcher) return;
 	if (watcher->refcount==1) {
