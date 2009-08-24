@@ -120,7 +120,7 @@ void ZeroConfProtocol::listDir( const KUrl& url )
     switch (type)
     {
     case ZeroConfUrl::RootDir:
-        serviceTypeBrowser = new ServiceTypeBrowser();
+        serviceTypeBrowser = new ServiceTypeBrowser(zeroConfUrl.domain());
         connect( serviceTypeBrowser, SIGNAL(serviceTypeAdded(const QString&)),
                  SLOT(addServiceType(const QString&)) );
         connect( serviceTypeBrowser, SIGNAL(finished()), SLOT(onBrowserFinished()) );
@@ -133,7 +133,7 @@ void ZeroConfProtocol::listDir( const KUrl& url )
             error( ERR_SERVICE_NOT_AVAILABLE, zeroConfUrl.serviceType() );
             break;
         }
-        serviceBrowser = new ServiceBrowser( zeroConfUrl.serviceType() );
+        serviceBrowser = new ServiceBrowser( zeroConfUrl.serviceType(), false, zeroConfUrl.domain() );
         connect( serviceBrowser, SIGNAL(serviceAdded(DNSSD::RemoteService::Ptr)),
                  SLOT(addService(DNSSD::RemoteService::Ptr)) );
         connect( serviceBrowser, SIGNAL(finished()), SLOT(onBrowserFinished()) );
@@ -186,7 +186,7 @@ void ZeroConfProtocol::resolveAndRedirect( const ZeroConfUrl& zeroConfUrl )
             return;
         }
 
-        serviceToResolve = new RemoteService( zeroConfUrl.serviceName(), zeroConfUrl.serviceType(), QString() );
+        serviceToResolve = new RemoteService( zeroConfUrl.serviceName(), zeroConfUrl.serviceType(), zeroConfUrl.domain() );
         if (!serviceToResolve->resolve())
         {
             error( ERR_DOES_NOT_EXIST, zeroConfUrl.serviceName() );

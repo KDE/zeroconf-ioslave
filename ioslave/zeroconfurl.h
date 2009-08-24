@@ -38,29 +38,32 @@ class ZeroConfUrl
   public:
     const QString& serviceType() const;
     const QString& serviceName() const;
+    const QString& domain() const;
     bool matches( const RemoteService* remoteService ) const;
     ZeroConfUrl::Type type() const;
 
   private:
     QString mServiceType;
     QString mServiceName;
+    QString mDomain;
 };
 
 
 inline ZeroConfUrl::ZeroConfUrl( const KUrl& url )
 {
-    // FIXME: encode domain name into url to support many services with the same name on 
-    // different domains
     mServiceType = url.path().section('/',1,1);
     mServiceName = url.path().section('/',2,-1);
+    mDomain = url.host();
 }
 
 inline const QString& ZeroConfUrl::serviceType() const { return mServiceType; }
 inline const QString& ZeroConfUrl::serviceName() const { return mServiceName; }
+inline const QString& ZeroConfUrl::domain() const { return mDomain; }
 
 inline bool ZeroConfUrl::matches( const RemoteService* remoteService ) const
 {
-    return ( remoteService->serviceName()==mServiceName && remoteService->type()==mServiceType );
+    return ( remoteService->serviceName()==mServiceName && remoteService->type()==mServiceType 
+        && remoteService->domain()==mDomain);
 }
 
 // TODO: how is a invalid url defined?
