@@ -14,6 +14,7 @@ moving=false
 Icon=network-workgroup
 Description=A kioslave for ZeroConf
 Description[ar]=كيوسلاف لي ZeroConf
+Description[ast]=Un «kioslave» pa ZeroConf
 Description[bg]=A kioslave for ZeroConf
 Description[bn]=জিরো-কন্ফ এর জন্য একটি কে-আই-ও স্লেভ
 Description[br]=Ur c'hioslave evit ZeroConf
