@@ -1,7 +1,17 @@
 [Desktop Entry]
 Type=Service
 Name=DNS-SD Service Discovery Monitor
+Name[pt]=Monitor de Descoberta de Serviços DNS-SD
+Name[pt_BR]=Monitor de descoberta dos serviços DNS-SD
+Name[sv]=Övervakning av DNS-SD tjänstupptäckt
+Name[uk]=Спостереження за службами DNS-SD
+Name[x-test]=xxDNS-SD Service Discovery Monitorxx
 Comment=Monitors the network for DNS-SD services
+Comment[pt]=Vigia a rede à procura de serviços DNS-SD
+Comment[pt_BR]=Monitora a rede à procura de serviços DNS-SD
+Comment[sv]=Övervakar nätverket för att hitta DNS-SD tjänster
+Comment[uk]=Спостереження за службами DNS-SD мережі
+Comment[x-test]=xxMonitors the network for DNS-SD servicesxx
 X-KDE-ServiceTypes=KDEDModule
 X-KDE-ModuleType=Library
 X-KDE-Library=dnssdwatcher
