@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=DNS-SD Service Discovery Monitor
+Name[nb]=Overvåker oppdaging av DNS-SD-tjenester
 Name[nds]=DNS-SD-Kieker
 Name[pt]=Monitor de Descoberta de Serviços DNS-SD
 Name[pt_BR]=Monitor de descoberta dos serviços DNS-SD
@@ -8,6 +9,7 @@ Name[sv]=Övervakning av DNS-SD tjänstupptäckt
 Name[uk]=Спостереження за службами DNS-SD
 Name[x-test]=xxDNS-SD Service Discovery Monitorxx
 Comment=Monitors the network for DNS-SD services
+Comment[nb]=Overvåker nettverket etter DNS-SD-tjenester
 Comment[nds]=Kiekt dat Nettwark na DNS-SD-Deensten dör
 Comment[pt]=Vigia a rede à procura de serviços DNS-SD
 Comment[pt_BR]=Monitora a rede à procura de serviços DNS-SD
