@@ -2,6 +2,7 @@
 Type=Service
 Name=DNS-SD Service Discovery Monitor
 Name[de]=DNS-SD-Dienst-Überwachung
+Name[et]=DNS-SD teenuste tuvastamise jälgija
 Name[hr]=Nadzornik otkrivanja usluga DNS-SD-a
 Name[nb]=Overvåker oppdaging av DNS-SD-tjenester
 Name[nds]=DNS-SD-Kieker
@@ -12,6 +13,7 @@ Name[uk]=Спостереження за службами DNS-SD
 Name[x-test]=xxDNS-SD Service Discovery Monitorxx
 Comment=Monitors the network for DNS-SD services
 Comment[de]=Überwacht das Netzwerk nach DNS-SD-Diensten
+Comment[et]=DNS-SD teenuste võrgu jälgimine
 Comment[hr]=Nadgleda mrežu za usluge DNS-SD-a
 Comment[nb]=Overvåker nettverket etter DNS-SD-tjenester
 Comment[nds]=Kiekt dat Nettwark na DNS-SD-Deensten dör
