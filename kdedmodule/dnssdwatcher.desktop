@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=DNS-SD Service Discovery Monitor
+Name[ca]=Controlador de descobriment de serveis DNS-SD
 Name[da]=DNS-SD overvågning af tjenesteopdagelse
 Name[de]=DNS-SD-Dienst-Überwachung
 Name[en_GB]=DNS-SD Service Discovery Monitor
@@ -21,6 +22,7 @@ Name[x-test]=xxDNS-SD Service Discovery Monitorxx
 Name[zh_CN]=DNS-SD 服务发现监视器
 Name[zh_TW]=DNS-SD 服務發現監控器
 Comment=Monitors the network for DNS-SD services
+Comment[ca]=Controla la xarxa cercant serveis DNS-SD
 Comment[da]=Overvåger netværket for DNS-SD-tjenester
 Comment[de]=Überwacht das Netzwerk nach DNS-SD-Diensten
 Comment[en_GB]=Monitors the network for DNS-SD services
