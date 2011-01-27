@@ -3,6 +3,7 @@ Type=Service
 Name=DNS-SD Service Discovery Monitor
 Name[ca]=Controlador de descobriment de serveis DNS-SD
 Name[ca@valencia]=Controlador de descobriment de serveis DNS-SD
+Name[cs]=Monitor vyhledávání služeb DNS-SD
 Name[da]=DNS-SD overvågning af tjenesteopdagelse
 Name[de]=DNS-SD-Dienst-Überwachung
 Name[en_GB]=DNS-SD Service Discovery Monitor
