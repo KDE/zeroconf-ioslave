@@ -24,6 +24,7 @@
 #include "zeroconfurl.h"
 // KDE
 #include <KComponentData>
+#include <KIcon>
 #include <KProtocolInfo>
 // Qt
 #include <QtCore/QCoreApplication>
@@ -55,6 +56,7 @@ ZeroConfProtocol::ZeroConfProtocol(const QByteArray& protocol, const QByteArray 
     knownProtocols["_sftp-ssh._tcp"]=ProtocolData(i18n("Remote disk (sftp)"),     "sftp",   QString(), "u", "p");
     knownProtocols["_ssh._tcp"]=     ProtocolData(i18n("Remote disk (fish)"),     "fish",   QString(), "u", "p");
     knownProtocols["_nfs._tcp"]=     ProtocolData(i18n("NFS remote directory"),    "nfs",   "path");
+    knownProtocols["_plasma._tcp"]=     ProtocolData(i18n("Plasma remote widget"), "plasma", "plasmoidname", QString(), QString(), true);
 }
 
 ZeroConfProtocol::~ZeroConfProtocol()
@@ -226,10 +228,16 @@ void ZeroConfProtocol::addService( DNSSD::RemoteService::Ptr service )
     UDSEntry entry;
     entry.insert( UDSEntry::UDS_NAME,      service->serviceName() );
     entry.insert( UDSEntry::UDS_ACCESS,    0666);
-    entry.insert( UDSEntry::UDS_FILE_TYPE, S_IFDIR );
-    const QString iconName = KProtocolInfo::icon( knownProtocols[service->type()].protocol );
+
+    if (!knownProtocols[service->type()].servicesAsFiles)
+        entry.insert( UDSEntry::UDS_FILE_TYPE, S_IFDIR );
+
+    const QString protocol = knownProtocols[service->type()].protocol;
+    const QString iconName = KProtocolInfo::icon( protocol );
     if (!iconName.isNull())
         entry.insert( UDSEntry::UDS_ICON_NAME, iconName );
+    else if (!KIcon(protocol).isNull())
+        entry.insert( UDSEntry::UDS_ICON_NAME, protocol );
 
     listEntry( entry, false );
 }
