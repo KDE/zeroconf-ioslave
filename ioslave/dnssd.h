@@ -39,10 +39,8 @@ struct ProtocolData
 {
     ProtocolData() {}
     ProtocolData( const QString& _name, const QString& proto,
-                  const QString& path=QString(),
-                  const QString& user=QString(), const QString& passwd=QString(),
-                  bool files = false )
-     : name(_name), protocol(proto), pathEntry(path), userEntry(user), passwordEntry(passwd), servicesAsFiles(files)
+                  const QString& path=QString(), const QString& user=QString(), const QString& passwd=QString() )
+     : name(_name), protocol(proto), pathEntry(path), userEntry(user), passwordEntry(passwd)
     {}
 
     void feedUrl( KUrl* url, const RemoteService* remoteService ) const;
@@ -52,7 +50,6 @@ struct ProtocolData
     QString pathEntry;
     QString userEntry;
     QString passwordEntry;
-    bool servicesAsFiles;
 };
 
 class ZeroConfProtocol : public QObject, public KIO::SlaveBase
