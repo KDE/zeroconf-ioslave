@@ -42,6 +42,7 @@ Comment=Monitors the network for DNS-SD services
 Comment[bs]=Nadzire mrežu za DNSSD servisima
 Comment[ca]=Controla la xarxa cercant serveis DNS-SD
 Comment[ca@valencia]=Controla la xarxa cercant serveis DNS-SD
+Comment[cs]=Monitoruje síťové DNS-SD služby
 Comment[da]=Overvåger netværket for DNS-SD-tjenester
 Comment[de]=Überwacht das Netzwerk nach DNS-SD-Diensten
 Comment[en_GB]=Monitors the network for DNS-SD services
