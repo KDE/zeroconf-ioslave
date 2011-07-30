@@ -45,9 +45,9 @@ TypeWatcher::TypeWatcher() : Watcher()
 {
 	typebrowser = new DNSSD::ServiceTypeBrowser();
 	typebrowser->setParent(this);
-	connect(typebrowser,SIGNAL(serviceTypeAdded(const QString&)),
+	connect(typebrowser,SIGNAL(serviceTypeAdded(QString)),
 		this,SLOT(scheduleUpdate()));
-	connect(typebrowser,SIGNAL(serviceTypeRemoved(const QString&)),
+	connect(typebrowser,SIGNAL(serviceTypeRemoved(QString)),
 		this,SLOT(scheduleUpdate()));
 	connect(typebrowser,SIGNAL(finished()),this,SLOT(finished()));
 	typebrowser->startBrowse();

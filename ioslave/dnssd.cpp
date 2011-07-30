@@ -121,8 +121,8 @@ void ZeroConfProtocol::listDir( const KUrl& url )
     {
     case ZeroConfUrl::RootDir:
         serviceTypeBrowser = new ServiceTypeBrowser(zeroConfUrl.domain());
-        connect( serviceTypeBrowser, SIGNAL(serviceTypeAdded(const QString&)),
-                 SLOT(addServiceType(const QString&)) );
+        connect( serviceTypeBrowser, SIGNAL(serviceTypeAdded(QString)),
+                 SLOT(addServiceType(QString)) );
         connect( serviceTypeBrowser, SIGNAL(finished()), SLOT(onBrowserFinished()) );
         serviceTypeBrowser->startBrowse();
         enterLoop();
