@@ -62,7 +62,7 @@ QUrl TypeWatcher::constructUrl() const
 QUrl ServiceWatcher::constructUrl() const
 {
     QUrl url(QStringLiteral("zeroconf:/"));
-    url.setPath(m_type + '/');
+    url.setPath(m_type + QChar::fromLatin1('/'));
     return url;
 }
 

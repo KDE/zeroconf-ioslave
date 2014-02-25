@@ -35,11 +35,11 @@ void ProtocolData::feedUrl( QUrl* url, const RemoteService* remoteService ) cons
 
     url->setScheme( protocol );
     if (!userEntry.isNull())
-        url->setUserName( serviceTextData[userEntry] );
+        url->setUserName( QString::fromUtf8(serviceTextData[userEntry]) );
     if (!passwordEntry.isNull())
-        url->setPassword( serviceTextData[passwordEntry] );
+        url->setPassword( QString::fromUtf8(serviceTextData[passwordEntry]) );
     if (!pathEntry.isNull())
-        url->setPath( serviceTextData[pathEntry] );
+        url->setPath( QString::fromUtf8(serviceTextData[pathEntry]) );
 
     url->setHost( remoteService->hostName() );
     url->setPort( remoteService->port() );
@@ -50,11 +50,11 @@ ZeroConfProtocol::ZeroConfProtocol(const QByteArray& protocol, const QByteArray 
     : SlaveBase(protocol, pool_socket, app_socket),
     serviceBrowser(0), serviceTypeBrowser(0), serviceToResolve(0)
 {
-    knownProtocols["_ftp._tcp"]=     ProtocolData(i18n("FTP servers"),            "ftp",    "path",    "u", "p");
-    knownProtocols["_webdav._tcp"]=  ProtocolData(i18n("WebDav remote directory"),"webdav", "path");
-    knownProtocols["_sftp-ssh._tcp"]=ProtocolData(i18n("Remote disk (sftp)"),     "sftp",   QString(), "u", "p");
-    knownProtocols["_ssh._tcp"]=     ProtocolData(i18n("Remote disk (fish)"),     "fish",   QString(), "u", "p");
-    knownProtocols["_nfs._tcp"]=     ProtocolData(i18n("NFS remote directory"),    "nfs",   "path");
+    knownProtocols[QStringLiteral("_ftp._tcp")]=     ProtocolData(i18n("FTP servers"),            QStringLiteral("ftp"),    QStringLiteral("path"), QStringLiteral("u"), QStringLiteral("p"));
+    knownProtocols[QStringLiteral("_webdav._tcp")]=  ProtocolData(i18n("WebDav remote directory"),QStringLiteral("webdav"), QStringLiteral("path"));
+    knownProtocols[QStringLiteral("_sftp-ssh._tcp")]=ProtocolData(i18n("Remote disk (sftp)"),     QStringLiteral("sftp"),   QString(),              QStringLiteral("u"), QStringLiteral("p"));
+    knownProtocols[QStringLiteral("_ssh._tcp")]=     ProtocolData(i18n("Remote disk (fish)"),     QStringLiteral("fish"),   QString(),              QStringLiteral("u"), QStringLiteral("p"));
+    knownProtocols[QStringLiteral("_nfs._tcp")]=     ProtocolData(i18n("NFS remote directory"),   QStringLiteral("nfs"),    QStringLiteral("path"));
 }
 
 ZeroConfProtocol::~ZeroConfProtocol()
@@ -259,7 +259,7 @@ void ZeroConfProtocol::feedEntryAsDir( UDSEntry* entry, const QString& name, con
     entry->insert( UDSEntry::UDS_NAME,      name );
     entry->insert( UDSEntry::UDS_ACCESS,    0555 );
     entry->insert( UDSEntry::UDS_FILE_TYPE, S_IFDIR );
-    entry->insert( UDSEntry::UDS_MIME_TYPE, "inode/directory" );
+    entry->insert( UDSEntry::UDS_MIME_TYPE, QStringLiteral("inode/directory") );
     if (!displayName.isEmpty())
         entry->insert( UDSEntry::UDS_DISPLAY_NAME, displayName );
 }

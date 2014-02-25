@@ -51,8 +51,8 @@ class ZeroConfUrl
 
 inline ZeroConfUrl::ZeroConfUrl( const QUrl& url )
 {
-    mServiceType = url.path().section('/',1,1);
-    mServiceName = url.path().section('/',2,-1);
+    mServiceType = url.path().section(QChar::fromLatin1('/'),1,1);
+    mServiceName = url.path().section(QChar::fromLatin1('/'),2,-1);
     mDomain = url.host();
 }
 

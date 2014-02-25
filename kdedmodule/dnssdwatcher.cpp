@@ -29,10 +29,14 @@ K_PLUGIN_FACTORY(DNSSDWatcherFactory,
 DNSSDWatcher::DNSSDWatcher(QObject* parent, const QList<QVariant>&)
 : KDEDModule(parent)
 {
-    QDBusConnection::sessionBus().connect(QString(), QString(), "org.kde.KDirNotify",
-            "enteredDirectory", this, SLOT(enteredDirectory(QString)));
-    QDBusConnection::sessionBus().connect(QString(), QString(), "org.kde.KDirNotify",
-            "leftDirectory", this, SLOT(leftDirectory(QString)));
+    QDBusConnection::sessionBus().connect(QString(), QString(),
+            QStringLiteral("org.kde.KDirNotify"),
+            QStringLiteral("enteredDirectory"),
+            this, SLOT(enteredDirectory(QString)));
+    QDBusConnection::sessionBus().connect(QString(), QString(),
+            QStringLiteral("org.kde.KDirNotify"),
+            QStringLiteral("leftDirectory"),
+            this, SLOT(leftDirectory(QString)));
     new KdnssdAdaptor( this );
 }
 
@@ -45,8 +49,8 @@ QStringList DNSSDWatcher::watchedDirectories()
 // from ioslave
 void DNSSDWatcher::dissect(const QUrl& url,QString& name,QString& type)
 {
-    type = url.path().section('/',1,1);
-    name = url.path().section('/',2,-1);
+    type = url.path().section(QChar::fromLatin1('/'),1,1);
+    name = url.path().section(QChar::fromLatin1('/'),2,-1);
 }
 
 
