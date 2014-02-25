@@ -23,21 +23,21 @@
 // io-slave
 #include "zeroconfurl.h"
 // KDE
-#include <KComponentData>
 #include <KProtocolInfo>
 // Qt
-#include <QtCore/QCoreApplication>
+#include <QCoreApplication>
+#include <qplatformdefs.h> // S_IFDIR
 
 
-void ProtocolData::feedUrl( KUrl* url, const RemoteService* remoteService ) const
+void ProtocolData::feedUrl( QUrl* url, const RemoteService* remoteService ) const
 {
     const QMap<QString,QByteArray> serviceTextData = remoteService->textData();
 
-    url->setProtocol( protocol );
+    url->setScheme( protocol );
     if (!userEntry.isNull())
-        url->setUser( serviceTextData[userEntry] );
+        url->setUserName( serviceTextData[userEntry] );
     if (!passwordEntry.isNull())
-        url->setPass( serviceTextData[passwordEntry] );
+        url->setPassword( serviceTextData[passwordEntry] );
     if (!pathEntry.isNull())
         url->setPath( serviceTextData[pathEntry] );
 
@@ -62,7 +62,7 @@ ZeroConfProtocol::~ZeroConfProtocol()
     delete serviceToResolve;
 }
 
-void ZeroConfProtocol::get( const KUrl& url )
+void ZeroConfProtocol::get( const QUrl& url )
 {
     if (!dnssdOK())
         return;
@@ -73,15 +73,15 @@ void ZeroConfProtocol::get( const KUrl& url )
     if (type==ZeroConfUrl::Service)
         resolveAndRedirect( zeroConfUrl );
     else
-        error( ERR_MALFORMED_URL, url.prettyUrl() );
+        error( ERR_MALFORMED_URL, url.toDisplayString() );
 }
 
-void ZeroConfProtocol::mimetype( const KUrl& url )
+void ZeroConfProtocol::mimetype( const QUrl& url )
 {
     resolveAndRedirect( ZeroConfUrl(url) );
 }
 
-void ZeroConfProtocol::stat( const KUrl& url )
+void ZeroConfProtocol::stat( const QUrl& url )
 {
     if (!dnssdOK())
         return;
@@ -105,11 +105,11 @@ void ZeroConfProtocol::stat( const KUrl& url )
         resolveAndRedirect( zeroConfUrl );
         break;
     default:
-        error( ERR_MALFORMED_URL, url.prettyUrl() );
+        error( ERR_MALFORMED_URL, url.toDisplayString() );
     }
 }
 
-void ZeroConfProtocol::listDir( const KUrl& url )
+void ZeroConfProtocol::listDir( const QUrl& url )
 {
     if (!dnssdOK())
         return;
@@ -134,8 +134,8 @@ void ZeroConfProtocol::listDir( const KUrl& url )
             break;
         }
         serviceBrowser = new ServiceBrowser( zeroConfUrl.serviceType(), false, zeroConfUrl.domain() );
-        connect( serviceBrowser, SIGNAL(serviceAdded(DNSSD::RemoteService::Ptr)),
-                 SLOT(addService(DNSSD::RemoteService::Ptr)) );
+        connect( serviceBrowser, SIGNAL(serviceAdded(KDNSSD::RemoteService::Ptr)),
+                 SLOT(addService(KDNSSD::RemoteService::Ptr)) );
         connect( serviceBrowser, SIGNAL(finished()), SLOT(onBrowserFinished()) );
         serviceBrowser->startBrowse();
         enterLoop();
@@ -144,7 +144,7 @@ void ZeroConfProtocol::listDir( const KUrl& url )
         resolveAndRedirect( zeroConfUrl );
         break;
     default:
-        error( ERR_MALFORMED_URL, url.prettyUrl() );
+        error( ERR_MALFORMED_URL, url.toDisplayString() );
     }
 }
 
@@ -199,7 +199,7 @@ void ZeroConfProtocol::resolveAndRedirect( const ZeroConfUrl& zeroConfUrl )
 
     // action
     const ProtocolData& protocolData = knownProtocols[zeroConfUrl.serviceType()];
-    KUrl destUrl;
+    QUrl destUrl;
     protocolData.feedUrl( &destUrl, serviceToResolve );
 
     redirection( destUrl );
@@ -218,10 +218,10 @@ void ZeroConfProtocol::addServiceType( const QString& serviceType )
     // action
     UDSEntry entry;
     feedEntryAsDir( &entry, serviceType, knownProtocols[serviceType].name );
-    listEntry( entry, false );
+    listEntry( entry );
 }
 
-void ZeroConfProtocol::addService( DNSSD::RemoteService::Ptr service )
+void ZeroConfProtocol::addService( KDNSSD::RemoteService::Ptr service )
 {
     UDSEntry entry;
     entry.insert( UDSEntry::UDS_NAME,      service->serviceName() );
@@ -231,13 +231,11 @@ void ZeroConfProtocol::addService( DNSSD::RemoteService::Ptr service )
     if (!iconName.isNull())
         entry.insert( UDSEntry::UDS_ICON_NAME, iconName );
 
-    listEntry( entry, false );
+    listEntry( entry );
 }
 
 void ZeroConfProtocol::onBrowserFinished()
 {
-    UDSEntry entry;
-    listEntry( entry, true );
     finished();
 
     // cleanup
@@ -274,17 +272,19 @@ void ZeroConfProtocol::enterLoop()
 }
 
 
-extern "C"
+extern "C" Q_DECL_EXPORT int kdemain( int argc, char **argv )
 {
-    int KDE_EXPORT kdemain( int argc, char **argv )
-    {
-        // necessary to use other kio slaves
-        KComponentData componentData("kio_zeroconf");
-        QCoreApplication app(argc,argv);
+    // necessary to use other kio slaves
+    QCoreApplication app(argc,argv);
+    app.setApplicationName(QStringLiteral("kio_zeroconf"));
 
-        // start the slave
-        ZeroConfProtocol slave(argv[1],argv[2],argv[3]);
-        slave.dispatchLoop();
-        return 0;
+    if (argc != 4) {
+        fprintf(stderr, "Usage: %s protocol domain-socket1 domain-socket2\n", argv[0]);
+        exit(-1);
     }
+
+    // start the slave
+    ZeroConfProtocol slave(argv[1],argv[2],argv[3]);
+    slave.dispatchLoop();
+    return 0;
 }

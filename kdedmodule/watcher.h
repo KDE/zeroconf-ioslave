@@ -19,11 +19,11 @@
 #ifndef _WATCHER_H_
 #define _WATCHER_H_
 
-#include <qobject.h>
+#include <QObject>
 
 class QString;
 
-namespace DNSSD {
+namespace KDNSSD {
     class ServiceBrowser;
     class ServiceTypeBrowser;
 }
@@ -36,11 +36,11 @@ public:
 		
 	unsigned int refcount;
 protected:
-	virtual QString constructUrl()=0;
+	virtual QUrl constructUrl() const = 0;
 private:
 	bool updateNeeded;
 	
-private slots:
+private Q_SLOTS:
 	void scheduleUpdate();
 	void finished();
 };
@@ -51,9 +51,9 @@ Q_OBJECT
 public:
 	TypeWatcher();
 protected:
-	virtual QString constructUrl();
+	QUrl constructUrl() const Q_DECL_OVERRIDE;
 private:
-	DNSSD::ServiceTypeBrowser* typebrowser;
+	KDNSSD::ServiceTypeBrowser* typebrowser;
 };
 
 class ServiceWatcher : public Watcher
@@ -62,9 +62,9 @@ Q_OBJECT
 public:
 	ServiceWatcher(const QString& type);
 protected:
-	virtual QString constructUrl();
+	QUrl constructUrl() const Q_DECL_OVERRIDE;
 private:
-	DNSSD::ServiceBrowser* browser;
+	KDNSSD::ServiceBrowser* browser;
 	QString m_type;
 };
 
