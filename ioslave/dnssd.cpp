@@ -23,6 +23,7 @@
 // io-slave
 #include "zeroconfurl.h"
 // KDE
+#include <KLocalizedString>
 #include <KProtocolInfo>
 // Qt
 #include <QCoreApplication>
