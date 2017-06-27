@@ -162,7 +162,7 @@ bool ZeroConfProtocol::dnssdOK()
         break;
      case ServiceBrowser::Unsupported:
         error( KIO::ERR_UNSUPPORTED_ACTION,
-               i18n("KDE has been built without Zeroconf support."));
+               i18n("The KDNSSD library has been built without Zeroconf support."));
         result = false;
         break;
     default:
