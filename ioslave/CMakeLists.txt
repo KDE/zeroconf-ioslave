@@ -5,10 +5,9 @@ target_link_libraries(kio_zeroconf PRIVATE
     KF5::I18n
     KF5::KIOCore
 )
+set_target_properties(kio_zeroconf PROPERTIES OUTPUT_NAME "zeroconf")
 install(TARGETS kio_zeroconf
-        DESTINATION ${PLUGIN_INSTALL_DIR})
+        DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf5/kio)
 
-install(FILES zeroconf.protocol
-        DESTINATION ${SERVICES_INSTALL_DIR})
 install(FILES zeroconf.desktop
         DESTINATION ${DATA_INSTALL_DIR}/remoteview)

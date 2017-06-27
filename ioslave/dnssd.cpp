@@ -30,6 +30,13 @@
 #include <qplatformdefs.h> // S_IFDIR
 
 
+class KIOPluginForMetaData : public QObject
+{
+    Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.kde.kio.slave.zeroconf" FILE "zeroconf.json")
+};
+
+
 void ProtocolData::feedUrl( QUrl* url, const RemoteService* remoteService ) const
 {
     const QMap<QString,QByteArray> serviceTextData = remoteService->textData();
@@ -289,3 +296,5 @@ extern "C" Q_DECL_EXPORT int kdemain( int argc, char **argv )
     slave.dispatchLoop();
     return 0;
 }
+
+#include "dnssd.moc"
