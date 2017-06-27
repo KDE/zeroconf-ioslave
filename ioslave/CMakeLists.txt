@@ -1,3 +1,4 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"kio5_zeroconf\")
 add_library(kio_zeroconf MODULE dnssd.cpp)
 target_link_libraries(kio_zeroconf PRIVATE
     KF5::DNSSD

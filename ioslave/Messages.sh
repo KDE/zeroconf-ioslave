@@ -1,2 +1,2 @@
 #! /bin/sh
-$XGETTEXT *.cpp -o $podir/kio_zeroconf.pot
+$XGETTEXT *.cpp -o $podir/kio5_zeroconf.pot
