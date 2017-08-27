@@ -1,0 +1,24 @@
+{
+    "KDE-KIO-Protocols": {
+        "zeroconf": {
+            "Class": ":internet",
+            "Icon": "network-workgroup",
+            "exec": "kf5/kio/zeroconf",
+            "protocol": "zeroconf",
+            "input": "none",
+            "output": "filesystem",
+            "reading": true,
+            "listing": [
+                "Name",
+                "Link",
+                "Type"
+            ],
+            "writing": false,
+            "makedir": false,
+            "deleting": false,
+            "linking": false,
+            "moving": false,
+            "maxInstances": "4"
+        }
+    }
+}

@@ -18,26 +18,25 @@
 
 #include "dnssdwatcher.h"
 #include "kdnssdadaptor.h"
-
-#include <kglobal.h>
-#include <kurl.h>
 #include "watcher.h"
 
-#include <kpluginfactory.h>
-#include <kpluginloader.h>
+#include <KPluginFactory>
 
 K_PLUGIN_FACTORY(DNSSDWatcherFactory,
                  registerPlugin<DNSSDWatcher>();
     )
-K_EXPORT_PLUGIN(DNSSDWatcherFactory("dnssdwatcher"))
 
 DNSSDWatcher::DNSSDWatcher(QObject* parent, const QList<QVariant>&)
 : KDEDModule(parent)
 {
-    QDBusConnection::sessionBus().connect(QString(), QString(), "org.kde.KDirNotify",
-            "enteredDirectory", this, SLOT(enteredDirectory(QString)));
-    QDBusConnection::sessionBus().connect(QString(), QString(), "org.kde.KDirNotify",
-            "leftDirectory", this, SLOT(leftDirectory(QString)));
+    QDBusConnection::sessionBus().connect(QString(), QString(),
+            QStringLiteral("org.kde.KDirNotify"),
+            QStringLiteral("enteredDirectory"),
+            this, SLOT(enteredDirectory(QString)));
+    QDBusConnection::sessionBus().connect(QString(), QString(),
+            QStringLiteral("org.kde.KDirNotify"),
+            QStringLiteral("leftDirectory"),
+            this, SLOT(leftDirectory(QString)));
     new KdnssdAdaptor( this );
 }
 
@@ -48,18 +47,18 @@ QStringList DNSSDWatcher::watchedDirectories()
 
 
 // from ioslave
-void DNSSDWatcher::dissect(const KUrl& url,QString& name,QString& type)
+void DNSSDWatcher::dissect(const QUrl& url,QString& name,QString& type)
 {
-    type = url.path().section('/',1,1);
-    name = url.path().section('/',2,-1);
+    type = url.path().section(QChar::fromLatin1('/'),1,1);
+    name = url.path().section(QChar::fromLatin1('/'),2,-1);
 }
 
 
 
 void DNSSDWatcher::enteredDirectory(const QString& _dir)
 {
-    KUrl dir(_dir);
-    if (dir.protocol() != QLatin1String("zeroconf")) {
+    QUrl dir(_dir);
+    if (dir.scheme() != QLatin1String("zeroconf")) {
         return;
     }
     if (watchers.contains(dir.url())) {
@@ -73,8 +72,8 @@ void DNSSDWatcher::enteredDirectory(const QString& _dir)
 
 void DNSSDWatcher::leftDirectory(const QString& _dir)
 {
-    KUrl dir(_dir);
-    if (dir.protocol() != QLatin1String("zeroconf")) {
+    QUrl dir(_dir);
+    if (dir.scheme() != QLatin1String("zeroconf")) {
         return;
     }
     Watcher* watcher = watchers.value(dir.url());
@@ -90,7 +89,7 @@ void DNSSDWatcher::leftDirectory(const QString& _dir)
 }
 
 
-void DNSSDWatcher::createNotifier(const KUrl& url)
+void DNSSDWatcher::createNotifier(const QUrl& url)
 {
     QString type,name;
     dissect(url,name,type);
@@ -107,4 +106,4 @@ DNSSDWatcher::~DNSSDWatcher()
     qDeleteAll( watchers );
 }
 
-#include "dnssdwatcher.moc"
+#include <dnssdwatcher.moc>

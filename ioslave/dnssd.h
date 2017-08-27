@@ -23,15 +23,15 @@
 
 // KDE
 #include <DNSSD/ServiceBrowser>
-#include <dnssd/servicetypebrowser.h> // missing CamelCase version, can be fixed beginning 02.02.09
+#include <DNSSD/ServiceTypeBrowser>
 #include <DNSSD/RemoteService>
 #include <KIO/SlaveBase>
 // Qt
-#include <QtCore/QObject>
+#include <QObject>
 
 
 using namespace KIO;
-using namespace DNSSD;
+using namespace KDNSSD;
 
 class ZeroConfUrl;
 
@@ -43,7 +43,7 @@ struct ProtocolData
      : name(_name), protocol(proto), pathEntry(path), userEntry(user), passwordEntry(passwd)
     {}
 
-    void feedUrl( KUrl* url, const RemoteService* remoteService ) const;
+    void feedUrl( QUrl* url, const RemoteService* remoteService ) const;
 
     QString name;
     QString protocol;
@@ -60,10 +60,10 @@ public:
     virtual ~ZeroConfProtocol();
 
 public: // KIO::SlaveBase API
-    virtual void get( const KUrl& url );
-    virtual void mimetype( const KUrl& url );
-    virtual void stat( const KUrl& url );
-    virtual void listDir( const KUrl& url );
+    virtual void get( const QUrl& url );
+    virtual void mimetype( const QUrl& url );
+    virtual void stat( const QUrl& url );
+    virtual void listDir( const QUrl& url );
 
 Q_SIGNALS:
     void leaveModality();
@@ -80,7 +80,7 @@ private:
 
 private Q_SLOTS:
     void addServiceType( const QString& );
-    void addService( DNSSD::RemoteService::Ptr );
+    void addService( KDNSSD::RemoteService::Ptr );
     void onBrowserFinished();
 
 private: // data

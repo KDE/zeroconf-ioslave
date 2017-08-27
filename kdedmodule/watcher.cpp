@@ -18,10 +18,11 @@
 
 #include "watcher.h"
 
-#include <kdirnotify.h>
-#include <dnssd/remoteservice.h>
-#include <dnssd/servicebrowser.h>
-#include <dnssd/servicetypebrowser.h>
+#include <KDirNotify>
+#include <DNSSD/RemoteService>
+#include <DNSSD/ServiceBrowser>
+#include <DNSSD/ServiceTypeBrowser>
+#include <QUrl>
 
 Watcher::Watcher() 
 	: refcount(1), updateNeeded(false)
@@ -30,11 +31,11 @@ Watcher::Watcher()
 
 ServiceWatcher::ServiceWatcher(const QString& type) : Watcher(), m_type(type)
 {
-	browser = new DNSSD::ServiceBrowser(type);
+	browser = new KDNSSD::ServiceBrowser(type);
 	browser->setParent(this);
-	connect(browser,SIGNAL(serviceAdded(DNSSD::RemoteService::Ptr)),
+	connect(browser,SIGNAL(serviceAdded(KDNSSD::RemoteService::Ptr)),
 		SLOT(scheduleUpdate()));
-	connect(browser,SIGNAL(serviceRemoved(DNSSD::RemoteService::Ptr)),
+	connect(browser,SIGNAL(serviceRemoved(KDNSSD::RemoteService::Ptr)),
 		SLOT(scheduleUpdate()));
 	connect(browser,SIGNAL(finished()),SLOT(finished()));
 	browser->startBrowse();
@@ -43,7 +44,7 @@ ServiceWatcher::ServiceWatcher(const QString& type) : Watcher(), m_type(type)
 
 TypeWatcher::TypeWatcher() : Watcher()
 {
-	typebrowser = new DNSSD::ServiceTypeBrowser();
+	typebrowser = new KDNSSD::ServiceTypeBrowser();
 	typebrowser->setParent(this);
 	connect(typebrowser,SIGNAL(serviceTypeAdded(QString)),
 		this,SLOT(scheduleUpdate()));
@@ -53,14 +54,16 @@ TypeWatcher::TypeWatcher() : Watcher()
 	typebrowser->startBrowse();
 }
 
-QString TypeWatcher::constructUrl() 
+QUrl TypeWatcher::constructUrl() const
 {
-    return QString("zeroconf:/");
+    return QUrl(QStringLiteral("zeroconf:/"));
 }
 
-QString ServiceWatcher::constructUrl()
+QUrl ServiceWatcher::constructUrl() const
 {
-    return QString("zeroconf:/")+m_type+'/';
+    QUrl url(QStringLiteral("zeroconf:/"));
+    url.setPath(m_type + QChar::fromLatin1('/'));
+    return url;
 }
 
 void Watcher::scheduleUpdate()
@@ -74,4 +77,3 @@ void Watcher::finished()
 	updateNeeded=false;
 }
 
-#include "watcher.moc"

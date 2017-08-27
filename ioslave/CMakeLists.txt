@@ -1,19 +1,13 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"kio5_zeroconf\")
+add_library(kio_zeroconf MODULE dnssd.cpp)
+target_link_libraries(kio_zeroconf PRIVATE
+    KF5::DNSSD
+    KF5::I18n
+    KF5::KIOCore
+)
+set_target_properties(kio_zeroconf PROPERTIES OUTPUT_NAME "zeroconf")
+install(TARGETS kio_zeroconf
+        DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf5/kio)
 
-########### next target ###############
-
-set(kio_zeroconf_PART_SRCS dnssd.cpp )
-
-
-kde4_add_plugin(kio_zeroconf ${kio_zeroconf_PART_SRCS})
-
-
-target_link_libraries(kio_zeroconf  ${KDE4_KIO_LIBS} ${KDE4_KDNSSD_LIBS} )
-
-install(TARGETS kio_zeroconf  DESTINATION ${PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES zeroconf.protocol DESTINATION ${SERVICES_INSTALL_DIR})
-install( FILES zeroconf.desktop  DESTINATION ${DATA_INSTALL_DIR}/remoteview)
-
+install(FILES zeroconf.desktop
+        DESTINATION ${DATA_INSTALL_DIR}/remoteview)

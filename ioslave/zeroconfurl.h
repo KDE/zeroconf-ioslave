@@ -23,7 +23,7 @@
 
 // KDE
 #include <DNSSD/RemoteService>
-#include <KUrl>
+#include <QUrl>
 
 
 // URL zeroconf:/_http._tcp/some%20service
@@ -33,7 +33,7 @@ class ZeroConfUrl
     enum Type { InvalidUrl, RootDir, ServiceDir, Service };
 
   public:
-    explicit ZeroConfUrl( const KUrl& url );
+    explicit ZeroConfUrl( const QUrl& url );
 
   public:
     const QString& serviceType() const;
@@ -49,10 +49,10 @@ class ZeroConfUrl
 };
 
 
-inline ZeroConfUrl::ZeroConfUrl( const KUrl& url )
+inline ZeroConfUrl::ZeroConfUrl( const QUrl& url )
 {
-    mServiceType = url.path().section('/',1,1);
-    mServiceName = url.path().section('/',2,-1);
+    mServiceType = url.path().section(QChar::fromLatin1('/'),1,1);
+    mServiceName = url.path().section(QChar::fromLatin1('/'),2,-1);
     mDomain = url.host();
 }
 

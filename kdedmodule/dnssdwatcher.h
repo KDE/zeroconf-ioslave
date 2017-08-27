@@ -19,11 +19,12 @@
 #ifndef _DNSSDWATCHER_H_
 #define _DNSSDWATCHER_H_
 
-#include <qhash.h>
-#include <kdedmodule.h>
+#include <QHash>
+#include <QStringList>
+#include <KDEDModule>
 
 class Watcher;
-class KUrl;
+class QUrl;
 class DNSSDWatcher : public KDEDModule
 {
 Q_OBJECT
@@ -31,7 +32,7 @@ public:
 	DNSSDWatcher(QObject* parent, const QList<QVariant>&);
 	~DNSSDWatcher();
 
-public slots:
+public Q_SLOTS:
 	QStringList watchedDirectories();
 	void enteredDirectory(const QString& dir);
 	void leftDirectory(const QString& dir);
@@ -39,8 +40,8 @@ public slots:
 private:
 	QHash<QString, Watcher *> watchers;
 
-	void createNotifier(const KUrl& url);
-	void dissect(const KUrl& url,QString& name,QString& type);
+	void createNotifier(const QUrl& url);
+	void dissect(const QUrl& url,QString& name,QString& type);
 
 };
 
