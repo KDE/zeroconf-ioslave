@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=DNS-SD Service Discovery Monitor
+Name[ast]=Monitor de descubrición de servición DNS-SD
 Name[bg]=Следене за откриване на услуги DNS-SD
 Name[bs]=Nadzornik DNSSD otkrivanja servisa
 Name[ca]=Controlador de descobriment de serveis DNS-SD
@@ -48,6 +49,7 @@ Name[uk]=Спостереження за службами DNS-SD
 Name[x-test]=xxDNS-SD Service Discovery Monitorxx
 Name[zh_TW]=DNS-SD 服務發現監控器
 Comment=Monitors the network for DNS-SD services
+Comment[ast]=Monitoriza la rede pa servicios DNS-SD
 Comment[bg]=Следи мрежата за услуги DNS-SD
 Comment[bs]=Nadzire mrežu za DNSSD servisima
 Comment[ca]=Controla la xarxa cercant serveis DNS-SD
