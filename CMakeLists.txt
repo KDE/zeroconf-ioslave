@@ -11,7 +11,7 @@ include(KDECMakeSettings)
 
 include(FeatureSummary)
 
-find_package(KF5 COMPONENTS DBusAddons DNSSD I18n KIO)
+find_package(KF5 REQUIRED COMPONENTS DBusAddons DNSSD I18n KIO)
 
 add_subdirectory(ioslave)
 add_subdirectory(kdedmodule)
