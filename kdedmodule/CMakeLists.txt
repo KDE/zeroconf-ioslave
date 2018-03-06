@@ -16,9 +16,9 @@ target_link_libraries(kded_dnssdwatcher PRIVATE
 )
 
 install(TARGETS kded_dnssdwatcher
-        DESTINATION ${PLUGIN_INSTALL_DIR})
+        DESTINATION ${KDE_INSTALL_PLUGINDIR})
 
 install(FILES dnssdwatcher.desktop
-        DESTINATION ${SERVICES_INSTALL_DIR}/kded)
+        DESTINATION ${KDE_INSTALL_KSERVICES5DIR}/kded)
 install(FILES org.kde.kdnssd.xml
-        DESTINATION ${DBUS_INTERFACES_INSTALL_DIR})
+        DESTINATION ${KDE_INSTALL_DBUSINTERFACEDIR})

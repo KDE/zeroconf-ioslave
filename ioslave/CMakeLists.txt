@@ -10,4 +10,4 @@ install(TARGETS kio_zeroconf
         DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf5/kio)
 
 install(FILES zeroconf.desktop
-        DESTINATION ${DATA_INSTALL_DIR}/remoteview)
+        DESTINATION ${KDE_INSTALL_DATADIR}/remoteview)
