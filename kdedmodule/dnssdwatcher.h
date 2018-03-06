@@ -30,7 +30,7 @@ class DNSSDWatcher : public KDEDModule
 Q_OBJECT
 public:
 	DNSSDWatcher(QObject* parent, const QList<QVariant>&);
-	~DNSSDWatcher();
+	~DNSSDWatcher() override;
 
 public Q_SLOTS:
 	QStringList watchedDirectories();

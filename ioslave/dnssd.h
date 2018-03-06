@@ -57,13 +57,13 @@ class ZeroConfProtocol : public QObject, public KIO::SlaveBase
     Q_OBJECT
 public:
     ZeroConfProtocol( const QByteArray& protocol, const QByteArray& pool_socket, const QByteArray& app_socket);
-    virtual ~ZeroConfProtocol();
+    ~ZeroConfProtocol() override;
 
 public: // KIO::SlaveBase API
-    virtual void get( const QUrl& url );
-    virtual void mimetype( const QUrl& url );
-    virtual void stat( const QUrl& url );
-    virtual void listDir( const QUrl& url );
+    void get( const QUrl& url ) override;
+    void mimetype( const QUrl& url ) override;
+    void stat( const QUrl& url ) override;
+    void listDir( const QUrl& url ) override;
 
 Q_SIGNALS:
     void leaveModality();
