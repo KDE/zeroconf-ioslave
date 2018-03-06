@@ -56,7 +56,9 @@ void ProtocolData::feedUrl( QUrl* url, const RemoteService* remoteService ) cons
 
 ZeroConfProtocol::ZeroConfProtocol(const QByteArray& protocol, const QByteArray &pool_socket, const QByteArray &app_socket)
     : SlaveBase(protocol, pool_socket, app_socket),
-    serviceBrowser(0), serviceTypeBrowser(0), serviceToResolve(0)
+    serviceBrowser(nullptr),
+    serviceTypeBrowser(nullptr),
+    serviceToResolve(nullptr)
 {
     knownProtocols[QStringLiteral("_ftp._tcp")]=     ProtocolData(i18n("FTP servers"),            QStringLiteral("ftp"),    QStringLiteral("path"), QStringLiteral("u"), QStringLiteral("p"));
     knownProtocols[QStringLiteral("_webdav._tcp")]=  ProtocolData(i18n("WebDav remote directory"),QStringLiteral("webdav"), QStringLiteral("path"));
@@ -184,9 +186,9 @@ void ZeroConfProtocol::resolveAndRedirect( const ZeroConfUrl& zeroConfUrl )
     if (serviceToResolve && !zeroConfUrl.matches(serviceToResolve))
     {
         delete serviceToResolve;
-        serviceToResolve = 0;
+        serviceToResolve = nullptr;
     }
-    if (serviceToResolve == 0)
+    if (serviceToResolve == nullptr)
     {
         if( !knownProtocols.contains(zeroConfUrl.serviceType()) )
         {
@@ -250,12 +252,12 @@ void ZeroConfProtocol::onBrowserFinished()
     if (serviceBrowser)
     {
         serviceBrowser->deleteLater();
-        serviceBrowser = 0;
+        serviceBrowser = nullptr;
     }
     if (serviceTypeBrowser)
     {
         serviceTypeBrowser->deleteLater();
-        serviceTypeBrowser = 0;
+        serviceTypeBrowser = nullptr;
     }
     ServiceTypesAdded.clear();
 
