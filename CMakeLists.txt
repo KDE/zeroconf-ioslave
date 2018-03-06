@@ -2,8 +2,11 @@ cmake_minimum_required(VERSION 3.0)
 
 project(kdnssd)
 
-find_package(ECM 0.0.10 REQUIRED NO_MODULE)
-set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
+set(QT_MIN_VERSION "5.9.0")
+set(KF_MIN_VERSION "5.37.0")
+
+find_package(ECM ${KF_MIN_VERSION} REQUIRED NO_MODULE)
+set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
 
 include(KDEInstallDirs)
 include(KDEFrameworkCompilerSettings NO_POLICY_SCOPE)
@@ -11,7 +14,9 @@ include(KDECMakeSettings)
 
 include(FeatureSummary)
 
-find_package(KF5 REQUIRED COMPONENTS DBusAddons DNSSD I18n KIO)
+find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Core)
+
+find_package(KF5 ${KF_MIN_VERSION} REQUIRED COMPONENTS DBusAddons DNSSD I18n KIO)
 
 add_subdirectory(ioslave)
 add_subdirectory(kdedmodule)
