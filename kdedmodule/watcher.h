@@ -60,7 +60,7 @@ class ServiceWatcher : public Watcher
 {
 Q_OBJECT
 public:
-	ServiceWatcher(const QString& type);
+	explicit ServiceWatcher(const QString& type);
 protected:
 	QUrl constructUrl() const Q_DECL_OVERRIDE;
 private:
