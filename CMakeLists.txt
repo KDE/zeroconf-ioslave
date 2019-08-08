@@ -21,7 +21,7 @@ find_package(KF5 ${KF_MIN_VERSION} REQUIRED COMPONENTS DBusAddons DNSSD I18n KIO
 add_subdirectory(ioslave)
 add_subdirectory(kdedmodule)
 
-install(FILES org.kde.zeroconf-ioslave.appdata.xml
+install(FILES org.kde.zeroconf-ioslave.metainfo.xml
         DESTINATION ${KDE_INSTALL_METAINFODIR})
 
 feature_summary(WHAT ALL   FATAL_ON_MISSING_REQUIRED_PACKAGES)
