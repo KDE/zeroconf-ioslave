@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="addon">
+  <id>org.kde.zeroconf_ioslave</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <extends>org.kde.dolphin.desktop</extends>
+  <extends>org.kde.konqueror.desktop</extends>
+  <extends>org.kde.krusader.desktop</extends>
+  <name>Zeroconf Support</name>
+  <summary>Browse local network services in Dolphin's Network page</summary>
+  <description>
+    <p>Adds an entry to Dolphin's Network page to show local services such as printers which advertise themselves with DNSSD (called Avahi or Bonjour by other projects).</p>
+  </description>
+  <url type="homepage">https://www.kde.org/</url>
+  <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=dolphin</url>
+  <project_group>KDE</project_group>
+  <categories>
+    <category>Network</category>
+  </categories>
+  <icon type="stock">network-workgroup</icon>
+</component>
