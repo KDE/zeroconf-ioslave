@@ -18,4 +18,9 @@
     <category>Network</category>
   </categories>
   <icon type="stock">network-workgroup</icon>
+  <screenshots>
+    <screenshot type="default">
+      <image type="source">https://cdn.kde.org/screenshots/zeroconf-ioslave/zeroconf-ioslave.png</image>
+    </screenshot>
+  </screenshots>
 </component>
