@@ -7,9 +7,27 @@
   <extends>org.kde.konqueror.desktop</extends>
   <extends>org.kde.krusader.desktop</extends>
   <name>Zeroconf Support</name>
+  <name xml:lang="ca">Suport de Zeroconf</name>
+  <name xml:lang="de">Unterstützung für ZeroConf</name>
+  <name xml:lang="pt">Suporte para Zeroconf</name>
+  <name xml:lang="sv">Stöd för Zeroconf</name>
+  <name xml:lang="uk">Підтримка Zeroconf</name>
+  <name xml:lang="x-test">xxZeroconf Supportxx</name>
   <summary>Browse local network services in Dolphin's Network page</summary>
+  <summary xml:lang="ca">Navega pels serveis de xarxa local a la pàgina Xarxa del Dolphin</summary>
+  <summary xml:lang="de">Durchsuchen von lokalen Netzwerkdiensten in der Netzwerkseite von Dolphin</summary>
+  <summary xml:lang="pt">Navegue nos serviços da rede local com a página de Rede do Dolphin</summary>
+  <summary xml:lang="sv">Bläddra i lokala nätverkstjänster på Dolphins nätverkssida</summary>
+  <summary xml:lang="uk">Навігація службами локальної мережі на сторінці мереж Dolphin</summary>
+  <summary xml:lang="x-test">xxBrowse local network services in Dolphin's Network pagexx</summary>
   <description>
     <p>Adds an entry to Dolphin's Network page to show local services such as printers which advertise themselves with DNSSD (called Avahi or Bonjour by other projects).</p>
+    <p xml:lang="ca">Afegeix una entrada a la pàgina Xarxa del Dolphin per a mostrar els serveis locals com impressores que s'anuncien amb DNSSD (s'anomenen Avahi o Bonjour en altres projectes).</p>
+    <p xml:lang="de">Fügt der Netzwerkseite von Dolphin einen Eintrag hinzu, um lokale Dienste wie Drucker anzuzeigen, die sich mit DNSSD anbieten (bei anderen Projekten Avahi oder Bonjour genannt).</p>
+    <p xml:lang="pt">Adiciona um elemento à página de Rede do Dolphin que mostra os serviços locais, como as impressoras que se anunciam a elas próprias com o DNSSD (chamado de Avahi ou Bonjour noutros projectos).</p>
+    <p xml:lang="sv">Lägger till en post på Dolphins nätverkssida för att visa lokala tjänster såsom skrivare, som tillkännager sig med DNSSD (kallat Avahi eller Bonjour av andra projekt).</p>
+    <p xml:lang="uk">Додає на сторінку «Мережа» Dolphin пункт для показу служб локальної мережі, зокрема принтерів, які повідомляють про себе за допомогою DNSSD (системи, яка має назву Avahi або Bonjour у інших проєктах).</p>
+    <p xml:lang="x-test">xxAdds an entry to Dolphin's Network page to show local services such as printers which advertise themselves with DNSSD (called Avahi or Bonjour by other projects).xx</p>
   </description>
   <url type="homepage">https://www.kde.org/</url>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=dolphin</url>
