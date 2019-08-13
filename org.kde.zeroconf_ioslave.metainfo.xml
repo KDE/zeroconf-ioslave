@@ -10,6 +10,7 @@
   <name xml:lang="ca">Suport de Zeroconf</name>
   <name xml:lang="de">Unterstützung für ZeroConf</name>
   <name xml:lang="en-GB">Zeroconf Support</name>
+  <name xml:lang="es">Implementación de Zeroconf</name>
   <name xml:lang="eu">Zeroconf euskarria</name>
   <name xml:lang="fr">Prise en charge de Zeroconf</name>
   <name xml:lang="it">Supporto per Zeroconf</name>
@@ -23,6 +24,7 @@
   <summary xml:lang="ca">Navega pels serveis de xarxa local a la pàgina Xarxa del Dolphin</summary>
   <summary xml:lang="de">Durchsuchen von lokalen Netzwerkdiensten in der Netzwerkseite von Dolphin</summary>
   <summary xml:lang="en-GB">Browse local network services in Dolphin's Network page</summary>
+  <summary xml:lang="es">Explorar los servicios de la red local en la página de Redes de Dolphin</summary>
   <summary xml:lang="eu">Arakatu tokiko sareko zerbitzuak Dolphinen sareko orrian</summary>
   <summary xml:lang="fr">Parcourir les services des réseaux locaux sur la page Réseau de Dolphin</summary>
   <summary xml:lang="it">Sfoglia i servizi della rete locale nella pagina della rete di Dolphin</summary>
@@ -37,6 +39,7 @@
     <p xml:lang="ca">Afegeix una entrada a la pàgina Xarxa del Dolphin per a mostrar els serveis locals com impressores que s'anuncien amb DNSSD (s'anomenen Avahi o Bonjour en altres projectes).</p>
     <p xml:lang="de">Fügt der Netzwerkseite von Dolphin einen Eintrag hinzu, um lokale Dienste wie Drucker anzuzeigen, die sich mit DNSSD anbieten (bei anderen Projekten Avahi oder Bonjour genannt).</p>
     <p xml:lang="en-GB">Adds an entry to Dolphin's Network page to show local services such as printers which advertise themselves with DNSSD (called Avahi or Bonjour by other projects).</p>
+    <p xml:lang="es">Añade una entrada a la página de Redes de Dolphin para mostrar los servicios locales, como impresoras, que se anuncian a sí mismos mediante DNSSD (llamado Avahi o Bonjour en otros proyectos).</p>
     <p xml:lang="eu">Tokiko zerbitzuak erakusteko sarrera bat gehitzen dio Dolphinen sareko orriari, DNSSD (beste proiektu batzuek Avahi edo Bonjour deitzen diete) erabiliz beraien burua aurkezten duten inprimagailuak esaterako.</p>
     <p xml:lang="fr">Ajoute un menu dans la page Réseau de Dolphin permettant d'afficher les services locaux, par exemple les imprimantes, qui s'annoncent par l'intermédiaire de DNSSD (appelé Avahi ou Bonjour par d'autres projets).</p>
     <p xml:lang="it">Aggiunge una voce alla pagina della rete di Dolphin che mostra i servizi locali come le stampanti che si auto-annunciano tramite DNSSD (chiamato Avahi o Bonjour da altri progetti).</p>
