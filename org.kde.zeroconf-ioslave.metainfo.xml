@@ -17,6 +17,7 @@
   <name xml:lang="nl">Ondersteuning van Zeroconf</name>
   <name xml:lang="pl">Obsługa Zeroconf</name>
   <name xml:lang="pt">Suporte para Zeroconf</name>
+  <name xml:lang="sk">Podpora Zeroconf</name>
   <name xml:lang="sv">Stöd för Zeroconf</name>
   <name xml:lang="uk">Підтримка Zeroconf</name>
   <name xml:lang="x-test">xxZeroconf Supportxx</name>
@@ -31,6 +32,7 @@
   <summary xml:lang="nl">Bladeren in lokale netwerkservices in de netwerkpagina van Dolphin</summary>
   <summary xml:lang="pl">Przeglądaj usługi w sieci lokalnej na stronie sieci Dolphina</summary>
   <summary xml:lang="pt">Navegue nos serviços da rede local com a página de Rede do Dolphin</summary>
+  <summary xml:lang="sk">Prehliadať sieťové služby v stránke Dolphina Siete</summary>
   <summary xml:lang="sv">Bläddra i lokala nätverkstjänster på Dolphins nätverkssida</summary>
   <summary xml:lang="uk">Навігація службами локальної мережі на сторінці мереж Dolphin</summary>
   <summary xml:lang="x-test">xxBrowse local network services in Dolphin's Network pagexx</summary>
