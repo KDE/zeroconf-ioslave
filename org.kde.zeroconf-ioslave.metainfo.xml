@@ -21,6 +21,7 @@
   <name xml:lang="sv">Stöd för Zeroconf</name>
   <name xml:lang="uk">Підтримка Zeroconf</name>
   <name xml:lang="x-test">xxZeroconf Supportxx</name>
+  <name xml:lang="zh-CN">Zeroconf 支持</name>
   <summary>Browse local network services in Dolphin's Network page</summary>
   <summary xml:lang="ca">Navega pels serveis de xarxa local a la pàgina Xarxa del Dolphin</summary>
   <summary xml:lang="de">Durchsuchen von lokalen Netzwerkdiensten in der Netzwerkseite von Dolphin</summary>
@@ -36,6 +37,7 @@
   <summary xml:lang="sv">Bläddra i lokala nätverkstjänster på Dolphins nätverkssida</summary>
   <summary xml:lang="uk">Навігація службами локальної мережі на сторінці мереж Dolphin</summary>
   <summary xml:lang="x-test">xxBrowse local network services in Dolphin's Network pagexx</summary>
+  <summary xml:lang="zh-CN">在 Dolphin 的网络页面浏览本地网络服务</summary>
   <description>
     <p>Adds an entry to Dolphin's Network page to show local services such as printers which advertise themselves with DNSSD (called Avahi or Bonjour by other projects).</p>
     <p xml:lang="ca">Afegeix una entrada a la pàgina Xarxa del Dolphin per a mostrar els serveis locals com impressores que s'anuncien amb DNSSD (s'anomenen Avahi o Bonjour en altres projectes).</p>
@@ -51,6 +53,7 @@
     <p xml:lang="sv">Lägger till en post på Dolphins nätverkssida för att visa lokala tjänster såsom skrivare, som tillkännager sig med DNSSD (kallat Avahi eller Bonjour av andra projekt).</p>
     <p xml:lang="uk">Додає на сторінку «Мережа» Dolphin пункт для показу служб локальної мережі, зокрема принтерів, які повідомляють про себе за допомогою DNSSD (системи, яка має назву Avahi або Bonjour у інших проєктах).</p>
     <p xml:lang="x-test">xxAdds an entry to Dolphin's Network page to show local services such as printers which advertise themselves with DNSSD (called Avahi or Bonjour by other projects).xx</p>
+    <p xml:lang="zh-CN">在 Dolphin 的网络页面添加新项，显示通过 DNSSD (在其他项目中叫做 Avahi 或 Bonjour) 广播的本地服务，比如打印机。</p>
   </description>
   <url type="homepage">https://www.kde.org/</url>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=dolphin</url>
