@@ -25,6 +25,7 @@
   <name xml:lang="uk">Підтримка Zeroconf</name>
   <name xml:lang="x-test">xxZeroconf Supportxx</name>
   <name xml:lang="zh-CN">Zeroconf 支持</name>
+  <name xml:lang="zh-TW">Zeroconf 支援</name>
   <summary>Browse local network services in Dolphin's Network page</summary>
   <summary xml:lang="ca">Navega pels serveis de xarxa local a la pàgina Xarxa del Dolphin</summary>
   <summary xml:lang="de">Durchsuchen von lokalen Netzwerkdiensten in der Netzwerkseite von Dolphin</summary>
@@ -44,6 +45,7 @@
   <summary xml:lang="uk">Навігація службами локальної мережі на сторінці мереж Dolphin</summary>
   <summary xml:lang="x-test">xxBrowse local network services in Dolphin's Network pagexx</summary>
   <summary xml:lang="zh-CN">在 Dolphin 的网络页面浏览本地网络服务</summary>
+  <summary xml:lang="zh-TW">在 Dolphin 的網路頁面瀏覽本機網路服務</summary>
   <description>
     <p>Adds an entry to Dolphin's Network page to show local services such as printers which advertise themselves with DNSSD (called Avahi or Bonjour by other projects).</p>
     <p xml:lang="ca">Afegeix una entrada a la pàgina Xarxa del Dolphin per a mostrar els serveis locals com impressores que s'anuncien amb DNSSD (s'anomenen Avahi o Bonjour en altres projectes).</p>
