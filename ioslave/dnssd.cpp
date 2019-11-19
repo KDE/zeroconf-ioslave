@@ -234,12 +234,12 @@ void ZeroConfProtocol::addServiceType( const QString& serviceType )
 void ZeroConfProtocol::addService( KDNSSD::RemoteService::Ptr service )
 {
     UDSEntry entry;
-    entry.insert( UDSEntry::UDS_NAME,      service->serviceName() );
-    entry.insert( UDSEntry::UDS_ACCESS,    0666);
-    entry.insert( UDSEntry::UDS_FILE_TYPE, S_IFDIR );
+    entry.fastInsert(UDSEntry::UDS_NAME,      service->serviceName() );
+    entry.fastInsert( UDSEntry::UDS_ACCESS,    0666);
+    entry.fastInsert( UDSEntry::UDS_FILE_TYPE, S_IFDIR );
     const QString iconName = KProtocolInfo::icon( knownProtocols[service->type()].protocol );
     if (!iconName.isNull())
-        entry.insert( UDSEntry::UDS_ICON_NAME, iconName );
+        entry.fastInsert( UDSEntry::UDS_ICON_NAME, iconName );
 
     listEntry( entry );
 }
@@ -266,12 +266,12 @@ void ZeroConfProtocol::onBrowserFinished()
 
 void ZeroConfProtocol::feedEntryAsDir( UDSEntry* entry, const QString& name, const QString& displayName )
 {
-    entry->insert( UDSEntry::UDS_NAME,      name );
-    entry->insert( UDSEntry::UDS_ACCESS,    0555 );
-    entry->insert( UDSEntry::UDS_FILE_TYPE, S_IFDIR );
-    entry->insert( UDSEntry::UDS_MIME_TYPE, QStringLiteral("inode/directory") );
+    entry->fastInsert( UDSEntry::UDS_NAME,      name );
+    entry->fastInsert( UDSEntry::UDS_ACCESS,    0555 );
+    entry->fastInsert( UDSEntry::UDS_FILE_TYPE, S_IFDIR );
+    entry->fastInsert( UDSEntry::UDS_MIME_TYPE, QStringLiteral("inode/directory") );
     if (!displayName.isEmpty())
-        entry->insert( UDSEntry::UDS_DISPLAY_NAME, displayName );
+        entry->fastInsert( UDSEntry::UDS_DISPLAY_NAME, displayName );
 }
 
 void ZeroConfProtocol::enterLoop()
