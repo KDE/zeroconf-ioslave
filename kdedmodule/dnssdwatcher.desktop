@@ -101,6 +101,6 @@ Comment[zh_CN]=监视网络中的 DNS-SD 服务
 Comment[zh_TW]=監控 DNS-SD 服務網路
 X-KDE-ServiceTypes=KDEDModule
 X-KDE-ModuleType=Library
-X-KDE-Library=kded_dnssdwatcher
+X-KDE-Library=kf5/kded/dnssdwatcher
 X-KDE-DBus-ModuleName=dnssdwatcher
 X-KDE-Kded-autoload=true

@@ -22,9 +22,7 @@
 
 #include <KPluginFactory>
 
-K_PLUGIN_FACTORY(DNSSDWatcherFactory,
-                 registerPlugin<DNSSDWatcher>();
-    )
+K_PLUGIN_CLASS_WITH_JSON(DNSSDWatcher, "dnssdwatcher.json")
 
 DNSSDWatcher::DNSSDWatcher(QObject* parent, const QList<QVariant>&)
 : KDEDModule(parent)

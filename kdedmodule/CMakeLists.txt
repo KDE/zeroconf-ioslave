@@ -1,4 +1,9 @@
 add_library(kded_dnssdwatcher MODULE)
+set_target_properties(kded_dnssdwatcher PROPERTIES
+    OUTPUT_NAME dnssdwatcher
+)
+
+kcoreaddons_desktop_to_json(kded_dnssdwatcher dnssdwatcher.desktop)
 
 set(kded_dnssdwatcher_dbus_SRCS)
 qt5_add_dbus_adaptor(kded_dnssdwatcher_dbus_SRCS
@@ -18,10 +23,7 @@ target_link_libraries(kded_dnssdwatcher PRIVATE
     KF5::DNSSD
 )
 
-install(TARGETS kded_dnssdwatcher
-        DESTINATION ${KDE_INSTALL_PLUGINDIR})
+install(TARGETS kded_dnssdwatcher DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf5/kded)
 
-install(FILES dnssdwatcher.desktop
-        DESTINATION ${KDE_INSTALL_KSERVICES5DIR}/kded)
 install(FILES org.kde.kdnssd.xml
         DESTINATION ${KDE_INSTALL_DBUSINTERFACEDIR})
