@@ -261,7 +261,7 @@ void ZeroConfProtocol::onBrowserFinished()
     }
     ServiceTypesAdded.clear();
 
-    emit leaveModality();
+    Q_EMIT leaveModality();
 }
 
 void ZeroConfProtocol::feedEntryAsDir( UDSEntry* entry, const QString& name, const QString& displayName )
