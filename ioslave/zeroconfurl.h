@@ -7,8 +7,9 @@
 #ifndef ZEROCONFURL_H
 #define ZEROCONFURL_H
 
-// KDE
+// KF
 #include <DNSSD/RemoteService>
+// Qt
 #include <QUrl>
 
 

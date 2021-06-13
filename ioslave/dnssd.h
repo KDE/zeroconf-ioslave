@@ -7,7 +7,7 @@
 #ifndef _dnssd_H_
 #define _dnssd_H_
 
-// KDE
+// KF
 #include <DNSSD/ServiceBrowser>
 #include <DNSSD/ServiceTypeBrowser>
 #include <DNSSD/RemoteService>

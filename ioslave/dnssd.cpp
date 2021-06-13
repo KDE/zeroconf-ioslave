@@ -8,7 +8,7 @@
 
 // io-slave
 #include "zeroconfurl.h"
-// KDE
+// KF
 #include <KLocalizedString>
 #include <KProtocolInfo>
 // Qt
