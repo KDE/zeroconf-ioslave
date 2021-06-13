@@ -1,14 +1,17 @@
-set(kded_dnssdwatcher_PART_SRCS
-    dnssdwatcher.cpp
-    watcher.cpp
-)
+add_library(kded_dnssdwatcher MODULE)
 
-qt5_add_dbus_adaptor(kded_dnssdwatcher_PART_SRCS
+set(kded_dnssdwatcher_dbus_SRCS)
+qt5_add_dbus_adaptor(kded_dnssdwatcher_dbus_SRCS
     org.kde.kdnssd.xml
     dnssdwatcher.h
     DNSSDWatcher)
 
-add_library(kded_dnssdwatcher MODULE ${kded_dnssdwatcher_PART_SRCS})
+target_sources(kded_dnssdwatcher PRIVATE
+    dnssdwatcher.cpp
+    watcher.cpp
+    ${kded_dnssdwatcher_dbus_SRCS}
+)
+
 target_link_libraries(kded_dnssdwatcher PRIVATE
     KF5::DBusAddons
     KF5::KIOCore
