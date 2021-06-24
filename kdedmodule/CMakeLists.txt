@@ -3,8 +3,6 @@ set_target_properties(kded_dnssdwatcher PROPERTIES
     OUTPUT_NAME dnssdwatcher
 )
 
-kcoreaddons_desktop_to_json(kded_dnssdwatcher dnssdwatcher.desktop)
-
 set(kded_dnssdwatcher_dbus_SRCS)
 qt5_add_dbus_adaptor(kded_dnssdwatcher_dbus_SRCS
     org.kde.kdnssd.xml
