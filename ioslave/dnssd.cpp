@@ -118,9 +118,10 @@ void ZeroConfProtocol::listDir( const QUrl& url )
     case ZeroConfUrl::RootDir:
         listCurrentDirEntry();
         serviceTypeBrowser = new ServiceTypeBrowser(zeroConfUrl.domain());
-        connect( serviceTypeBrowser, SIGNAL(serviceTypeAdded(QString)),
-                 SLOT(addServiceType(QString)) );
-        connect( serviceTypeBrowser, SIGNAL(finished()), SLOT(onBrowserFinished()) );
+        connect(serviceTypeBrowser, &ServiceTypeBrowser::serviceTypeAdded,
+                this, &ZeroConfProtocol::addServiceType);
+        connect(serviceTypeBrowser, &ServiceTypeBrowser::finished,
+                this, &ZeroConfProtocol::onBrowserFinished);
         serviceTypeBrowser->startBrowse();
         enterLoop();
         break;
@@ -132,9 +133,10 @@ void ZeroConfProtocol::listDir( const QUrl& url )
         }
         listCurrentDirEntry();
         serviceBrowser = new ServiceBrowser( zeroConfUrl.serviceType(), false, zeroConfUrl.domain() );
-        connect( serviceBrowser, SIGNAL(serviceAdded(KDNSSD::RemoteService::Ptr)),
-                 SLOT(addService(KDNSSD::RemoteService::Ptr)) );
-        connect( serviceBrowser, SIGNAL(finished()), SLOT(onBrowserFinished()) );
+        connect(serviceBrowser, &ServiceBrowser::serviceAdded,
+                this, &ZeroConfProtocol::addService);
+        connect(serviceBrowser, &ServiceBrowser::finished,
+                this, &ZeroConfProtocol::onBrowserFinished);
         serviceBrowser->startBrowse();
         enterLoop();
         break;
@@ -272,7 +274,7 @@ void ZeroConfProtocol::feedEntryAsDir( UDSEntry* entry, const QString& name, con
 void ZeroConfProtocol::enterLoop()
 {
     QEventLoop eventLoop;
-    connect(this, SIGNAL(leaveModality()),&eventLoop, SLOT(quit()));
+    connect(this, &ZeroConfProtocol::leaveModality, &eventLoop, &QEventLoop::quit);
     eventLoop.exec(QEventLoop::ExcludeUserInputEvents);
 }
 
