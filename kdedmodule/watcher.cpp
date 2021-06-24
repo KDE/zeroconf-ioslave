@@ -28,11 +28,12 @@ ServiceWatcher::ServiceWatcher(const QString& type) : Watcher(), m_type(type)
 {
 	browser = new KDNSSD::ServiceBrowser(type);
 	browser->setParent(this);
-	connect(browser,SIGNAL(serviceAdded(KDNSSD::RemoteService::Ptr)),
-		SLOT(scheduleUpdate()));
-	connect(browser,SIGNAL(serviceRemoved(KDNSSD::RemoteService::Ptr)),
-		SLOT(scheduleUpdate()));
-	connect(browser,SIGNAL(finished()),SLOT(finished()));
+	connect(browser, &KDNSSD::ServiceBrowser::serviceAdded,
+		this, &ServiceWatcher::scheduleUpdate);
+	connect(browser, &KDNSSD::ServiceBrowser::serviceRemoved,
+		this, &ServiceWatcher::scheduleUpdate);
+	connect(browser, &KDNSSD::ServiceBrowser::finished,
+		this, &ServiceWatcher::finished);
 	browser->startBrowse();
 	
 }
@@ -41,11 +42,11 @@ TypeWatcher::TypeWatcher() : Watcher()
 {
 	typebrowser = new KDNSSD::ServiceTypeBrowser();
 	typebrowser->setParent(this);
-	connect(typebrowser,SIGNAL(serviceTypeAdded(QString)),
-		this,SLOT(scheduleUpdate()));
-	connect(typebrowser,SIGNAL(serviceTypeRemoved(QString)),
-		this,SLOT(scheduleUpdate()));
-	connect(typebrowser,SIGNAL(finished()),this,SLOT(finished()));
+	connect(typebrowser, &KDNSSD::ServiceTypeBrowser::serviceTypeAdded,
+		this, &TypeWatcher::scheduleUpdate);
+	connect(typebrowser, &KDNSSD::ServiceTypeBrowser::serviceTypeRemoved,
+		this, &TypeWatcher::scheduleUpdate);
+	connect(typebrowser, &KDNSSD::ServiceTypeBrowser::finished, this, &TypeWatcher::finished);
 	typebrowser->startBrowse();
 }
 

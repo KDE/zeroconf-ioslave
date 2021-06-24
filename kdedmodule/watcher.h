@@ -25,12 +25,13 @@ public:
 	unsigned int refcount;
 protected:
 	virtual QUrl constructUrl() const = 0;
-private:
-	bool updateNeeded;
-	
-private Q_SLOTS:
+
+protected Q_SLOTS:
 	void scheduleUpdate();
 	void finished();
+
+private:
+	bool updateNeeded;
 };
 
 class TypeWatcher : public Watcher
