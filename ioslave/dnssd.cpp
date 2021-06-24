@@ -116,6 +116,7 @@ void ZeroConfProtocol::listDir( const QUrl& url )
     switch (type)
     {
     case ZeroConfUrl::RootDir:
+        listCurrentDirEntry();
         serviceTypeBrowser = new ServiceTypeBrowser(zeroConfUrl.domain());
         connect( serviceTypeBrowser, SIGNAL(serviceTypeAdded(QString)),
                  SLOT(addServiceType(QString)) );
@@ -129,6 +130,7 @@ void ZeroConfProtocol::listDir( const QUrl& url )
             error( ERR_SERVICE_NOT_AVAILABLE, zeroConfUrl.serviceType() );
             break;
         }
+        listCurrentDirEntry();
         serviceBrowser = new ServiceBrowser( zeroConfUrl.serviceType(), false, zeroConfUrl.domain() );
         connect( serviceBrowser, SIGNAL(serviceAdded(KDNSSD::RemoteService::Ptr)),
                  SLOT(addService(KDNSSD::RemoteService::Ptr)) );
@@ -200,6 +202,13 @@ void ZeroConfProtocol::resolveAndRedirect( const ZeroConfUrl& zeroConfUrl )
 
     redirection( destUrl );
     finished();
+}
+
+void ZeroConfProtocol::listCurrentDirEntry()
+{
+    UDSEntry entry;
+    feedEntryAsDir( &entry, QStringLiteral(".") );
+    listEntry(entry);
 }
 
 void ZeroConfProtocol::addServiceType( const QString& serviceType )

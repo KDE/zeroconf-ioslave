@@ -67,6 +67,8 @@ private:
     // resolve given service and redirect() to it
     void resolveAndRedirect( const ZeroConfUrl& zeroConfUrl );
 
+    void listCurrentDirEntry();
+
     bool dnssdOK();
 
     void enterLoop();
