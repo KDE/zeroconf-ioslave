@@ -7,9 +7,16 @@
 #include "watcher.h"
 
 #include <KDirNotify>
+#include <kdnssd_version.h>
+#if KDNSSD_VERSION >= QT_VERSION_CHECK(5, 84, 0)
+#include <KDNSSD/RemoteService>
+#include <KDNSSD/ServiceBrowser>
+#include <KDNSSD/ServiceTypeBrowser>
+#else
 #include <DNSSD/RemoteService>
 #include <DNSSD/ServiceBrowser>
 #include <DNSSD/ServiceTypeBrowser>
+#endif
 #include <QUrl>
 
 Watcher::Watcher() 

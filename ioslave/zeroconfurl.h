@@ -8,7 +8,13 @@
 #define ZEROCONFURL_H
 
 // KF
+#include <kdnssd_version.h>
+#include <QtGlobal> // for QT_VERSION_CHECK
+#if KDNSSD_VERSION >= QT_VERSION_CHECK(5, 84, 0)
+#include <KDNSSD/RemoteService>
+#else
 #include <DNSSD/RemoteService>
+#endif
 // Qt
 #include <QUrl>
 
