@@ -9,16 +9,9 @@
 
 // KF
 #include <KIO/SlaveBase>
-#include <kdnssd_version.h>
-#if KDNSSD_VERSION >= QT_VERSION_CHECK(5, 84, 0)
 #include <KDNSSD/ServiceBrowser>
 #include <KDNSSD/ServiceTypeBrowser>
 #include <KDNSSD/RemoteService>
-#else
-#include <DNSSD/ServiceBrowser>
-#include <DNSSD/ServiceTypeBrowser>
-#include <DNSSD/RemoteService>
-#endif
 // Qt
 #include <QObject>
 
