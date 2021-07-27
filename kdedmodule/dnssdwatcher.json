@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "Monitors the network for DNS-SD services",
+        "Description[ar]": "يراقب الشبكة لخدمات DNS-SD",
         "Description[bg]": "Следи мрежата за услуги DNS-SD",
         "Description[bs]": "Nadzire mrežu za DNSSD servisima",
         "Description[ca@valencia]": "Controla la xarxa cercant serveis DNS-SD",
@@ -50,6 +51,7 @@
         "Description[zh_CN]": "监视网络中的 DNS-SD 服务",
         "Description[zh_TW]": "監控 DNS-SD 服務網路",
         "Name": "DNS-SD Service Discovery Monitor",
+        "Name[ar]": "مراقب اكتشاف خدمة DNS-SD",
         "Name[bg]": "Следене за откриване на услуги DNS-SD",
         "Name[bs]": "Nadzornik DNSSD otkrivanja servisa",
         "Name[ca@valencia]": "Monitor de descobriment de serveis DNS-SD",
