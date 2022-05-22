@@ -36,4 +36,6 @@ add_subdirectory(kdedmodule)
 install(FILES org.kde.zeroconf-ioslave.metainfo.xml
         DESTINATION ${KDE_INSTALL_METAINFODIR})
 
+ki18n_install(po)
+
 feature_summary(WHAT ALL   FATAL_ON_MISSING_REQUIRED_PACKAGES)
