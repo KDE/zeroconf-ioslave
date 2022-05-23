@@ -26,6 +26,7 @@
   <name xml:lang="ia">Supporto de Zeroconf</name>
   <name xml:lang="id">Dukungan Zeroconf</name>
   <name xml:lang="it">Supporto per Zeroconf</name>
+  <name xml:lang="ka">Zeroconf-ის მხარდაჭერა</name>
   <name xml:lang="ko">Zeroconf 지원</name>
   <name xml:lang="lt">Zeroconf palaikymas</name>
   <name xml:lang="nl">Ondersteuning van Zeroconf</name>
@@ -62,6 +63,7 @@
   <summary xml:lang="ia">Cerca o naviga in le pagina de servicios de rete de Dolphin </summary>
   <summary xml:lang="id">Telusuri layanan jaringan lokal di halaman Jaringan si Dolphin</summary>
   <summary xml:lang="it">Sfoglia i servizi della rete locale nella pagina della rete di Dolphin</summary>
+  <summary xml:lang="ka">დაათვალიერეთ ლოკალური ქსელის სერვისები Dolphin-ის ქსელის გვერდზე</summary>
   <summary xml:lang="ko">Dolphin의 네트워크 페이지에서 로컬 네트워크 서비스 탐색</summary>
   <summary xml:lang="lt">Naršyti Dolphin tinklo puslapyje vietinio tinklo tarnybas</summary>
   <summary xml:lang="nl">Bladeren in lokale netwerkservices in de netwerkpagina van Dolphin</summary>
@@ -99,6 +101,7 @@
     <p xml:lang="ia">Adde un entrata al pagina de rete de Dolphin per monstrar servicios local tal como imprimitores que annuncia se mesme con DNSSD(appellate Avahi o Bonjour per altere projectos).</p>
     <p xml:lang="id">Menambahkan entri ke halaman Jaringan si Dolphin untuk menampilkan layanan lokal sepertihalnya printer yang mengiklankan dirinya sendiri dengan DNSSD (disebut Avahi atau Bonjour berdasarkan proyek lain)</p>
     <p xml:lang="it">Aggiunge una voce alla pagina della rete di Dolphin che mostra i servizi locali come le stampanti che si auto-annunciano tramite DNSSD (chiamato Avahi o Bonjour da altri progetti).</p>
+    <p xml:lang="ka">Dolphin-ის ქსელის გვერდზე ამატებს ჩანაწერს, რომელშიც ნაჩვენები იქნება ისეთი ლოკალური სერვისები, ისეთები, მაგალითად პრინტერი, რომლებიც თავის თავს DNSSD სერვისით (სხვა პროექტები მას Avahi-ს ან Bonjour-ს ეძახიან) წარმოაჩენენ.</p>
     <p xml:lang="ko">Dolphin의 네트워크 페이지에 DNSSD(Avahi, Bonjour로도 알려져 있음)로 자기 자신을 알리는 프린터와 같은 로컬 서비스 항목을 추가합니다.</p>
     <p xml:lang="lt">Į programos Dolphin tinklo puslapį, prideda įrašą, skirtą rodyti vietines tarnybas, tokias kaip spausdintuvai, kurie skelbiasi naudodami DNSSD (kituose projektuose dar vadinamą kaip Avahi ar Bonjour)</p>
     <p xml:lang="nl">Voegt een item toe aan de netwerkpagina van Dolphin om lokale services te tonen zoals printers die zichzelf adverteren met DNSSD (Avahi of Bonjour genoemd door andere projecten).</p>
