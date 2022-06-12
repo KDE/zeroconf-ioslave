@@ -16,7 +16,7 @@ target_link_libraries(kio_zeroconf PRIVATE
 )
 
 install(TARGETS kio_zeroconf
-        DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf5/kio)
+        DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf${QT_MAJOR_VERSION}/kio)
 
 install(FILES zeroconf.desktop
         DESTINATION ${KDE_INSTALL_DATADIR}/remoteview)
