@@ -8,6 +8,7 @@
   <extends>org.kde.krusader.desktop</extends>
   <name>Zeroconf Support</name>
   <name xml:lang="ar">دعم التكوين الصفري</name>
+  <name xml:lang="bg">Поддръжка на Zeroconf</name>
   <name xml:lang="ca">Suport de Zeroconf</name>
   <name xml:lang="ca-valencia">Suport de Zeroconf</name>
   <name xml:lang="cs">Podpora Zeroconf</name>
@@ -46,6 +47,7 @@
   <name xml:lang="zh-TW">Zeroconf 支援</name>
   <summary>Browse local network services in Dolphin's Network page</summary>
   <summary xml:lang="ar">تصفح خدمات الشبكة المحلية في صفحة الشبكة في دولفين</summary>
+  <summary xml:lang="bg">Преглед на локалните услуги в страницата Мрежа на Dolphin</summary>
   <summary xml:lang="ca">Navega pels serveis de xarxa local a la pàgina Xarxa del Dolphin</summary>
   <summary xml:lang="ca-valencia">Navega pels serveis de xarxa local a la pàgina Xarxa de Dolphin</summary>
   <summary xml:lang="da">Gennemse lokale netværkstjenester på Dolphins netværksside</summary>
@@ -84,6 +86,7 @@
   <description>
     <p>Adds an entry to Dolphin's Network page to show local services such as printers which advertise themselves with DNSSD (called Avahi or Bonjour by other projects).</p>
     <p xml:lang="ar">يضيف مدخلاً إلى صفحة الشبكة في دولفين لعرض الخدمات المحلية مثل الطابعات التي تعلن عن نفسها باستخدام DNSSD (تسمى Avahi أو Bonjour بواسطة مشاريع أخرى).</p>
+    <p xml:lang="bg">Добавя запис в Мрежа на Dolphin, за да покаже локалните услуги, като например принтери, които се декларират с DNSSD (наричани Avahi или Bonjour от други проекти).</p>
     <p xml:lang="ca">Afegeix una entrada a la pàgina Xarxa del Dolphin per a mostrar els serveis locals com impressores que s'anuncien amb DNSSD (s'anomena Avahi o Bonjour en altres projectes).</p>
     <p xml:lang="ca-valencia">Afig una entrada a la pàgina Xarxa de Dolphin per a mostrar els serveis locals com impressores que s'anuncien amb DNSSD (s'anomena Avahi o Bonjour en altres projectes).</p>
     <p xml:lang="da">Føjer en indgang til Dolphins netværksside til at vise lokale tjenester såsom printere der annoncerer sig selv med DNSSD (kaldes også Avahi eller Bonjour af andre projekter)</p>
