@@ -8,7 +8,7 @@
 #define _dnssd_H_
 
 // KF
-#include <KIO/SlaveBase>
+#include <KIO/WorkerBase>
 #include <KDNSSD/ServiceBrowser>
 #include <KDNSSD/ServiceTypeBrowser>
 #include <KDNSSD/RemoteService>
@@ -38,18 +38,18 @@ struct ProtocolData
     QString passwordEntry;
 };
 
-class ZeroConfProtocol : public QObject, public KIO::SlaveBase
+class ZeroConfProtocol : public QObject, public KIO::WorkerBase
 {
     Q_OBJECT
 public:
     ZeroConfProtocol( const QByteArray& protocol, const QByteArray& pool_socket, const QByteArray& app_socket);
     ~ZeroConfProtocol() override;
 
-public: // KIO::SlaveBase API
-    void get( const QUrl& url ) override;
-    void mimetype( const QUrl& url ) override;
-    void stat( const QUrl& url ) override;
-    void listDir( const QUrl& url ) override;
+public: // KIO::WorkerBase API
+    KIO::WorkerResult get( const QUrl& url ) override;
+    KIO::WorkerResult mimetype( const QUrl& url ) override;
+    KIO::WorkerResult stat( const QUrl& url ) override;
+    KIO::WorkerResult listDir( const QUrl& url ) override;
 
 Q_SIGNALS:
     void leaveModality();
@@ -58,11 +58,11 @@ private:
     // Create UDSEntry for zeroconf:/ or zeroconf:/type/ urls
     void feedEntryAsDir( UDSEntry* entry, const QString& name, const QString& displayName = QString() );
     // resolve given service and redirect() to it
-    void resolveAndRedirect( const ZeroConfUrl& zeroConfUrl );
+    KIO::WorkerResult resolveAndRedirect( const ZeroConfUrl& zeroConfUrl );
 
     void listCurrentDirEntry();
 
-    bool dnssdOK();
+    KIO::WorkerResult dnssdOK();
 
     void enterLoop();
 

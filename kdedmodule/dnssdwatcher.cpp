@@ -32,7 +32,7 @@ QStringList DNSSDWatcher::watchedDirectories()
 }
 
 
-// from ioslave
+// from KIO worker
 void DNSSDWatcher::dissect(const QUrl& url,QString& name,QString& type)
 {
     type = url.path().section(QChar::fromLatin1('/'),1,1);

@@ -6,7 +6,7 @@
 
 #include "dnssd.h"
 
-// io-slave
+// kioworker
 #include "zeroconfurl.h"
 // KF
 #include <KLocalizedString>
@@ -19,7 +19,7 @@
 class KIOPluginForMetaData : public QObject
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.kde.kio.slave.zeroconf" FILE "zeroconf.json")
+    Q_PLUGIN_METADATA(IID "org.kde.kio.worker.zeroconf" FILE "zeroconf.json")
 };
 
 
@@ -41,7 +41,7 @@ void ProtocolData::feedUrl( QUrl* url, const RemoteService* remoteService ) cons
 
 
 ZeroConfProtocol::ZeroConfProtocol(const QByteArray& protocol, const QByteArray &pool_socket, const QByteArray &app_socket)
-    : SlaveBase(protocol, pool_socket, app_socket),
+    : WorkerBase(protocol, pool_socket, app_socket),
     serviceBrowser(nullptr),
     serviceTypeBrowser(nullptr),
     serviceToResolve(nullptr)
@@ -58,29 +58,34 @@ ZeroConfProtocol::~ZeroConfProtocol()
     delete serviceToResolve;
 }
 
-void ZeroConfProtocol::get( const QUrl& url )
+KIO::WorkerResult ZeroConfProtocol::get( const QUrl& url )
 {
-    if (!dnssdOK())
-        return;
+    const KIO::WorkerResult dnssdOkResult = dnssdOK();
+    if (!dnssdOkResult.success()) {
+        return dnssdOkResult;
+    }
 
     const ZeroConfUrl zeroConfUrl( url );
 
     ZeroConfUrl::Type type = zeroConfUrl.type();
-    if (type==ZeroConfUrl::Service)
-        resolveAndRedirect( zeroConfUrl );
-    else
-        error( ERR_MALFORMED_URL, url.toDisplayString() );
+    if (type != ZeroConfUrl::Service) {
+        return KIO::WorkerResult::fail(KIO::ERR_MALFORMED_URL, url.toDisplayString());
+    }
+
+    return resolveAndRedirect( zeroConfUrl );
 }
 
-void ZeroConfProtocol::mimetype( const QUrl& url )
+KIO::WorkerResult ZeroConfProtocol::mimetype( const QUrl& url )
 {
-    resolveAndRedirect( ZeroConfUrl(url) );
+    return resolveAndRedirect( ZeroConfUrl(url) );
 }
 
-void ZeroConfProtocol::stat( const QUrl& url )
+KIO::WorkerResult ZeroConfProtocol::stat( const QUrl& url )
 {
-    if (!dnssdOK())
-        return;
+    const KIO::WorkerResult dnssdOkResult = dnssdOK();
+    if (!dnssdOkResult.success()) {
+        return dnssdOkResult;
+    }
 
     const ZeroConfUrl zeroConfUrl( url );
 
@@ -94,21 +99,22 @@ void ZeroConfProtocol::stat( const QUrl& url )
         UDSEntry entry;
         feedEntryAsDir( &entry, QString() );
         statEntry( entry );
-        finished();
-        break;
+        return KIO::WorkerResult::pass();
     }
     case ZeroConfUrl::Service:
-        resolveAndRedirect( zeroConfUrl );
+        return resolveAndRedirect( zeroConfUrl );
         break;
     default:
-        error( ERR_MALFORMED_URL, url.toDisplayString() );
+        return KIO::WorkerResult::fail(KIO::ERR_MALFORMED_URL, url.toDisplayString());
     }
 }
 
-void ZeroConfProtocol::listDir( const QUrl& url )
+KIO::WorkerResult ZeroConfProtocol::listDir( const QUrl& url )
 {
-    if (!dnssdOK())
-        return;
+    const KIO::WorkerResult dnssdOkResult = dnssdOK();
+    if (!dnssdOkResult.success()) {
+        return dnssdOkResult;
+    }
 
     const ZeroConfUrl zeroConfUrl( url );
 
@@ -124,12 +130,11 @@ void ZeroConfProtocol::listDir( const QUrl& url )
                 this, &ZeroConfProtocol::onBrowserFinished);
         serviceTypeBrowser->startBrowse();
         enterLoop();
-        break;
+        return KIO::WorkerResult::pass();
     case ZeroConfUrl::ServiceDir:
         if( !knownProtocols.contains(zeroConfUrl.serviceType()) )
         {
-            error( ERR_SERVICE_NOT_AVAILABLE, zeroConfUrl.serviceType() );
-            break;
+            return KIO::WorkerResult::fail(KIO::ERR_SERVICE_NOT_AVAILABLE, zeroConfUrl.serviceType());
         }
         listCurrentDirEntry();
         serviceBrowser = new ServiceBrowser( zeroConfUrl.serviceType(), false, zeroConfUrl.domain() );
@@ -139,39 +144,30 @@ void ZeroConfProtocol::listDir( const QUrl& url )
                 this, &ZeroConfProtocol::onBrowserFinished);
         serviceBrowser->startBrowse();
         enterLoop();
-        break;
+        return KIO::WorkerResult::pass();
     case ZeroConfUrl::Service:
-        resolveAndRedirect( zeroConfUrl );
-        break;
+        return resolveAndRedirect( zeroConfUrl );
     default:
-        error( ERR_MALFORMED_URL, url.toDisplayString() );
+        return KIO::WorkerResult::fail(KIO::ERR_MALFORMED_URL, url.toDisplayString());
     }
 }
 
-bool ZeroConfProtocol::dnssdOK()
+KIO::WorkerResult ZeroConfProtocol::dnssdOK()
 {
-    bool result;
-
     switch (ServiceBrowser::isAvailable())
     {
     case ServiceBrowser::Stopped:
-        error( KIO::ERR_UNSUPPORTED_ACTION,
+        return KIO::WorkerResult::fail( KIO::ERR_UNSUPPORTED_ACTION,
                i18n("The Zeroconf daemon (mdnsd) is not running."));
-        result = false;
-        break;
      case ServiceBrowser::Unsupported:
-        error( KIO::ERR_UNSUPPORTED_ACTION,
+        return KIO::WorkerResult::fail( KIO::ERR_UNSUPPORTED_ACTION,
                i18n("The KDNSSD library has been built without Zeroconf support."));
-        result = false;
-        break;
     default:
-        result = true;
+        return KIO::WorkerResult::pass();
     }
-
-    return result;
 }
 
-void ZeroConfProtocol::resolveAndRedirect( const ZeroConfUrl& zeroConfUrl )
+KIO::WorkerResult ZeroConfProtocol::resolveAndRedirect( const ZeroConfUrl& zeroConfUrl )
 {
     if (serviceToResolve && !zeroConfUrl.matches(serviceToResolve))
     {
@@ -182,20 +178,18 @@ void ZeroConfProtocol::resolveAndRedirect( const ZeroConfUrl& zeroConfUrl )
     {
         if( !knownProtocols.contains(zeroConfUrl.serviceType()) )
         {
-            error( ERR_SERVICE_NOT_AVAILABLE, zeroConfUrl.serviceType() );
-            return;
+            return KIO::WorkerResult::fail(KIO::ERR_SERVICE_NOT_AVAILABLE, zeroConfUrl.serviceType());
         }
 
         serviceToResolve = new RemoteService( zeroConfUrl.serviceName(), zeroConfUrl.serviceType(), zeroConfUrl.domain() );
         if (!serviceToResolve->resolve())
         {
-            error( ERR_DOES_NOT_EXIST, zeroConfUrl.serviceName() );
-            return;
+            return KIO::WorkerResult::fail(KIO::ERR_DOES_NOT_EXIST, zeroConfUrl.serviceName());
         }
     }
 
     if( !knownProtocols.contains(zeroConfUrl.serviceType()) )
-        return;
+        return KIO::WorkerResult::fail();
 
     // action
     const ProtocolData& protocolData = knownProtocols[zeroConfUrl.serviceType()];
@@ -203,7 +197,8 @@ void ZeroConfProtocol::resolveAndRedirect( const ZeroConfUrl& zeroConfUrl )
     protocolData.feedUrl( &destUrl, serviceToResolve );
 
     redirection( destUrl );
-    finished();
+
+    return KIO::WorkerResult::pass();
 }
 
 void ZeroConfProtocol::listCurrentDirEntry()
@@ -243,8 +238,6 @@ void ZeroConfProtocol::addService( KDNSSD::RemoteService::Ptr service )
 
 void ZeroConfProtocol::onBrowserFinished()
 {
-    finished();
-
     // cleanup
     if (serviceBrowser)
     {
@@ -281,7 +274,7 @@ void ZeroConfProtocol::enterLoop()
 
 extern "C" Q_DECL_EXPORT int kdemain( int argc, char **argv )
 {
-    // necessary to use other kio slaves
+    // necessary to use other KIO workers
     QCoreApplication app(argc,argv);
     app.setApplicationName(QStringLiteral("kio_zeroconf"));
 
@@ -290,9 +283,9 @@ extern "C" Q_DECL_EXPORT int kdemain( int argc, char **argv )
         exit(-1);
     }
 
-    // start the slave
-    ZeroConfProtocol slave(argv[1],argv[2],argv[3]);
-    slave.dispatchLoop();
+    // start the worker
+    ZeroConfProtocol worker(argv[1],argv[2],argv[3]);
+    worker.dispatchLoop();
     return 0;
 }
 

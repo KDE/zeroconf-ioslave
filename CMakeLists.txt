@@ -29,7 +29,7 @@ ecm_set_disabled_deprecation_versions(
     KF 5.96
 )
 
-add_subdirectory(ioslave)
+add_subdirectory(kioworker)
 add_subdirectory(kdedmodule)
 
 install(FILES org.kde.zeroconf-ioslave.metainfo.xml
