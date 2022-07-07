@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component type="addon">
-  <id>org.kde.zeroconf_ioslave</id>
+  <id>org.kde.kio.worker.zeroconf</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <extends>org.kde.dolphin.desktop</extends>
@@ -124,6 +124,9 @@
   </description>
   <url type="homepage">https://www.kde.org/</url>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=dolphin</url>
+  <provides>
+    <id>org.kde.zeroconf_ioslave</id><!-- Id was changed after port to KIO worker -->
+  </provides>
   <project_group>KDE</project_group>
   <categories>
     <category>Network</category>
@@ -131,7 +134,7 @@
   <icon type="stock">network-workgroup</icon>
   <screenshots>
     <screenshot type="default">
-      <image type="source">https://cdn.kde.org/screenshots/zeroconf-ioslave/zeroconf-ioslave.png</image>
+      <image type="source">https://cdn.kde.org/screenshots/kio-zeroconf/kio-zeroconf.png</image>
     </screenshot>
   </screenshots>
   <releases>
